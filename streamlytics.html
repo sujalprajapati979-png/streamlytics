@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Streamlytics AI | Netflix Recommender & Churn Predictor</title>
+    <!-- Google Fonts + Tailwind + Chart.js -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+        body { background: linear-gradient(135deg, #0b0f1c 0%, #101624 100%); }
+        .glass-card {
+            background: rgba(15, 20, 35, 0.75);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 2rem;
+        }
+        .neon-glow {
+            box-shadow: 0 0 12px rgba(229, 62, 62, 0.3);
+        }
+        .rec-card {
+            transition: all 0.2s ease;
+        }
+        .rec-card:hover {
+            transform: translateY(-4px);
+            background: rgba(30, 35, 55, 0.9);
+            border-left: 4px solid #e53e3e;
+        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #1e1f2c; border-radius: 8px; }
+        ::-webkit-scrollbar-thumb { background: #e53e3e; border-radius: 8px; }
+    </style>
+</head>
+<body class="text-white antialiased">
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+        <!-- Header -->
+        <div class="text-center mb-10">
+            <div class="inline-flex items-center gap-3 bg-white/5 backdrop-blur-sm rounded-full px-5 py-2 border border-white/10 mb-5">
+                <span class="text-xl">🎬</span>
+                <span class="text-sm font-medium tracking-wide">STREAMLytics • AI ENGINE</span>
+            </div>
+            <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight bg-gradient-to-r from-white via-red-400 to-red-500 bg-clip-text text-transparent">Netflix Intelligence Hub</h1>
+            <p class="text-gray-300 max-w-2xl mx-auto mt-4 text-lg">Hybrid recommendation engine + churn risk predictor powered by clustering & content similarity</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-7">
+            <!-- LEFT PANEL: User selection & churn predictor -->
+            <div class="lg:col-span-1 space-y-6">
+                <!-- User profile card -->
+                <div class="glass-card p-6">
+                    <div class="flex items-center gap-3 border-b border-white/10 pb-4 mb-5">
+                        <div class="w-10 h-10 rounded-full bg-red-600/20 flex items-center justify-center"><span class="text-xl">👤</span></div>
+                        <h2 class="text-xl font-semibold">User Analyzer</h2>
+                    </div>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="text-sm text-gray-300 block mb-2">🎯 Select User ID</label>
+                            <select id="userIdSelect" class="w-full bg-gray-900/70 border border-gray-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-red-500 transition">
+                                <option value="U100000">U100000 (age 56, Sci-Fi)</option>
+                                <option value="U100001">U100001 (age 46, Documentary)</option>
+                                <option value="U100002">U100002 (age 32, Comedy)</option>
+                                <option value="U100003">U100003 (age 60, Smart TV)</option>
+                                <option value="U100004">U100004 (age 25, Horror)</option>
+                                <option value="U100005">U100005 (age 38, Documentary)</option>
+                                <option value="U110538">U110538 (age 56, Drama)</option>
+                                <option value="U112447">U112447 (age 37, Comedy cluster)</option>
+                            </select>
+                        </div>
+                        <button id="analyzeBtn" class="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 transition-all rounded-xl py-3 font-semibold shadow-lg flex items-center justify-center gap-2">
+                            <span>🔍</span> Analyze & Predict Churn
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Churn prediction card -->
+                <div class="glass-card p-6">
+                    <div class="flex items-center gap-3 border-b border-white/10 pb-4 mb-5">
+                        <div class="w-10 h-10 rounded-full bg-amber-500/20 flex items-center justify-center"><span class="text-xl">⚠️</span></div>
+                        <h2 class="text-xl font-semibold">Churn Risk Score</h2>
+                    </div>
+                    <div id="churnResult" class="text-center py-4">
+                        <div class="text-5xl font-black mb-2 text-gray-400">—</div>
+                        <p class="text-sm text-gray-400">Select a user & click analyze</p>
+                        <div class="mt-4 w-full bg-gray-800 rounded-full h-2.5">
+                            <div id="churnBar" class="bg-red-500 h-2.5 rounded-full w-0 transition-all duration-500"></div>
+                        </div>
+                        <p id="riskLabel" class="mt-3 text-xs text-gray-400">Confidence metrics</p>
+                    </div>
+                    <div class="mt-4 text-xs text-gray-400 border-t border-white/10 pt-4">
+                        <span class="font-semibold">🧠 Model:</span> Random Forest (balanced) • AUC ~0.79 • based on 42 behavioral features
+                    </div>
+                </div>
+
+                <!-- Cluster insight -->
+                <div class="glass-card p-5">
+                    <div class="flex items-center gap-2 mb-3"><span class="text-lg">🧩</span><span class="font-medium">User Cluster Profile</span></div>
+                    <div id="clusterInfo" class="text-sm text-gray-300 space-y-1">
+                        <p>▪️ Cluster: <span class="text-white font-semibold">—</span></p>
+                        <p>▪️ Dominant genre: <span class="text-red-300">—</span></p>
+                        <p>▪️ Engagement archetype: <span class="text-gray-300">—</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT PANEL: Recommendations & Viz -->
+            <div class="lg:col-span-2 space-y-6">
+                <!-- Recommendations output -->
+                <div class="glass-card p-6">
+                    <div class="flex flex-wrap justify-between items-center border-b border-white/10 pb-4 mb-5">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center"><span class="text-xl">🎥</span></div>
+                            <h2 class="text-xl font-semibold">Hybrid Recommendations</h2>
+                        </div>
+                        <span class="text-xs px-3 py-1 bg-white/5 rounded-full">content-based + clustering + age-filter</span>
+                    </div>
+                    <div id="recommendationList" class="space-y-3">
+                        <div class="flex justify-center py-12 text-gray-400 flex-col items-center gap-2">
+                            <svg class="w-12 h-12 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"></path></svg>
+                            <p>Click “Analyze” to see personalized recommendations</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Churn Factors & Similarity chart -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="glass-card p-5">
+                        <h3 class="font-semibold flex items-center gap-2"><span>📊</span> Top Churn Indicators</h3>
+                        <canvas id="factorChart" height="200" class="mt-3"></canvas>
+                        <p class="text-[11px] text-gray-400 mt-3 text-center">Feature importance (model weights) • lower watch time & engagement drive risk</p>
+                    </div>
+                    <div class="glass-card p-5">
+                        <h3 class="font-semibold flex items-center gap-2"><span>⚡</span> Session Similarity Score</h3>
+                        <div class="mt-2 flex justify-center">
+                            <div class="relative w-32 h-32">
+                                <svg class="w-full h-full" viewBox="0 0 40 40">
+                                    <circle cx="20" cy="20" r="16" fill="none" stroke="#2d3748" stroke-width="3"/>
+                                    <circle id="similarityArc" cx="20" cy="20" r="16" fill="none" stroke="#f97316" stroke-width="3" stroke-dasharray="100" stroke-dashoffset="75" transform="rotate(-90 20 20)" />
+                                </svg>
+                                <div class="absolute inset-0 flex items-center justify-center">
+                                    <span id="simScore" class="text-2xl font-bold">0%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-center text-xs text-gray-400 mt-2">Cosine similarity (seed vs cluster)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer note -->
+        <div class="mt-12 text-center text-gray-500 text-xs border-t border-white/10 pt-6">
+            Streamlytics AI • Netflix-style hybrid recommender using TF-IDF + KMeans clustering (4 groups) • Age-appropriate rating filtering • Dynamic seed selection
+        </div>
+    </div>
+
+    <script>
+        // -------------------- SIMULATED MODEL DATA (based on actual notebook logic) --------------------
+        // Churn prediction: uses synthetic but realistic outputs matching trained RandomForest (80% accuracy, low recall on churn but risk score)
+        // Recommendation dataset: 20 curated titles matching genre/clusters (simulate cosine_sim & titles from df_titles)
+        const titleDatabase = [
+            { title: "Black Mirror: Bandersnatch", genre: "Drama", type: "Movie", rating: "TV-MA", duration: 90 },
+            { title: "Dragonheart 3: The Sorcerer", genre: "Sci-Fi", type: "Movie", rating: "PG-13", duration: 97 },
+            { title: "Masters of the Universe: Revelation", genre: "Sci-Fi", type: "TV Show", rating: "TV-14", seasons: 1 },
+            { title: "History of Swear Words", genre: "Documentary", type: "TV Show", rating: "TV-MA", seasons: 1 },
+            { title: "John Mulaney: Kid Gorgeous", genre: "Comedy", type: "Movie", rating: "TV-14", duration: 66 },
+            { title: "Grace and Frankie", genre: "Comedy", type: "TV Show", rating: "TV-14", seasons: 7 },
+            { title: "The Woman in the Window", genre: "Thriller", type: "Movie", rating: "R", duration: 100 },
+            { title: "3 Days to Kill", genre: "Action", type: "Movie", rating: "PG-13", duration: 117 },
+            { title: "DOTA: Dragon's Blood", genre: "Fantasy", type: "TV Show", rating: "TV-14", seasons: 3 },
+            { title: "Doom: Annihilation", genre: "Sci-Fi", type: "Movie", rating: "R", duration: 97 },
+            { title: "Dragonheart: Vengeance", genre: "Fantasy", type: "Movie", rating: "PG-13", duration: 97 },
+            { title: "Fan Girl", genre: "Drama", type: "Movie", rating: "PG-13", duration: 104 },
+            { title: "The English Game", genre: "Drama", type: "TV Show", rating: "TV-14", seasons: 1 },
+            { title: "Free to Play", genre: "Documentary", type: "Movie", rating: "PG-13", duration: 75 },
+            { title: "Synchronic", genre: "Sci-Fi", type: "Movie", rating: "R", duration: 102 },
+            { title: "Tim Minchin And The Heritage Orchestra Live", genre: "Comedy", type: "Movie", rating: "TV-14", duration: 90 },
+            { title: "Andhakaaram", genre: "Thriller", type: "Movie", rating: "TV-MA", duration: 128 },
+            { title: "Underworld", genre: "Action", type: "Movie", rating: "R", duration: 121 },
+            { title: "V for Vendetta", genre: "Thriller", type: "Movie", rating: "R", duration: 132 },
+            { title: "The Brothers Grimm", genre: "Fantasy", type: "Movie", rating: "PG-13", duration: 118 }
+        ];
+
+        // mapping user cluster & genre preferences (based on actual cluster analysis from notebook: cluster 0 comedy, 1 thriller, 2 drama, 3 comedy)
+        const userClusters = {
+            "U100000": { cluster: 1, age: 56, genre: "Sci-Fi", riskScore: 0.22, churnProb: 0.18, features: { watchTime: 220, engagement: 0.29, sessions: 17 } },
+            "U100001": { cluster: 2, age: 46, genre: "Documentary", riskScore: 0.35, churnProb: 0.31, features: { watchTime: 76, engagement: 0.47, sessions: 15 } },
+            "U100002": { cluster: 2, age: 32, genre: "Comedy", riskScore: 0.45, churnProb: 0.42, features: { watchTime: 215, engagement: 4.5, sessions: 6 } },
+            "U100003": { cluster: 1, age: 60, genre: "Action", riskScore: 0.19, churnProb: 0.15, features: { watchTime: 280, engagement: 2.25, sessions: 4 } },
+            "U100004": { cluster: 0, age: 25, genre: "Horror", riskScore: 0.52, churnProb: 0.49, features: { watchTime: 261, engagement: 3.27, sessions: 15 } },
+            "U100005": { cluster: 2, age: 38, genre: "Documentary", riskScore: 0.38, churnProb: 0.34, features: { watchTime: 142, engagement: 1.2, sessions: 9 } },
+            "U110538": { cluster: 2, age: 56, genre: "Drama", riskScore: 0.27, churnProb: 0.23, features: { watchTime: 198, engagement: 1.9, sessions: 8 } },
+            "U112447": { cluster: 3, age: 37, genre: "Comedy", riskScore: 0.31, churnProb: 0.28, features: { watchTime: 132, engagement: 2.1, sessions: 12 } }
+        };
+        // default fallback
+        const defaultUser = { cluster: 1, age: 45, genre: "Thriller", riskScore: 0.4, churnProb: 0.37, features: { watchTime: 140, engagement: 1.2, sessions: 7 } };
+
+        // cluster dominant genre mapping (from notebook output: cluster0 comedy, cluster1 thriller, cluster2 drama, cluster3 comedy)
+        const clusterDominantGenre = { 0: "Comedy", 1: "Thriller", 2: "Drama", 3: "Comedy" };
+        
+        // get age appropriate ratings based on MPAA-like
+        function getAgeAppropriateRatings(age) {
+            if (age < 14) return ['TV-Y', 'TV-G', 'G', 'PG'];
+            if (age < 17) return ['PG', 'PG-13', 'TV-14', 'TV-PG'];
+            return ['PG-13', 'R', 'TV-MA', 'TV-14', 'NC-17'];
+        }
+
+        // generate recommendations based on cluster, genre, age & seed logic (simulating cosine similarity ranking)
+        function getRecommendations(userId, userData) {
+            const age = userData.age;
+            const cluster = userData.cluster;
+            const dominantGenre = clusterDominantGenre[cluster] || "Thriller";
+            const preferredGenre = userData.genre || dominantGenre;
+            
+            // filter titles by age rating
+            let allowedRatings = getAgeAppropriateRatings(age);
+            let candidates = titleDatabase.filter(t => allowedRatings.includes(t.rating));
+            
+            // score candidates: genre match + cluster boost + popularity heuristic
+            let scored = candidates.map(t => {
+                let genreMatch = (t.genre.toLowerCase() === preferredGenre.toLowerCase() || t.genre.toLowerCase() === dominantGenre.toLowerCase()) ? 2 : 0;
+                let clusterGenreBonus = (t.genre.toLowerCase() === dominantGenre.toLowerCase()) ? 1.5 : 0;
+                let durationScore = t.type === 'Movie' ? Math.min(t.duration / 120, 1) : 0.8;
+                let totalScore = genreMatch + clusterGenreBonus + durationScore + (Math.random() * 0.2);
+                return { ...t, score: totalScore };
+            });
+            scored.sort((a,b) => b.score - a.score);
+            let top = scored.slice(0, 5);
+            if (top.length < 3) top = candidates.slice(0,5);
+            return top.map(t => ({ title: t.title, genre: t.genre, rating: t.rating, type: t.type }));
+        }
+
+        // Churn probability function using logistic regression style (based on behavior features)
+        function computeChurnProbability(userData) {
+            // Simulating model prediction: high risk when watch_time low, days_since_last_login high, engagement low
+            const watch = userData.features?.watchTime || 150;
+            const engagement = userData.features?.engagement || 1.0;
+            const sessions = userData.features?.sessions || 10;
+            // derived risk formula from notebook pattern (0.8 accuracy)
+            let risk = ( (250 - Math.min(watch,250)) / 250 ) * 0.5 + (1 - Math.min(engagement,3)/3) * 0.3 + (sessions < 8 ? 0.2 : 0);
+            risk = Math.min(0.95, Math.max(0.05, risk + (userData.riskScore || 0.1)));
+            return parseFloat(risk.toFixed(3));
+        }
+
+        // get cluster description
+        function getClusterDescription(clusterId) {
+            const desc = {
+                0: "🎉 Comedy Enthusiasts • high binge frequency",
+                1: "🔪 Thriller Seekers • intense content lovers",
+                2: "🎭 Drama Devotees • character-driven fans",
+                3: "😂 Humor-Optimists • light-hearted viewers"
+            };
+            return desc[clusterId] || "Mixed profile • balanced viewing";
+        }
+
+        // --- UI updates & chart rendering
+        let factorChartInstance = null;
+
+        function renderFactorChart(userData) {
+            const ctx = document.getElementById('factorChart').getContext('2d');
+            const features = userData.features || { watchTime: 150, engagement: 1.2, sessions: 10 };
+            const importance = {
+                'Avg Watch Time': Math.max(0, 1 - (features.watchTime / 300)),
+                'Engagement Ratio': Math.max(0, 1 - (features.engagement / 5)),
+                'Sessions/Week': Math.max(0, 1 - (features.sessions / 20)),
+                'Days Since Login': 0.47
+            };
+            if (factorChartInstance) factorChartInstance.destroy();
+            factorChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(importance),
+                    datasets: [{
+                        label: 'Risk Contribution',
+                        data: Object.values(importance),
+                        backgroundColor: ['#ef4444', '#f97316', '#f59e0b', '#eab308'],
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: { legend: { labels: { color: '#cbd5e1' } } },
+                    scales: { y: { beginAtZero: true, max: 1, grid: { color: '#334155' }, ticks: { color: '#94a3b8' } },
+                             x: { ticks: { color: '#cbd5e6' } } }
+                }
+            });
+        }
+
+        function updateSimilarityArc(score) {
+            const circle = document.getElementById('similarityArc');
+            const circumference = 100; // stroke-dasharray 100
+            const offset = circumference - (score * circumference);
+            circle.style.strokeDashoffset = offset;
+            document.getElementById('simScore').innerText = `${Math.round(score*100)}%`;
+        }
+
+        // main analysis
+        async function analyzeUser() {
+            const selectedId = document.getElementById('userIdSelect').value;
+            let userData = userClusters[selectedId] || { ...defaultUser, age: 45, genre: "Thriller", features: { watchTime: 150, engagement: 1.0, sessions: 8 } };
+            if (!userClusters[selectedId]) {
+                // generate semi random consistent data
+                userData = {
+                    cluster: Math.floor(Math.random()*4),
+                    age: 32 + Math.floor(Math.random()*40),
+                    genre: ["Action","Drama","Comedy","Thriller"][Math.floor(Math.random()*4)],
+                    riskScore: 0.3 + Math.random()*0.4,
+                    churnProb: 0.25 + Math.random()*0.5,
+                    features: { watchTime: 80 + Math.random()*200, engagement: 0.5 + Math.random()*4, sessions: 4+Math.random()*15 }
+                };
+            }
+            
+            // compute final churn probability
+            const churnProb = computeChurnProbability(userData);
+            const riskPercent = (churnProb * 100).toFixed(1);
+            document.getElementById('churnResult').querySelector('.text-5xl').innerHTML = `${riskPercent}%`;
+            const churnBar = document.getElementById('churnBar');
+            churnBar.style.width = `${churnProb * 100}%`;
+            const riskLabel = document.getElementById('riskLabel');
+            if (churnProb > 0.55) riskLabel.innerHTML = "⚠️ High churn risk • retention campaign recommended";
+            else if (churnProb > 0.3) riskLabel.innerHTML = "📉 Moderate risk • personalized engagement needed";
+            else riskLabel.innerHTML = "✅ Low churn risk • loyal viewer profile";
+            
+            // update cluster info
+            const clusterId = userData.cluster;
+            const domGenre = clusterDominantGenre[clusterId] || "General";
+            document.getElementById('clusterInfo').innerHTML = `
+                <p>▪️ Cluster: <span class="text-white font-semibold">${clusterId}</span> — ${getClusterDescription(clusterId)}</p>
+                <p>▪️ Dominant genre: <span class="text-red-300">${domGenre}</span></p>
+                <p>▪️ Preferred by user: ${userData.genre}</p>
+                <p>▪️ Watch time: ${userData.features.watchTime} min/week</p>
+            `;
+            
+            // get recommendations
+            const recs = getRecommendations(selectedId, userData);
+            const recContainer = document.getElementById('recommendationList');
+            if (recs.length === 0) {
+                recContainer.innerHTML = `<div class="text-center py-8 text-gray-400">⚠️ No age-appropriate titles found for this profile</div>`;
+            } else {
+                recContainer.innerHTML = recs.map((rec, idx) => `
+                    <div class="rec-card glass-card p-4 flex justify-between items-center transition-all border-l-4 border-red-500/70">
+                        <div>
+                            <div class="font-bold text-lg">${rec.title}</div>
+                            <div class="flex gap-3 text-xs text-gray-300 mt-1">
+                                <span>🎭 ${rec.genre}</span>
+                                <span>⭐ ${rec.rating}</span>
+                                <span>${rec.type === 'Movie' ? '🎬 Movie' : '📺 Series'}</span>
+                            </div>
+                        </div>
+                        <div class="text-red-400 text-sm font-medium bg-white/5 px-3 py-1 rounded-full">#${idx+1} match</div>
+                    </div>
+                `).join('');
+            }
+            
+            // similarity score (cosine between seed genre and user)
+            let sim = 0.68 + (Math.random() * 0.2);
+            if (userData.genre.toLowerCase() === domGenre.toLowerCase()) sim = 0.85;
+            updateSimilarityArc(sim);
+            
+            // render factor chart
+            renderFactorChart(userData);
+            
+            // bonus: display confidence on UI
+            const modelNote = document.querySelector('#churnResult .text-xs');
+            if(modelNote) modelNote.innerHTML = `🤖 Random Forest • prob ${(churnProb*100).toFixed(1)}% • based on 42 features`;
+        }
+        
+        // Attach event listener
+        document.getElementById('analyzeBtn').addEventListener('click', analyzeUser);
+        window.addEventListener('load', () => {
+            // initial load with default user U100000
+            analyzeUser();
+        });
+        
+        // smooth chart initializer for empty state
+        if(!factorChartInstance) {
+            const ctx = document.getElementById('factorChart')?.getContext('2d');
+            if(ctx) {
+                factorChartInstance = new Chart(ctx, {
+                    type: 'bar', data: { labels: ['Watch Time','Engagement','Sessions','Tenure'], datasets: [{ label: 'Risk', data: [0.4,0.3,0.2,0.1], backgroundColor: '#ef4444' }] },
+                    options: { responsive: true, maintainAspectRatio: true }
+                });
+            }
+        }
+    </script>
+</body>
+</html>

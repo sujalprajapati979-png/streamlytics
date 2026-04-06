@@ -19,5 +19,145 @@
     "genre": "Comedy",
     "riskScore": 0.45,
     "features": { "watchTime": 215, "engagement": 4.5, "sessions": 6, "daysSinceLogin": 1 }
+  },
+  "U100003": {
+    "cluster": 2,
+    "age": 24,
+    "genre": "Action",
+    "riskScore": 0.68,
+    "features": { "watchTime": 340, "engagement": 5.2, "sessions": 22, "daysSinceLogin": 0 }
+  },
+  "U100004": {
+    "cluster": 3,
+    "age": 61,
+    "genre": "Drama",
+    "riskScore": 0.19,
+    "features": { "watchTime": 145, "engagement": 0.18, "sessions": 11, "daysSinceLogin": 5 }
+  },
+  "U100005": {
+    "cluster": 1,
+    "age": 43,
+    "genre": "Thriller",
+    "riskScore": 0.51,
+    "features": { "watchTime": 198, "engagement": 1.2, "sessions": 9, "daysSinceLogin": 2 }
+  },
+  "U100006": {
+    "cluster": 0,
+    "age": 28,
+    "genre": "Comedy",
+    "riskScore": 0.73,
+    "features": { "watchTime": 420, "engagement": 6.1, "sessions": 25, "daysSinceLogin": 0 }
+  },
+  "U100007": {
+    "cluster": 4,
+    "age": 52,
+    "genre": "Documentary",
+    "riskScore": 0.27,
+    "features": { "watchTime": 89, "engagement": 0.34, "sessions": 13, "daysSinceLogin": 7 }
+  },
+  "U100008": {
+    "cluster": 2,
+    "age": 35,
+    "genre": "Action",
+    "riskScore": 0.39,
+    "features": { "watchTime": 270, "engagement": 2.8, "sessions": 18, "daysSinceLogin": 1 }
+  },
+  "U100009": {
+    "cluster": 3,
+    "age": 67,
+    "genre": "Drama",
+    "riskScore": 0.12,
+    "features": { "watchTime": 130, "engagement": 0.11, "sessions": 8, "daysSinceLogin": 10 }
+  },
+  "U100010": {
+    "cluster": 1,
+    "age": 39,
+    "genre": "Sci-Fi",
+    "riskScore": 0.48,
+    "features": { "watchTime": 255, "engagement": 1.9, "sessions": 14, "daysSinceLogin": 2 }
+  },
+  "U100011": {
+    "cluster": 0,
+    "age": 21,
+    "genre": "Comedy",
+    "riskScore": 0.82,
+    "features": { "watchTime": 490, "engagement": 7.3, "sessions": 31, "daysSinceLogin": 0 }
+  },
+  "U100012": {
+    "cluster": 4,
+    "age": 59,
+    "genre": "Documentary",
+    "riskScore": 0.31,
+    "features": { "watchTime": 68, "engagement": 0.41, "sessions": 12, "daysSinceLogin": 6 }
+  },
+  "U100013": {
+    "cluster": 2,
+    "age": 29,
+    "genre": "Action",
+    "riskScore": 0.62,
+    "features": { "watchTime": 380, "engagement": 4.9, "sessions": 20, "daysSinceLogin": 1 }
+  },
+  "U100014": {
+    "cluster": 3,
+    "age": 73,
+    "genre": "Drama",
+    "riskScore": 0.09,
+    "features": { "watchTime": 102, "engagement": 0.08, "sessions": 6, "daysSinceLogin": 14 }
+  },
+  "U100015": {
+    "cluster": 1,
+    "age": 48,
+    "genre": "Thriller",
+    "riskScore": 0.44,
+    "features": { "watchTime": 210, "engagement": 1.5, "sessions": 16, "daysSinceLogin": 3 }
+  },
+  "U100016": {
+    "cluster": 0,
+    "age": 26,
+    "genre": "Comedy",
+    "riskScore": 0.79,
+    "features": { "watchTime": 450, "engagement": 6.8, "sessions": 28, "daysSinceLogin": 0 }
+  },
+  "U100017": {
+    "cluster": 4,
+    "age": 55,
+    "genre": "Documentary",
+    "riskScore": 0.25,
+    "features": { "watchTime": 94, "engagement": 0.39, "sessions": 14, "daysSinceLogin": 4 }
+  },
+  "U100018": {
+    "cluster": 2,
+    "age": 37,
+    "genre": "Action",
+    "riskScore": 0.57,
+    "features": { "watchTime": 310, "engagement": 3.6, "sessions": 19, "daysSinceLogin": 1 }
+  },
+  "U100019": {
+    "cluster": 3,
+    "age": 65,
+    "genre": "Drama",
+    "riskScore": 0.14,
+    "features": { "watchTime": 118, "engagement": 0.15, "sessions": 9, "daysSinceLogin": 9 }
+  },
+  "U100020": {
+    "cluster": 1,
+    "age": 44,
+    "genre": "Sci-Fi",
+    "riskScore": 0.41,
+    "features": { "watchTime": 240, "engagement": 1.7, "sessions": 15, "daysSinceLogin": 2 }
+  },
+  "U100021": {
+    "cluster": 0,
+    "age": 30,
+    "genre": "Comedy",
+    "riskScore": 0.87,
+    "features": { "watchTime": 520, "engagement": 8.1, "sessions": 35, "daysSinceLogin": 0 }
+  },
+  "U100022": {
+    "cluster": 4,
+    "age": 50,
+    "genre": "Documentary",
+    "riskScore": 0.29,
+    "features": { "watchTime": 82, "engagement": 0.44, "sessions": 11, "daysSinceLogin": 5 }
   }
 }

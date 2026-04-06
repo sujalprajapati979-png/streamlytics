@@ -4,7 +4,7 @@
 ![Jupyter](https://img.shields.io/badge/Jupyter-Notebook-orange.svg)
 ![ML](https://img.shields.io/badge/ML_Engine-Scikit--Learn_&_TensorFlow-green.svg)
 ![License](https://img.shields.io/badge/License-MIT-red.svg)
-![GTU Internship](https://img.shields.io/badge/GTU-Internship%202026-brightgreen)
+![GTU Internship](https://img.shields.io/badge/GTU-Internship%202026-purple)
 ![Microsoft Elevate](https://img.shields.io/badge/Microsoft%20Elevate-Program-blue)
 ![Ahmedabad Institute](https://img.shields.io/badge/Ahmedabad%20Institute%20of%20technology-CE%20dept-brightgreen)
 

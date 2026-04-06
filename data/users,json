@@ -1,0 +1,15 @@
+{
+  "U100000": {
+    "cluster": 1,
+    "age": 56,
+    "genre": "Sci-Fi",
+    "riskScore": 0.22,
+    "features": {
+      "watchTime": 220,
+      "engagement": 0.29,
+      "sessions": 17,
+      "daysSinceLogin": 3
+    }
+  }
+  // Add more users...
+}

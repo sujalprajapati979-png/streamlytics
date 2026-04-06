@@ -4,12 +4,20 @@
     "age": 56,
     "genre": "Sci-Fi",
     "riskScore": 0.22,
-    "features": {
-      "watchTime": 220,
-      "engagement": 0.29,
-      "sessions": 17,
-      "daysSinceLogin": 3
-    }
+    "features": { "watchTime": 220, "engagement": 0.29, "sessions": 17, "daysSinceLogin": 3 }
+  },
+  "U100001": {
+    "cluster": 4,
+    "age": 46,
+    "genre": "Documentary",
+    "riskScore": 0.35,
+    "features": { "watchTime": 76, "engagement": 0.47, "sessions": 15, "daysSinceLogin": 8 }
+  },
+  "U100002": {
+    "cluster": 0,
+    "age": 32,
+    "genre": "Comedy",
+    "riskScore": 0.45,
+    "features": { "watchTime": 215, "engagement": 4.5, "sessions": 6, "daysSinceLogin": 1 }
   }
-  // Add more users...
 }

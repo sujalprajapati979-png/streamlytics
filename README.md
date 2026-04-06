@@ -4,9 +4,9 @@
 ![Jupyter](https://img.shields.io/badge/Jupyter-Notebook-orange.svg)
 ![ML](https://img.shields.io/badge/ML_Engine-Scikit--Learn_&_TensorFlow-green.svg)
 ![License](https://img.shields.io/badge/License-MIT-green.svg)
-![GTU Internship](https://img.shields.io/badge/GTU%20Internship-Completed-brightgreen)
-![Microsoft Elevate](https://img.shields.io/badge/Microsoft%20Elevate-Participated-blue)
-![Ahmedabad Institute](https://img.shields.io/badge/Ahmedabad%20Institute-Completed-brightgreen)
+![GTU Internship](https://img.shields.io/badge/GTU-Internship%202026-brightgreen)
+![Microsoft Elevate](https://img.shields.io/badge/Microsoft%20Elevate-Program-blue)
+![Ahmedabad Institute](https://img.shields.io/badge/Ahmedabad%20Institute-CE%20dept-brightgreen)
 
 Streamlytics is an intelligent content recommendation and sentiment analytics platform designed to enhance user engagement on digital media platforms. By combining collaborative filtering with content-based algorithms and advanced NLP, it delivers personalized content suggestions while analyzing user sentiment in real-time.
 

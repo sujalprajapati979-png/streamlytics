@@ -1,0 +1,6 @@
+[
+  { "title": "Black Mirror: Bandersnatch", "genre": "Drama", "type": "Movie", "rating": "TV-MA", "duration": 90 },
+  { "title": "Stranger Things", "genre": "Sci-Fi", "type": "TV Show", "rating": "TV-14", "seasons": 4 },
+  { "title": "The Witcher", "genre": "Fantasy", "type": "TV Show", "rating": "TV-MA", "seasons": 3 },
+  { "title": "Our Planet", "genre": "Documentary", "type": "TV Show", "rating": "TV-PG", "seasons": 2 }
+]

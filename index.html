@@ -48,68 +48,74 @@
             animation: lightBgFlow 12s ease-in-out infinite;
         }
         
-        /* Glass Card - Dark Mode (black-red accent) */
+        /* ENHANCED GLASS CARD with RED/BLACK FADING BORDERS */
         .glass-card {
             background: rgba(10, 10, 18, 0.75);
             backdrop-filter: blur(14px);
-            border: 1px solid rgba(220, 38, 38, 0.25);
             border-radius: 1.5rem;
             transition: all 0.3s ease;
             box-shadow: 0 8px 24px rgba(0,0,0,0.5);
-        }
-        
-        /* Red/Black glowing border effect */
-        .glass-card {
             position: relative;
             overflow: hidden;
         }
         
+        /* Animated Red/Black fading border effect (gradient rotating) */
         .glass-card::before {
             content: '';
             position: absolute;
             inset: 0;
             border-radius: 1.5rem;
-            padding: 1.5px;
-            background: linear-gradient(125deg, rgba(220,38,38,0.7), rgba(0,0,0,0.4), rgba(180,0,0,0.7));
+            padding: 2px;
+            background: linear-gradient(125deg, rgba(220,38,38,0.9), rgba(0,0,0,0.6), rgba(180,0,0,0.9), rgba(0,0,0,0.8));
+            background-size: 200% 200%;
             mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
             -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
             -webkit-mask-composite: xor;
             mask-composite: exclude;
             pointer-events: none;
-            opacity: 0.7;
-            transition: opacity 0.3s ease;
+            opacity: 0.8;
+            animation: borderFlow 3s ease infinite alternate;
+        }
+        
+        @keyframes borderFlow {
+            0% { background-position: 0% 0%; opacity: 0.6; }
+            50% { background-position: 100% 100%; opacity: 1; }
+            100% { background-position: 0% 0%; opacity: 0.7; }
         }
         
         .glass-card:hover::before {
             opacity: 1;
-            background: linear-gradient(125deg, #ef4444, #000000, #ef4444);
+            animation: borderFlow 0.8s ease infinite;
+            background: linear-gradient(125deg, #ef4444, #000000, #ef4444, #3b0000);
+            background-size: 200% 200%;
         }
         
         .glass-card:hover {
-            box-shadow: 0 0 22px rgba(220,38,38,0.4), 0 12px 28px rgba(0,0,0,0.5);
+            box-shadow: 0 0 28px rgba(220,38,38,0.5), 0 12px 28px rgba(0,0,0,0.6);
             transform: translateY(-2px);
         }
         
-        /* Light mode glass card */
+        /* Light mode glass card with red/black fading border */
         body.light-mode .glass-card {
             background: rgba(255, 245, 245, 0.92);
             backdrop-filter: blur(14px);
-            border: 1px solid rgba(220, 38, 38, 0.4);
+            border: none;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
         }
         
         body.light-mode .glass-card::before {
-            background: linear-gradient(125deg, #ef4444, #ffffff, #ef4444);
-            opacity: 0.5;
+            background: linear-gradient(125deg, #ef4444, #ffffff, #dc2626, #f0f0f0);
+            background-size: 200% 200%;
+            opacity: 0.6;
         }
         
         body.light-mode .glass-card:hover::before {
             opacity: 0.9;
-            background: linear-gradient(125deg, #dc2626, #fef2f2, #dc2626);
+            background: linear-gradient(125deg, #dc2626, #fef2f2, #dc2626, #ffffff);
         }
         
         body.light-mode .glass-card:hover {
-            box-shadow: 0 0 28px rgba(220,38,38,0.3), 0 12px 24px rgba(0,0,0,0.1);
+            box-shadow: 0 0 28px rgba(220,38,38,0.4), 0 12px 24px rgba(0,0,0,0.1);
         }
         
         /* Glitch Logo + Title Container */
@@ -138,50 +144,10 @@
             100% { transform: scale(1) rotate(0deg); opacity: 1; filter: blur(0);}
         }
         
-        .glitch-logo::before,
-        .glitch-logo::after {
-            content: "🎬";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0.8;
-        }
-        
-        .glitch-logo::before {
-            animation: glitch-shake 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite;
-            color: #ef4444;
-            z-index: -1;
-            text-shadow: -2px 0 red;
-            clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
-            transform: translate(-2px, -1px);
-        }
-        
-        .glitch-logo::after {
-            animation: glitch-shake 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) reverse both infinite;
-            color: #000000;
-            z-index: -2;
-            text-shadow: 2px 0 black;
-            clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
-            transform: translate(2px, 1px);
-        }
-        
-        @keyframes glitch-shake {
-            0% { transform: translate(0); }
-            20% { transform: translate(-1px, 1px); }
-            40% { transform: translate(1px, -1px); }
-            60% { transform: translate(-1px, 0); }
-            80% { transform: translate(1px, 1px); }
-            100% { transform: translate(0); }
-        }
-        
         .glitch-title {
             font-size: 2.8rem;
             font-weight: 800;
             letter-spacing: -0.02em;
-            display: inline-block;
-            position: relative;
             background: linear-gradient(135deg, #ffffff, #f0f0f0, #ef4444);
             background-size: 200% auto;
             -webkit-background-clip: text;
@@ -197,12 +163,6 @@
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            animation: fadeBlackRed 2.5s ease-in-out infinite alternate, titleGlitchPulse 0.8s ease-out;
-        }
-        
-        @keyframes fadeBlackRed {
-            0% { background-position: 0% 50%; filter: drop-shadow(0 0 1px rgba(0,0,0,0.3));}
-            100% { background-position: 100% 50%; filter: drop-shadow(0 0 12px rgba(220,38,38,0.6));}
         }
         
         @keyframes titleShimmer {
@@ -214,17 +174,6 @@
             0% { opacity: 0; transform: skew(0deg) scale(0.96); letter-spacing: 0px; filter: blur(2px);}
             30% { opacity: 1; transform: skew(2deg) scale(1.02); filter: blur(0px);}
             100% { opacity: 1; transform: skew(0deg) scale(1); letter-spacing: normal;}
-        }
-        
-        .glitch-title.glitch-active {
-            animation: glitch-text-burst 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-        }
-        
-        @keyframes glitch-text-burst {
-            0% { text-shadow: -2px 0 red, 2px 0 black; opacity: 0.9; transform: translateX(0);}
-            25% { text-shadow: -3px 0 red, 3px 0 black; transform: translateX(2px);}
-            75% { text-shadow: 2px 0 red, -2px 0 black; transform: translateX(-2px);}
-            100% { text-shadow: 0px 0 red, 0px 0 black; transform: translateX(0);}
         }
         
         @media (max-width: 768px) {
@@ -239,7 +188,7 @@
             color: #1a1a2e;
             border-color: #e2e8f0;
         }
-        .rec-card { transition: all 0.2s ease; cursor: pointer; }
+        .rec-card { transition: all 0.2s ease; cursor: pointer; margin-bottom: 10px; }
         .rec-card:hover { transform: translateY(-4px); background: rgba(30, 35, 55, 0.9); }
         body.light-mode .rec-card:hover { background: rgba(0, 0, 0, 0.08); }
         ::-webkit-scrollbar { width: 6px; }
@@ -255,6 +204,16 @@
         .cluster-2 { background: rgba(245, 158, 11, 0.2); color: #f59e0b; }
         .cluster-3 { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
         .cluster-4 { background: rgba(139, 92, 246, 0.2); color: #8b5cf6; }
+        
+        /* Detailed movie card styling */
+        .detail-card {
+            background: rgba(0,0,0,0.4);
+            border-radius: 1rem;
+            padding: 0.75rem;
+            transition: all 0.2s;
+        }
+        .detail-card:hover { background: rgba(220,38,38,0.2); transform: scale(0.98); }
+        .info-row { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 0.75rem; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 4px; }
     </style>
 </head>
 <body class="antialiased">
@@ -300,9 +259,10 @@
                     </div>
                 </div>
 
+                <!-- Enhanced Cluster Profile with FULL user data -->
                 <div class="glass-card p-5">
-                    <div class="flex items-center gap-2 mb-3"><span class="text-lg">🧩</span><span class="font-medium">User Cluster Profile</span></div>
-                    <div id="clusterInfo" class="space-y-3 text-sm">Select a user to view profile</div>
+                    <div class="flex items-center gap-2 mb-3"><span class="text-lg">🧩</span><span class="font-medium">User Cluster Profile (Full Data)</span></div>
+                    <div id="clusterInfo" class="space-y-3 text-sm">Select a user to view complete profile</div>
                 </div>
 
                 <div class="glass-card p-6">
@@ -341,7 +301,14 @@
                 </div>
                 <div class="glass-card p-5"><div class="flex items-center gap-2 mb-4"><i class="fas fa-chart-line text-red-500"></i><h3 class="font-semibold">🔥 Trending Now</h3><span class="trending-badge text-xs px-2 py-0.5 rounded-full text-white">HOT</span></div><div id="trendingList" class="flex gap-3 overflow-x-auto pb-2"></div></div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6"><div class="glass-card p-5"><h3 class="font-semibold flex items-center gap-2 mb-3"><i class="fas fa-bookmark text-red-400"></i> My Bookmarks</h3><div id="bookmarksList" class="text-sm space-y-1"></div></div><div class="glass-card p-5"><h3 class="font-semibold flex items-center gap-2 mb-3"><i class="fas fa-history text-blue-400"></i> Watch History</h3><div id="historyList" class="text-sm space-y-1"></div><div class="mt-3 pt-2 border-t border-white/10"><h4 class="text-xs font-semibold mb-2">▶️ Currently Watching</h4><div id="ongoingList" class="text-xs text-gray-300"></div></div></div></div>
-                <div class="glass-card p-5"><h3 class="font-semibold flex items-center gap-2 mb-3"><i class="fas fa-search"></i> Interactive Content Explorer</h3><div class="flex gap-2 mb-3"><input type="text" id="searchInput" placeholder="Search movies or shows..." class="flex-1 bg-gray-900/70 border border-gray-700 rounded-xl px-4 py-2"><select id="genreFilter" class="bg-gray-900/70 border border-gray-700 rounded-xl px-3 py-2"><option value="all">All Genres</option></select></div><div id="explorerResults" class="grid grid-cols-2 gap-2 max-h-64 overflow-y-auto"></div></div>
+                
+                <!-- Enhanced Content Explorer with FULL details from catalog -->
+                <div class="glass-card p-5">
+                    <h3 class="font-semibold flex items-center gap-2 mb-3"><i class="fas fa-search"></i> Interactive Content Explorer (Full Details)</h3>
+                    <div class="flex gap-2 mb-3 flex-wrap"><input type="text" id="searchInput" placeholder="Search movies or shows..." class="flex-1 bg-gray-900/70 border border-gray-700 rounded-xl px-4 py-2"><select id="genreFilter" class="bg-gray-900/70 border border-gray-700 rounded-xl px-3 py-2"><option value="all">All Genres</option></select></div>
+                    <div id="explorerResults" class="grid grid-cols-1 gap-3 max-h-96 overflow-y-auto pr-1"></div>
+                </div>
+                
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6"><div class="glass-card p-5"><h3 class="font-semibold flex items-center gap-2"><i class="fas fa-flask"></i> A/B Test Simulator</h3><div class="mt-3 space-y-3"><div class="flex justify-between text-sm"><span>Algorithm A (Current)</span><span id="ctrA" class="font-mono">0%</span></div><div class="w-full bg-gray-700 rounded-full h-2"><div id="ctrABar" class="bg-red-500 h-2 rounded-full w-0"></div></div><div class="flex justify-between text-sm mt-2"><span>Algorithm B (Test)</span><span id="ctrB" class="font-mono">0%</span></div><div class="w-full bg-gray-700 rounded-full h-2"><div id="ctrBBar" class="bg-emerald-500 h-2 rounded-full w-0"></div></div><p id="abWinner" class="text-xs text-center text-gray-400 mt-2">Click recommendations to vote</p></div></div><div class="glass-card p-5"><h3 class="font-semibold flex items-center gap-2"><i class="fas fa-users"></i> Community Insights</h3><div id="communityInsights" class="space-y-2 text-sm"><p>👥 2,847 active viewers</p><p>⭐ Most loved: "Arcane" (9.1/10)</p><p>💬 "Best thriller this season" trending</p><p>📈 +52% watch time this week</p></div></div></div>
             </div>
         </div>
@@ -375,10 +342,25 @@
         
         function computeChurnProbability(user) { let risk = 0.1 + (user.features?.days_since_login || 0) * 0.03 + (100 - (user.features?.engagement_score || 5)*10)/200; risk = Math.min(0.95, Math.max(0.05, risk)); return parseFloat(risk.toFixed(3)); }
         
+        // FULL DETAILS display for each movie/show
+        function renderFullCatalogItem(item) {
+            return `<div class="detail-card glass-card p-3 cursor-pointer" data-title="${item.title}">
+                        <div class="font-bold text-base">${item.title}</div>
+                        <div class="info-row"><span>🎭 Genre:</span><span class="font-mono">${item.genre}</span></div>
+                        <div class="info-row"><span>📺 Type:</span><span>${item.type}</span></div>
+                        <div class="info-row"><span>🔞 Rating:</span><span>${item.rating}</span></div>
+                        <div class="info-row"><span>⏱️ Duration:</span><span>${item.duration} min</span></div>
+                        <div class="info-row"><span>📅 Year:</span><span>${item.year}</span></div>
+                        <div class="info-row"><span>🔥 Trending:</span><span>${item.trending}%</span></div>
+                        <div class="info-row"><span>⭐ Popularity:</span><span>${item.popularity_score}/10</span></div>
+                        <div class="text-xs mt-2 text-gray-300 italic">💡 ${item.ai_description?.substring(0,120)}${item.ai_description?.length>120?'...':''}</div>
+                    </div>`;
+        }
+        
         function renderList(recs) {
             let container = document.getElementById('recommendationList');
             if(!recs?.length){ container.innerHTML='<div class="text-center py-8 text-gray-400">No recommendations based on filters</div>'; return; }
-            container.innerHTML = recs.map((rec,idx) => `<div class="rec-card glass-card p-4 flex justify-between items-center cursor-pointer" data-title="${rec.title}" data-idx="${idx}"><div><div class="font-bold">${rec.title}</div><div class="text-xs">${rec.genre} • ${rec.duration}min</div></div><i class="far fa-bookmark bookmark-icon" data-title="${rec.title}"></i></div>`).join('');
+            container.innerHTML = recs.map((rec,idx) => `<div class="rec-card glass-card p-4 flex justify-between items-center cursor-pointer" data-title="${rec.title}" data-idx="${idx}"><div><div class="font-bold">${rec.title}</div><div class="text-xs">${rec.genre} • ${rec.duration}min • ${rec.rating}</div><div class="text-xs text-gray-400">${rec.ai_description?.substring(0,60)}...</div></div><i class="far fa-bookmark bookmark-icon" data-title="${rec.title}"></i></div>`).join('');
             document.querySelectorAll('.rec-card').forEach(el => el.addEventListener('click', (e) => { if(!e.target.classList.contains('bookmark-icon')) addToHistory(el.dataset.title); }));
             document.querySelectorAll('.bookmark-icon').forEach(icon => { icon.addEventListener('click', (e) => { e.stopPropagation(); toggleBookmark(icon.dataset.title); }); });
         }
@@ -390,12 +372,24 @@
         function renderOngoing() { let cont = document.getElementById('ongoingList'); if(!ongoingContent.length) { cont.innerHTML='<div class="text-gray-400">No ongoing shows</div>'; return; } cont.innerHTML = ongoingContent.map(o => `<div>▶️ ${o.title} - ${o.progress}%</div>`).join(''); }
         function updateABTestVote(title) { let isTest = Math.random() > 0.5; if(isTest) { abVotes.B++; abVotes.B_shown++; } else { abVotes.A++; abVotes.A_shown++; } updateABDisplay(); }
         function updateABDisplay() { let ctrA = abVotes.A_shown ? (abVotes.A/abVotes.A_shown)*100 : 0; let ctrB = abVotes.B_shown ? (abVotes.B/abVotes.B_shown)*100 : 0; document.getElementById('ctrA').innerText = ctrA.toFixed(1)+'%'; document.getElementById('ctrB').innerText = ctrB.toFixed(1)+'%'; document.getElementById('ctrABar').style.width = ctrA+'%'; document.getElementById('ctrBBar').style.width = ctrB+'%'; let winner = ctrA>ctrB ? '🏆 Algorithm A leading' : (ctrB>ctrA ? '🚀 Algorithm B leading' : '⚖️ Tie'); document.getElementById('abWinner').innerText = winner; }
-        function renderTrending() { let trendingSorted = [...masterTitleDatabase].sort((a,b)=> (b.trending||0) - (a.trending||0)).slice(0,6); let cont = document.getElementById('trendingList'); cont.innerHTML = trendingSorted.map(t => `<div class="glass-card p-2 text-center min-w-[110px]"><div class="font-bold text-sm">${t.title}</div><div class="text-xs">🔥 ${t.trending}%</div></div>`).join(''); }
-        function searchContent() { let query = document.getElementById('searchInput').value.toLowerCase(); let genre = document.getElementById('genreFilter').value; let filtered = masterTitleDatabase.filter(t => (!genre || genre==='all' || t.genre===genre) && t.title.toLowerCase().includes(query)).slice(0,12); let container = document.getElementById('explorerResults'); container.innerHTML = filtered.map(t => `<div class="glass-card p-2 text-sm"><div class="font-bold">${t.title}</div><div>${t.genre} • ${t.duration}min</div></div>`).join(''); }
+        function renderTrending() { let trendingSorted = [...masterTitleDatabase].sort((a,b)=> (b.trending||0) - (a.trending||0)).slice(0,6); let cont = document.getElementById('trendingList'); cont.innerHTML = trendingSorted.map(t => `<div class="glass-card p-2 text-center min-w-[110px]"><div class="font-bold text-sm">${t.title}</div><div class="text-xs">🔥 ${t.trending}%</div><div class="text-[10px]">${t.genre}</div></div>`).join(''); }
+        
+        function searchContent() {
+            let query = document.getElementById('searchInput').value.toLowerCase();
+            let genre = document.getElementById('genreFilter').value;
+            let filtered = masterTitleDatabase.filter(t => (!genre || genre==='all' || t.genre===genre) && t.title.toLowerCase().includes(query)).slice(0,18);
+            let container = document.getElementById('explorerResults');
+            container.innerHTML = filtered.map(item => renderFullCatalogItem(item)).join('');
+            document.querySelectorAll('#explorerResults .detail-card').forEach(card => {
+                card.addEventListener('click', () => { addToHistory(card.dataset.title); });
+            });
+        }
+        
         function initSwipe(items) { currentSwipeItems = items || []; swipeIndex = 0; renderSwipeCard(); }
-        function renderSwipeCard() { let container = document.getElementById('swipeStack'); if(swipeIndex >= currentSwipeItems.length) { container.innerHTML='<div class="text-center py-12 text-gray-400">✨ No more recommendations ✨</div>'; return; } let item = currentSwipeItems[swipeIndex]; container.innerHTML = `<div class="swipe-card glass-card p-6 text-center"><h3 class="font-bold text-xl">${item.title}</h3><p class="mt-2">${item.genre} • ${item.duration}min</p><p class="text-sm mt-3 text-gray-300">${item.ai_description?.substring(0,100)}...</p><div class="flex justify-center gap-8 mt-5"><span class="text-3xl">👎</span><span class="text-3xl">👍</span></div></div>`; }
+        function renderSwipeCard() { let container = document.getElementById('swipeStack'); if(swipeIndex >= currentSwipeItems.length) { container.innerHTML='<div class="text-center py-12 text-gray-400">✨ No more recommendations ✨</div>'; return; } let item = currentSwipeItems[swipeIndex]; container.innerHTML = `<div class="swipe-card glass-card p-6 text-center"><h3 class="font-bold text-xl">${item.title}</h3><p class="mt-1">${item.genre} • ${item.duration}min • ${item.rating}</p><p class="text-sm mt-3 text-gray-300">${item.ai_description?.substring(0,120)}...</p><div class="flex justify-center gap-8 mt-5"><span class="text-3xl">👎</span><span class="text-3xl">👍</span></div></div>`; }
         function swipeLeft() { if(swipeIndex < currentSwipeItems.length) { swipeIndex++; renderSwipeCard(); showNotification("Skipped", 'info'); } }
         function swipeRight() { if(swipeIndex < currentSwipeItems.length) { addToHistory(currentSwipeItems[swipeIndex].title); swipeIndex++; renderSwipeCard(); showNotification("Added to watch history!", 'success'); } }
+        
         async function analyzeUser() {
             let uid = document.getElementById('userIdSelect').value;
             if(!uid || !masterUserDatabase[uid]) { showNotification("Select a valid user", 'error'); return; }
@@ -408,13 +402,29 @@
             let churn = computeChurnProbability(currentUserData);
             document.getElementById('churnResult').innerHTML = `<div class="text-3xl font-bold ${churn>0.6 ? 'text-red-500' : 'text-green-400'}">${(churn*100).toFixed(1)}%</div><div class="text-xs">${churn>0.6 ? 'High risk: re-engage with personalized offers' : 'Low churn risk, loyal user'}</div>`;
             let clusterInfo = clusterDefinitions[currentUserData.cluster] || clusterDefinitions[0];
-            document.getElementById('clusterInfo').innerHTML = `<div class="cluster-badge cluster-${currentUserData.cluster}">${clusterInfo.name}</div><div class="mt-2 text-xs">${clusterInfo.archetype}</div><div class="mt-1">🎯 Preferred: ${currentUserData.preferred_genre}</div><div>📍 ${currentUserData.location}</div><div>💎 ${currentUserData.subscription_tier}</div>`;
+            // FULL user data display
+            let features = currentUserData.features || {};
+            document.getElementById('clusterInfo').innerHTML = `
+                <div class="cluster-badge cluster-${currentUserData.cluster} mb-2">${clusterInfo.name}</div>
+                <div class="grid grid-cols-2 gap-1 text-xs"><span>👤 Name:</span><span class="font-semibold">${currentUserData.name}</span>
+                <span>🎂 Age:</span><span>${currentUserData.age}</span>
+                <span>📍 Location:</span><span>${currentUserData.location}</span>
+                <span>💎 Tier:</span><span>${currentUserData.subscription_tier}</span>
+                <span>📅 Joined:</span><span>${currentUserData.join_date}</span>
+                <span>🎭 Preferred:</span><span>${currentUserData.preferred_genre}</span>
+                <span>📺 Watch Time:</span><span>${features.watch_time || 'N/A'} hrs</span>
+                <span>⭐ Engagement:</span><span>${features.engagement_score || 'N/A'}/5</span>
+                <span>📆 Sessions/week:</span><span>${features.sessions_per_week || 'N/A'}</span>
+                <span>📅 Days since login:</span><span>${features.days_since_login ?? 'N/A'}</span>
+                <span>⌛ Total hours:</span><span>${features.total_watch_hours || 'N/A'}</span>
+                <span>📱 Devices:</span><span>${features.devices_used || 'N/A'}</span>
+                <span>👥 Profiles:</span><span>${features.profile_count || 'N/A'}</span></div>
+                <div class="mt-2 text-xs text-gray-400">${clusterInfo.archetype}</div>`;
             showNotification(`Analyzed ${currentUserData.name} (${clusterInfo.name})`, 'success');
         }
         
         async function loadDynamicData() {
             try {
-                let basePath = window.location.pathname.includes('/data/') ? './data/' : (window.location.origin.includes('github') ? '/streamlytics/data/' : './data/');
                 let usersRes = await fetch('./data/users.json');
                 if(!usersRes.ok) throw new Error('users.json not found');
                 let catalogRes = await fetch('./data/catalog.json');
@@ -426,12 +436,11 @@
                 Object.keys(masterUserDatabase).forEach(uid => { let opt = document.createElement('option'); opt.value = uid; opt.textContent = `${uid} - ${masterUserDatabase[uid].name} (${masterUserDatabase[uid].preferred_genre})`; select.appendChild(opt); });
                 let genres = [...new Set(masterTitleDatabase.map(t=>t.genre).filter(Boolean))];
                 let genreFilter = document.getElementById('genreFilter'); genreFilter.innerHTML = '<option value="all">All Genres</option>'+genres.map(g=>`<option value="${g}">${g}</option>`).join('');
-                renderTrending(); renderBookmarks(); renderHistory(); renderOngoing(); updateABDisplay();
+                renderTrending(); renderBookmarks(); renderHistory(); renderOngoing(); updateABDisplay(); searchContent();
                 if(Object.keys(masterUserDatabase).length) analyzeUser();
-            } catch(e) { console.error(e); showNotification("Error loading data from /data/ folder. Ensure users.json and catalog.json exist.", 'error'); masterUserDatabase = {"U1":{name:"Demo",cluster:0,age:30,preferred_genre:"Comedy",location:"Global",subscription_tier:"Premium",features:{days_since_login:1,engagement_score:5}}}; masterTitleDatabase = [{title:"Stranger Things",genre:"Sci-Fi",rating:"TV-14",duration:50,trending:98,ai_description:"Demo"}]; analyzeUser(); }
+            } catch(e) { console.error(e); showNotification("Error loading data from /data/ folder. Ensure users.json and catalog.json exist.", 'error'); masterUserDatabase = {"U1":{name:"Demo",cluster:0,age:30,preferred_genre:"Comedy",location:"Global",subscription_tier:"Premium",features:{days_since_login:1,engagement_score:5}}}; masterTitleDatabase = [{title:"Stranger Things",genre:"Sci-Fi",rating:"TV-14",duration:50,trending:98,ai_description:"Demo",year:2016,popularity_score:9}]; analyzeUser(); }
         }
         
-        // Glitch animation
         document.getElementById('glitchLogo')?.addEventListener('animationend', () => { let title = document.getElementById('mainGlitchTitle'); if(title) { title.classList.add('glitch-active'); setTimeout(()=>title.classList.remove('glitch-active'),500); } });
         setTimeout(() => { let title = document.getElementById('mainGlitchTitle'); if(title && !title.classList.contains('glitch-active')) { title.classList.add('glitch-active'); setTimeout(()=>title.classList.remove('glitch-active'),400); } }, 700);
         document.getElementById('themeToggle').addEventListener('click',()=>{ document.body.classList.toggle('light-mode'); let icon=document.querySelector('#themeToggle i'); if(document.body.classList.contains('light-mode')){ icon.classList.remove('fa-moon'); icon.classList.add('fa-sun'); } else { icon.classList.remove('fa-sun'); icon.classList.add('fa-moon'); } });

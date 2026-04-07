@@ -50,20 +50,22 @@ Streamlytics is an intelligent content recommendation and sentiment analytics pl
 Streamlytics utilizes a modular Jupyter Notebook-based architecture for transparent, reproducible analysis and modeling.
 
 ```text
-streamlytics/
-├── notebooks/                  # Jupyter Notebooks for analysis & modeling
-│   ├── 01_EDA.ipynb           # Exploratory Data Analysis
-│   ├── 02_Data_Preprocessing.ipynb
-│   ├── 03_Collaborative_Filtering.ipynb
-│   ├── 04_Content_Based_Filtering.ipynb
-│   ├── 05_Hybrid_Model.ipynb
-│   └── 06_Sentiment_Analysis.ipynb
-├── datasets/                   # Raw and processed data
-│   ├── raw/                    # Original data sources
-│   └── processed/              # Cleaned and transformed data
-├── requirements.txt            # Python dependencies
-├── .gitignore                  # Git ignore rules
-└── README.md                   # Project documentation
+your-repo/
+├── index.html              # Main webpage
+├── app.py                  # Flask/FastAPI backend (if using server)
+├── requirements.txt        # Python dependencies
+├── saved_models/          # Your exported models
+│   ├── tfidf_vectorizer.pkl
+│   ├── cosine_sim.joblib
+│   ├── indices.pkl
+│   ├── df_titles.pkl
+│   ├── random_forest_churn_model.joblib
+│   ├── feature_scaler.joblib
+│   ├── kmeans_model.joblib
+│   └── model_config.json
+└── static/
+    ├── css/style.css
+    └── js/script.js
 ```
 
 ## ⚙️ Installation & Setup

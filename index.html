@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Streamlytics AI | Netflix Intelligence Hub</title>
+    <!-- Google Fonts + Tailwind + Chart.js + Font Awesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+        
+        /* Dark Mode (Default) - Red & Black Fading Background */
+        body {
+            background: radial-gradient(circle at 10% 20%, #0a0a0c 0%, #1a0505 50%, #0b0b0f 100%);
+            background-attachment: fixed;
+            color: #ffffff;
+            transition: background 0.5s ease, color 0.3s ease;
+        }
+        
+        /* Light Mode - Red & White Fading Background */
+        body.light-mode {
+            background: radial-gradient(circle at 80% 30%, #fff5f5 0%, #ffe6e6 40%, #ffffff 100%);
+            background-attachment: fixed;
+            color: #1e1a2f;
+        }
+        
+        /* Animated gradient shift for depth */
+        @keyframes darkBgFlow {
+            0% { background: radial-gradient(circle at 10% 20%, #0a0a0c 0%, #1a0505 50%, #0b0b0f 100%); }
+            50% { background: radial-gradient(circle at 90% 70%, #0f0f14 0%, #2d0a0a 60%, #0a0a0e 100%); }
+            100% { background: radial-gradient(circle at 10% 20%, #0a0a0c 0%, #1a0505 50%, #0b0b0f 100%); }
+        }
+        
+        @keyframes lightBgFlow {
+            0% { background: radial-gradient(circle at 80% 30%, #fff5f5 0%, #ffe6e6 40%, #ffffff 100%); }
+            50% { background: radial-gradient(circle at 20% 70%, #ffeaea 0%, #ffcccc 50%, #fff0f0 100%); }
+            100% { background: radial-gradient(circle at 80% 30%, #fff5f5 0%, #ffe6e6 40%, #ffffff 100%); }
+        }
+        
+        body:not(.light-mode) {
+            animation: darkBgFlow 12s ease-in-out infinite;
+        }
+        
+        body.light-mode {
+            animation: lightBgFlow 12s ease-in-out infinite;
+        }
+        
+        /* ENHANCED GLASS CARD with RED/BLACK FADING BORDERS */
+        .glass-card {
+            background: rgba(10, 10, 18, 0.75);
+            backdrop-filter: blur(14px);
+            border-radius: 1.5rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Animated Red/Black fading border effect (gradient rotating) */
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 1.5rem;
+            padding: 2px;
+            background: linear-gradient(125deg, rgba(220,38,38,0.9), rgba(0,0,0,0.6), rgba(180,0,0,0.9), rgba(0,0,0,0.8));
+            background-size: 200% 200%;
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+            opacity: 0.8;
+            animation: borderFlow 3s ease infinite alternate;
+        }
+        
+        @keyframes borderFlow {
+            0% { background-position: 0% 0%; opacity: 0.6; }
+            50% { background-position: 100% 100%; opacity: 1; }
+            100% { background-position: 0% 0%; opacity: 0.7; }
+        }
+        
+        .glass-card:hover::before {
+            opacity: 1;
+            animation: borderFlow 0.8s ease infinite;
+            background: linear-gradient(125deg, #ef4444, #000000, #ef4444, #3b0000);
+            background-size: 200% 200%;
+        }
+        
+        .glass-card:hover {
+            box-shadow: 0 0 28px rgba(220,38,38,0.5), 0 12px 28px rgba(0,0,0,0.6);
+            transform: translateY(-2px);
+        }
+        
+        /* Light mode glass card with red/black fading border */
+        body.light-mode .glass-card {
+            background: rgba(255, 245, 245, 0.92);
+            backdrop-filter: blur(14px);
+            border: none;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+        
+        body.light-mode .glass-card::before {
+            background: linear-gradient(125deg, #ef4444, #ffffff, #dc2626, #f0f0f0);
+            background-size: 200% 200%;
+            opacity: 0.6;
+        }
+        
+        body.light-mode .glass-card:hover::before {
+            opacity: 0.9;
+            background: linear-gradient(125deg, #dc2626, #fef2f2, #dc2626, #ffffff);
+        }
+        
+        body.light-mode .glass-card:hover {
+            box-shadow: 0 0 28px rgba(220,38,38,0.4), 0 12px 24px rgba(0,0,0,0.1);
+        }
+        
+        /* Glitch Logo + Title Container */
+        .glitch-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        
+        .glitch-logo {
+            font-size: 4.2rem;
+            display: inline-block;
+            position: relative;
+            cursor: pointer;
+            filter: drop-shadow(0 0 8px rgba(220,38,38,0.7));
+            transition: filter 0.2s;
+            animation: logoFloat 0.6s ease-out forwards;
+        }
+        
+        @keyframes logoFloat {
+            0% { transform: scale(0.2) rotate(-10deg); opacity: 0; filter: blur(4px);}
+            60% { transform: scale(1.1) rotate(2deg); opacity: 1;}
+            100% { transform: scale(1) rotate(0deg); opacity: 1; filter: blur(0);}
+        }
+        
+        .glitch-title {
+            font-size: 2.8rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #ffffff, #f0f0f0, #ef4444);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            animation: titleGlitchPulse 0.8s ease-out, titleShimmer 3s infinite alternate;
+        }
+        
+        body.light-mode .glitch-title {
+            background: linear-gradient(135deg, #1a1a2e, #dc2626, #2d0a0a);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        @keyframes titleShimmer {
+            0% { background-position: 0% 50%; text-shadow: 0 0 2px rgba(239,68,68,0.3);}
+            100% { background-position: 100% 50%; text-shadow: 0 0 15px rgba(239,68,68,0.7);}
+        }
+        
+        @keyframes titleGlitchPulse {
+            0% { opacity: 0; transform: skew(0deg) scale(0.96); letter-spacing: 0px; filter: blur(2px);}
+            30% { opacity: 1; transform: skew(2deg) scale(1.02); filter: blur(0px);}
+            100% { opacity: 1; transform: skew(0deg) scale(1); letter-spacing: normal;}
+        }
+        
+        @media (max-width: 768px) {
+            .glitch-title { font-size: 1.9rem; }
+            .glitch-logo { font-size: 2.8rem; }
+        }
+        
+        body.light-mode .text-gray-300 { color: #2d3748; }
+        body.light-mode .text-gray-400 { color: #4a5568; }
+        body.light-mode select, body.light-mode input {
+            background: #ffffff;
+            color: #1a1a2e;
+            border-color: #e2e8f0;
+        }
+        .rec-card { transition: all 0.2s ease; cursor: pointer; margin-bottom: 10px; }
+        .rec-card:hover { transform: translateY(-4px); background: rgba(30, 35, 55, 0.9); }
+        body.light-mode .rec-card:hover { background: rgba(0, 0, 0, 0.08); }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #1e1f2c; border-radius: 8px; }
+        ::-webkit-scrollbar-thumb { background: #e53e3e; border-radius: 8px; }
+        .trending-badge { background: linear-gradient(135deg, #e53e3e, #f97316); animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { opacity: 0.8; } 50% { opacity: 1; transform: scale(1.05); } 100% { opacity: 0.8; } }
+        .notification { position: fixed; top: 20px; right: 20px; z-index: 1000; animation: slideIn 0.3s ease; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); border-radius: 40px; padding: 8px 20px; color: white; border-left: 4px solid #ef4444; }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .cluster-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+        .cluster-0 { background: rgba(16, 185, 129, 0.2); color: #10b981; }
+        .cluster-1 { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+        .cluster-2 { background: rgba(245, 158, 11, 0.2); color: #f59e0b; }
+        .cluster-3 { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
+        .cluster-4 { background: rgba(139, 92, 246, 0.2); color: #8b5cf6; }
+        
+        /* Detailed movie card styling */
+        .detail-card {
+            background: rgba(0,0,0,0.4);
+            border-radius: 1rem;
+            padding: 0.75rem;
+            transition: all 0.2s;
+        }
+        .detail-card:hover { background: rgba(220,38,38,0.2); transform: scale(0.98); }
+        .info-row { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 0.75rem; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 4px; }
+    </style>
+</head>
+<body class="antialiased">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+        <!-- Header -->
+        <div class="flex justify-between items-start mb-5">
+            <div class="text-center flex-1">
+                <div class="inline-flex items-center gap-3 bg-white/5 backdrop-blur-sm rounded-full px-5 py-2 border border-white/10 mb-4">
+                    <span class="text-xl">🎬</span>
+                    <span class="text-sm font-medium tracking-wide">STREAMLytics • AI POWERED RECOMMENDATION SYSTEM</span>
+                </div>
+                <div class="glitch-container">
+                    <div class="glitch-logo" id="glitchLogo">🎬</div>
+                    <h1 class="glitch-title" id="mainGlitchTitle">Netflix Intelligence Hub</h1>
+                </div>
+                <p class="text-gray-300 max-w-2xl mx-auto mt-2 text-lg">Mood filtering • Time-aware • Swipe recommendations • AI insights</p>
+            </div>
+            <div class="theme-toggle ml-4 p-3 glass-card rounded-full cursor-pointer" id="themeToggle">
+                <i class="fas fa-moon text-xl"></i>
+            </div>
+        </div>
+
+        <div id="notificationContainer"></div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-7">
+            <!-- LEFT PANEL -->
+            <div class="lg:col-span-1 space-y-6">
+                <div class="glass-card p-6">
+                    <div class="flex items-center gap-3 border-b border-white/10 pb-4 mb-5">
+                        <div class="w-10 h-10 rounded-full bg-red-600/20 flex items-center justify-center"><span class="text-xl">👤</span></div>
+                        <h2 class="text-xl font-semibold">User Analyzer</h2>
+                    </div>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="text-sm text-gray-300 block mb-2">🎯 Select User (Dynamic from /data/users.json)</label>
+                            <select id="userIdSelect" class="w-full bg-gray-900/70 border border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-red-500 transition">
+                                <option value="">Loading users...</option>
+                            </select>
+                        </div>
+                        <button id="analyzeBtn" class="w-full bg-gradient-to-r from-red-700 to-red-800 hover:from-red-600 hover:to-red-700 transition-all rounded-xl py-3 font-semibold shadow-lg flex items-center justify-center gap-2 text-white">
+                            <span>🔍</span> Analyze & Predict Churn
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Enhanced Cluster Profile with FULL user data -->
+                <div class="glass-card p-5">
+                    <div class="flex items-center gap-2 mb-3"><span class="text-lg">🧩</span><span class="font-medium">User Cluster Profile (Full Data)</span></div>
+                    <div id="clusterInfo" class="space-y-3 text-sm">Select a user to view complete profile</div>
+                </div>
+
+                <div class="glass-card p-6">
+                    <div class="flex items-center gap-3 border-b border-white/10 pb-4 mb-5"><div class="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center"><span class="text-xl">🎭</span></div><h2 class="text-xl font-semibold">Mood & Time Filter</h2></div>
+                    <div class="space-y-4">
+                        <div><label class="text-sm text-gray-300 block mb-2">😊 Select Mood</label>
+                            <select id="moodSelect" class="w-full bg-gray-900/70 border border-gray-700 rounded-xl px-4 py-2">
+                                <option value="all">All moods</option><option value="funny">😂 Funny</option><option value="emotional">😢 Emotional</option><option value="mindbending">🧠 Mind-bending</option><option value="scary">👻 Scary</option><option value="romantic">💕 Romantic</option><option value="action">⚡ Action</option>
+                            </select>
+                        </div>
+                        <div><label class="text-sm text-gray-300 block mb-2">⏰ Time Available</label>
+                            <select id="timeSelect" class="w-full bg-gray-900/70 border border-gray-700 rounded-xl px-4 py-2">
+                                <option value="any">Any duration</option><option value="short">📺 Short (<30 min)</option><option value="medium">🍿 Medium (30-60 min)</option><option value="long">🎬 Long (>60 min)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card p-6">
+                    <div class="flex items-center gap-3 border-b border-white/10 pb-4 mb-5"><div class="w-10 h-10 rounded-full bg-amber-500/20 flex items-center justify-center"><span class="text-xl">⚠️</span></div><h2 class="text-xl font-semibold">Churn Risk Score</h2></div>
+                    <div id="churnResult" class="text-center py-4">—</div>
+                </div>
+
+                <div class="glass-card p-5" id="seasonalAlert">
+                    <div class="flex items-center gap-2 mb-3"><span class="text-lg">🌸</span><span class="font-medium">Seasonal Spotlight</span><span class="trending-badge text-xs px-2 py-0.5 rounded-full text-white ml-2">LIVE</span></div>
+                    <div id="seasonalContent" class="text-sm text-gray-300">🎬 Spring Season: Romantic Comedies & Drama blooms</div>
+                </div>
+            </div>
+
+            <!-- RIGHT PANEL -->
+            <div class="lg:col-span-2 space-y-6">
+                <div class="glass-card p-6">
+                    <div class="flex flex-wrap justify-between items-center border-b border-white/10 pb-4 mb-5"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center"><span class="text-xl">🎥</span></div><h2 class="text-xl font-semibold">Smart Recommendations</h2></div><div class="flex gap-2"><button id="showListBtn" class="px-3 py-1 rounded-lg bg-red-600/30 hover:bg-red-600 transition">📋 List View</button><button id="showSwipeBtn" class="px-3 py-1 rounded-lg bg-white/10 hover:bg-white/20 transition">🔄 Swipe Mode</button></div></div>
+                    <div id="listView"><div id="recommendationList" class="space-y-3">Select a user and click analyze</div></div>
+                    <div id="swipeView" class="hidden"><div id="swipeStack" class="relative w-full max-w-md mx-auto"></div><div class="flex justify-center gap-6 mt-6"><button id="swipeLeftBtn" class="w-14 h-14 rounded-full bg-red-600/30 hover:bg-red-600 transition text-2xl">✗</button><button id="swipeRightBtn" class="w-14 h-14 rounded-full bg-emerald-600/30 hover:bg-emerald-600 transition text-2xl">✓</button></div></div>
+                </div>
+                <div class="glass-card p-5"><div class="flex items-center gap-2 mb-4"><i class="fas fa-chart-line text-red-500"></i><h3 class="font-semibold">🔥 Trending Now</h3><span class="trending-badge text-xs px-2 py-0.5 rounded-full text-white">HOT</span></div><div id="trendingList" class="flex gap-3 overflow-x-auto pb-2"></div></div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6"><div class="glass-card p-5"><h3 class="font-semibold flex items-center gap-2 mb-3"><i class="fas fa-bookmark text-red-400"></i> My Bookmarks</h3><div id="bookmarksList" class="text-sm space-y-1"></div></div><div class="glass-card p-5"><h3 class="font-semibold flex items-center gap-2 mb-3"><i class="fas fa-history text-blue-400"></i> Watch History</h3><div id="historyList" class="text-sm space-y-1"></div><div class="mt-3 pt-2 border-t border-white/10"><h4 class="text-xs font-semibold mb-2">▶️ Currently Watching</h4><div id="ongoingList" class="text-xs text-gray-300"></div></div></div></div>
+                
+                <!-- Enhanced Content Explorer with FULL details from catalog -->
+                <div class="glass-card p-5">
+                    <h3 class="font-semibold flex items-center gap-2 mb-3"><i class="fas fa-search"></i> Interactive Content Explorer (Full Details)</h3>
+                    <div class="flex gap-2 mb-3 flex-wrap"><input type="text" id="searchInput" placeholder="Search movies or shows..." class="flex-1 bg-gray-900/70 border border-gray-700 rounded-xl px-4 py-2"><select id="genreFilter" class="bg-gray-900/70 border border-gray-700 rounded-xl px-3 py-2"><option value="all">All Genres</option></select></div>
+                    <div id="explorerResults" class="grid grid-cols-1 gap-3 max-h-96 overflow-y-auto pr-1"></div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6"><div class="glass-card p-5"><h3 class="font-semibold flex items-center gap-2"><i class="fas fa-flask"></i> A/B Test Simulator</h3><div class="mt-3 space-y-3"><div class="flex justify-between text-sm"><span>Algorithm A (Current)</span><span id="ctrA" class="font-mono">0%</span></div><div class="w-full bg-gray-700 rounded-full h-2"><div id="ctrABar" class="bg-red-500 h-2 rounded-full w-0"></div></div><div class="flex justify-between text-sm mt-2"><span>Algorithm B (Test)</span><span id="ctrB" class="font-mono">0%</span></div><div class="w-full bg-gray-700 rounded-full h-2"><div id="ctrBBar" class="bg-emerald-500 h-2 rounded-full w-0"></div></div><p id="abWinner" class="text-xs text-center text-gray-400 mt-2">Click recommendations to vote</p></div></div><div class="glass-card p-5"><h3 class="font-semibold flex items-center gap-2"><i class="fas fa-users"></i> Community Insights</h3><div id="communityInsights" class="space-y-2 text-sm"><p>👥 2,847 active viewers</p><p>⭐ Most loved: "Arcane" (9.1/10)</p><p>💬 "Best thriller this season" trending</p><p>📈 +52% watch time this week</p></div></div></div>
+            </div>
+        </div>
+        <div class="mt-12 text-center text-gray-500 text-xs border-t border-white/10 pt-6">Streamlytics AI • Mood-Aware • Swipe • Live Data from GitHub</div>
+    </div>
+
+    <script>
+        let masterUserDatabase = {}, masterTitleDatabase = [], currentUserData = null, currentRecommendations = [];
+        let bookmarks = JSON.parse(localStorage.getItem('netflix_bookmarks') || '[]');
+        let watchHistory = JSON.parse(localStorage.getItem('netflix_history') || '[]');
+        let ongoingContent = JSON.parse(localStorage.getItem('netflix_ongoing') || '[]');
+        let abVotes = { A: 0, B: 0, A_shown: 0, B_shown: 0 };
+        let swipeIndex = 0, currentSwipeItems = [];
+        const clusterDefinitions = {0:{name:"Comedy Enthusiasts",genre:"Comedy",archetype:"🎉 High binge"},1:{name:"Thrill Seekers",genre:"Thriller",archetype:"🔪 Intense"},2:{name:"Drama Devotees",genre:"Drama",archetype:"🎭 Character-driven"},3:{name:"Sci-Fi Explorers",genre:"Sci-Fi",archetype:"🚀 Futuristic"},4:{name:"Documentary Buffs",genre:"Documentary",archetype:"📽️ Knowledge"}};
+        const moodGenreMap = {funny:["Comedy"],emotional:["Drama"],mindbending:["Sci-Fi","Thriller"],scary:["Horror","Thriller"],romantic:["Romance"],action:["Action","Thriller"]};
+        const timeDurationMap = {short:{max:30},medium:{min:30,max:60},long:{min:60},any:{min:0,max:999}};
+        
+        function showNotification(msg, type='info') { let c=document.getElementById('notificationContainer'),n=document.createElement('div');n.className=`notification ${type}`;n.innerHTML=`<span>${msg}</span>`;c.appendChild(n);setTimeout(()=>n.remove(),3000);}
+        
+        function getAgeAppropriateRatings(age) { if(age<14) return ['TV-Y','PG','TV-PG']; if(age<17) return ['PG-13','TV-14']; return ['R','TV-MA','NC-17']; }
+        
+        function getRecommendations(uid, user, catalog, mood, timeFilter) {
+            let allowed = getAgeAppropriateRatings(user.age);
+            let candidates = catalog.filter(t => allowed.includes(t.rating) && t.type);
+            if(mood !== 'all') candidates = candidates.filter(t => t.genre && moodGenreMap[mood]?.some(mg => t.genre.includes(mg)));
+            let timeRule = timeDurationMap[timeFilter] || timeDurationMap.any;
+            candidates = candidates.filter(t => (!timeRule.min || t.duration >= timeRule.min) && (!timeRule.max || t.duration <= timeRule.max));
+            let sorted = candidates.sort((a,b) => (b.popularity_score||0) - (a.popularity_score||0)).slice(0, 12);
+            return sorted.map(t => ({...t, score: (t.popularity_score || 5)}));
+        }
+        
+        function computeChurnProbability(user) { let risk = 0.1 + (user.features?.days_since_login || 0) * 0.03 + (100 - (user.features?.engagement_score || 5)*10)/200; risk = Math.min(0.95, Math.max(0.05, risk)); return parseFloat(risk.toFixed(3)); }
+        
+        // FULL DETAILS display for each movie/show
+        function renderFullCatalogItem(item) {
+            return `<div class="detail-card glass-card p-3 cursor-pointer" data-title="${item.title}">
+                        <div class="font-bold text-base">${item.title}</div>
+                        <div class="info-row"><span>🎭 Genre:</span><span class="font-mono">${item.genre}</span></div>
+                        <div class="info-row"><span>📺 Type:</span><span>${item.type}</span></div>
+                        <div class="info-row"><span>🔞 Rating:</span><span>${item.rating}</span></div>
+                        <div class="info-row"><span>⏱️ Duration:</span><span>${item.duration} min</span></div>
+                        <div class="info-row"><span>📅 Year:</span><span>${item.year}</span></div>
+                        <div class="info-row"><span>🔥 Trending:</span><span>${item.trending}%</span></div>
+                        <div class="info-row"><span>⭐ Popularity:</span><span>${item.popularity_score}/10</span></div>
+                        <div class="text-xs mt-2 text-gray-300 italic">💡 ${item.ai_description?.substring(0,120)}${item.ai_description?.length>120?'...':''}</div>
+                    </div>`;
+        }
+        
+        function renderList(recs) {
+            let container = document.getElementById('recommendationList');
+            if(!recs?.length){ container.innerHTML='<div class="text-center py-8 text-gray-400">No recommendations based on filters</div>'; return; }
+            container.innerHTML = recs.map((rec,idx) => `<div class="rec-card glass-card p-4 flex justify-between items-center cursor-pointer" data-title="${rec.title}" data-idx="${idx}"><div><div class="font-bold">${rec.title}</div><div class="text-xs">${rec.genre} • ${rec.duration}min • ${rec.rating}</div><div class="text-xs text-gray-400">${rec.ai_description?.substring(0,60)}...</div></div><i class="far fa-bookmark bookmark-icon" data-title="${rec.title}"></i></div>`).join('');
+            document.querySelectorAll('.rec-card').forEach(el => el.addEventListener('click', (e) => { if(!e.target.classList.contains('bookmark-icon')) addToHistory(el.dataset.title); }));
+            document.querySelectorAll('.bookmark-icon').forEach(icon => { icon.addEventListener('click', (e) => { e.stopPropagation(); toggleBookmark(icon.dataset.title); }); });
+        }
+        
+        function toggleBookmark(title) { if(bookmarks.includes(title)) bookmarks = bookmarks.filter(b=>b!==title); else bookmarks.push(title); localStorage.setItem('netflix_bookmarks', JSON.stringify(bookmarks)); renderBookmarks(); showNotification(`${title} ${bookmarks.includes(title) ? 'added to' : 'removed from'} bookmarks`); }
+        function renderBookmarks() { let cont = document.getElementById('bookmarksList'); if(!bookmarks.length) { cont.innerHTML='<div class="text-gray-400 text-xs">No bookmarks yet</div>'; return; } cont.innerHTML = bookmarks.map(b => `<div class="flex justify-between text-sm"><span>📌 ${b}</span><i class="fas fa-times-circle text-red-400 cursor-pointer" data-title="${b}"></i></div>`).join(''); document.querySelectorAll('#bookmarksList .fa-times-circle').forEach(el => el.addEventListener('click', (e) => { let t = el.dataset.title; bookmarks = bookmarks.filter(b=>b!==t); localStorage.setItem('netflix_bookmarks', JSON.stringify(bookmarks)); renderBookmarks(); showNotification(`Removed ${t}`); })); }
+        function addToHistory(title) { if(!watchHistory.includes(title)) watchHistory.unshift(title); if(watchHistory.length>20) watchHistory.pop(); localStorage.setItem('netflix_history', JSON.stringify(watchHistory)); renderHistory(); showNotification(`Added "${title}" to history`); updateABTestVote(title); }
+        function renderHistory() { let cont = document.getElementById('historyList'); if(!watchHistory.length) { cont.innerHTML='<div class="text-gray-400 text-xs">No history yet</div>'; return; } cont.innerHTML = watchHistory.slice(0,8).map(h => `<div class="text-sm">🎬 ${h}</div>`).join(''); }
+        function renderOngoing() { let cont = document.getElementById('ongoingList'); if(!ongoingContent.length) { cont.innerHTML='<div class="text-gray-400">No ongoing shows</div>'; return; } cont.innerHTML = ongoingContent.map(o => `<div>▶️ ${o.title} - ${o.progress}%</div>`).join(''); }
+        function updateABTestVote(title) { let isTest = Math.random() > 0.5; if(isTest) { abVotes.B++; abVotes.B_shown++; } else { abVotes.A++; abVotes.A_shown++; } updateABDisplay(); }
+        function updateABDisplay() { let ctrA = abVotes.A_shown ? (abVotes.A/abVotes.A_shown)*100 : 0; let ctrB = abVotes.B_shown ? (abVotes.B/abVotes.B_shown)*100 : 0; document.getElementById('ctrA').innerText = ctrA.toFixed(1)+'%'; document.getElementById('ctrB').innerText = ctrB.toFixed(1)+'%'; document.getElementById('ctrABar').style.width = ctrA+'%'; document.getElementById('ctrBBar').style.width = ctrB+'%'; let winner = ctrA>ctrB ? '🏆 Algorithm A leading' : (ctrB>ctrA ? '🚀 Algorithm B leading' : '⚖️ Tie'); document.getElementById('abWinner').innerText = winner; }
+        function renderTrending() { let trendingSorted = [...masterTitleDatabase].sort((a,b)=> (b.trending||0) - (a.trending||0)).slice(0,6); let cont = document.getElementById('trendingList'); cont.innerHTML = trendingSorted.map(t => `<div class="glass-card p-2 text-center min-w-[110px]"><div class="font-bold text-sm">${t.title}</div><div class="text-xs">🔥 ${t.trending}%</div><div class="text-[10px]">${t.genre}</div></div>`).join(''); }
+        
+        function searchContent() {
+            let query = document.getElementById('searchInput').value.toLowerCase();
+            let genre = document.getElementById('genreFilter').value;
+            let filtered = masterTitleDatabase.filter(t => (!genre || genre==='all' || t.genre===genre) && t.title.toLowerCase().includes(query)).slice(0,18);
+            let container = document.getElementById('explorerResults');
+            container.innerHTML = filtered.map(item => renderFullCatalogItem(item)).join('');
+            document.querySelectorAll('#explorerResults .detail-card').forEach(card => {
+                card.addEventListener('click', () => { addToHistory(card.dataset.title); });
+            });
+        }
+        
+        function initSwipe(items) { currentSwipeItems = items || []; swipeIndex = 0; renderSwipeCard(); }
+        function renderSwipeCard() { let container = document.getElementById('swipeStack'); if(swipeIndex >= currentSwipeItems.length) { container.innerHTML='<div class="text-center py-12 text-gray-400">✨ No more recommendations ✨</div>'; return; } let item = currentSwipeItems[swipeIndex]; container.innerHTML = `<div class="swipe-card glass-card p-6 text-center"><h3 class="font-bold text-xl">${item.title}</h3><p class="mt-1">${item.genre} • ${item.duration}min • ${item.rating}</p><p class="text-sm mt-3 text-gray-300">${item.ai_description?.substring(0,120)}...</p><div class="flex justify-center gap-8 mt-5"><span class="text-3xl">👎</span><span class="text-3xl">👍</span></div></div>`; }
+        function swipeLeft() { if(swipeIndex < currentSwipeItems.length) { swipeIndex++; renderSwipeCard(); showNotification("Skipped", 'info'); } }
+        function swipeRight() { if(swipeIndex < currentSwipeItems.length) { addToHistory(currentSwipeItems[swipeIndex].title); swipeIndex++; renderSwipeCard(); showNotification("Added to watch history!", 'success'); } }
+        
+        async function analyzeUser() {
+            let uid = document.getElementById('userIdSelect').value;
+            if(!uid || !masterUserDatabase[uid]) { showNotification("Select a valid user", 'error'); return; }
+            currentUserData = masterUserDatabase[uid];
+            let mood = document.getElementById('moodSelect').value;
+            let timeF = document.getElementById('timeSelect').value;
+            currentRecommendations = getRecommendations(uid, currentUserData, masterTitleDatabase, mood, timeF);
+            renderList(currentRecommendations);
+            initSwipe(currentRecommendations);
+            let churn = computeChurnProbability(currentUserData);
+            document.getElementById('churnResult').innerHTML = `<div class="text-3xl font-bold ${churn>0.6 ? 'text-red-500' : 'text-green-400'}">${(churn*100).toFixed(1)}%</div><div class="text-xs">${churn>0.6 ? 'High risk: re-engage with personalized offers' : 'Low churn risk, loyal user'}</div>`;
+            let clusterInfo = clusterDefinitions[currentUserData.cluster] || clusterDefinitions[0];
+            // FULL user data display
+            let features = currentUserData.features || {};
+            document.getElementById('clusterInfo').innerHTML = `
+                <div class="cluster-badge cluster-${currentUserData.cluster} mb-2">${clusterInfo.name}</div>
+                <div class="grid grid-cols-2 gap-1 text-xs"><span>👤 Name:</span><span class="font-semibold">${currentUserData.name}</span>
+                <span>🎂 Age:</span><span>${currentUserData.age}</span>
+                <span>📍 Location:</span><span>${currentUserData.location}</span>
+                <span>💎 Tier:</span><span>${currentUserData.subscription_tier}</span>
+                <span>📅 Joined:</span><span>${currentUserData.join_date}</span>
+                <span>🎭 Preferred:</span><span>${currentUserData.preferred_genre}</span>
+                <span>📺 Watch Time:</span><span>${features.watch_time || 'N/A'} hrs</span>
+                <span>⭐ Engagement:</span><span>${features.engagement_score || 'N/A'}/5</span>
+                <span>📆 Sessions/week:</span><span>${features.sessions_per_week || 'N/A'}</span>
+                <span>📅 Days since login:</span><span>${features.days_since_login ?? 'N/A'}</span>
+                <span>⌛ Total hours:</span><span>${features.total_watch_hours || 'N/A'}</span>
+                <span>📱 Devices:</span><span>${features.devices_used || 'N/A'}</span>
+                <span>👥 Profiles:</span><span>${features.profile_count || 'N/A'}</span></div>
+                <div class="mt-2 text-xs text-gray-400">${clusterInfo.archetype}</div>`;
+            showNotification(`Analyzed ${currentUserData.name} (${clusterInfo.name})`, 'success');
+        }
+        
+        async function loadDynamicData() {
+            try {
+                let usersRes = await fetch('./data/users.json');
+                if(!usersRes.ok) throw new Error('users.json not found');
+                let catalogRes = await fetch('./data/catalog.json');
+                if(!catalogRes.ok) throw new Error('catalog.json not found');
+                masterUserDatabase = await usersRes.json();
+                masterTitleDatabase = await catalogRes.json();
+                let select = document.getElementById('userIdSelect');
+                select.innerHTML = '';
+                Object.keys(masterUserDatabase).forEach(uid => { let opt = document.createElement('option'); opt.value = uid; opt.textContent = `${uid} - ${masterUserDatabase[uid].name} (${masterUserDatabase[uid].preferred_genre})`; select.appendChild(opt); });
+                let genres = [...new Set(masterTitleDatabase.map(t=>t.genre).filter(Boolean))];
+                let genreFilter = document.getElementById('genreFilter'); genreFilter.innerHTML = '<option value="all">All Genres</option>'+genres.map(g=>`<option value="${g}">${g}</option>`).join('');
+                renderTrending(); renderBookmarks(); renderHistory(); renderOngoing(); updateABDisplay(); searchContent();
+                if(Object.keys(masterUserDatabase).length) analyzeUser();
+            } catch(e) { console.error(e); showNotification("Error loading data from /data/ folder. Ensure users.json and catalog.json exist.", 'error'); masterUserDatabase = {"U1":{name:"Demo",cluster:0,age:30,preferred_genre:"Comedy",location:"Global",subscription_tier:"Premium",features:{days_since_login:1,engagement_score:5}}}; masterTitleDatabase = [{title:"Stranger Things",genre:"Sci-Fi",rating:"TV-14",duration:50,trending:98,ai_description:"Demo",year:2016,popularity_score:9}]; analyzeUser(); }
+        }
+        
+        document.getElementById('glitchLogo')?.addEventListener('animationend', () => { let title = document.getElementById('mainGlitchTitle'); if(title) { title.classList.add('glitch-active'); setTimeout(()=>title.classList.remove('glitch-active'),500); } });
+        setTimeout(() => { let title = document.getElementById('mainGlitchTitle'); if(title && !title.classList.contains('glitch-active')) { title.classList.add('glitch-active'); setTimeout(()=>title.classList.remove('glitch-active'),400); } }, 700);
+        document.getElementById('themeToggle').addEventListener('click',()=>{ document.body.classList.toggle('light-mode'); let icon=document.querySelector('#themeToggle i'); if(document.body.classList.contains('light-mode')){ icon.classList.remove('fa-moon'); icon.classList.add('fa-sun'); } else { icon.classList.remove('fa-sun'); icon.classList.add('fa-moon'); } });
+        document.getElementById('analyzeBtn')?.addEventListener('click', analyzeUser);
+        document.getElementById('showListBtn')?.addEventListener('click',()=>{ document.getElementById('listView').classList.remove('hidden'); document.getElementById('swipeView').classList.add('hidden'); });
+        document.getElementById('showSwipeBtn')?.addEventListener('click',()=>{ document.getElementById('listView').classList.add('hidden'); document.getElementById('swipeView').classList.remove('hidden'); if(currentRecommendations.length) initSwipe(currentRecommendations); });
+        document.getElementById('swipeLeftBtn')?.addEventListener('click', swipeLeft);
+        document.getElementById('swipeRightBtn')?.addEventListener('click', swipeRight);
+        document.getElementById('searchInput')?.addEventListener('input', searchContent);
+        document.getElementById('genreFilter')?.addEventListener('change', searchContent);
+        document.getElementById('moodSelect')?.addEventListener('change', analyzeUser);
+        document.getElementById('timeSelect')?.addEventListener('change', analyzeUser);
+        window.addEventListener('load', loadDynamicData);
+    </script>
+</body>
+</html>

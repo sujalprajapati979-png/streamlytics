@@ -3,34 +3,176 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Streamlytics AI | Dynamic Netflix Recommender & Churn Predictor</title>
-    <!-- Google Fonts + Tailwind + Chart.js -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <title>Streamlytics AI | Complete Netflix Intelligence Hub</title>
+    <!-- Google Fonts + Tailwind + Chart.js + Font Awesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * { font-family: 'Inter', sans-serif; }
-        body { background: linear-gradient(135deg, #0b0f1c 0%, #101624 100%); }
+        
+        /* Dark Mode (Default) */
+        body {
+            background: linear-gradient(135deg, #0b0f1c 0%, #101624 100%);
+            color: #ffffff;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+        
+        /* Light Mode */
+        body.light-mode {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
+            color: #1a1a2e;
+        }
+        
+        /* Glass Card - Dark Mode */
         .glass-card {
-            background: rgba(15, 20, 35, 0.75);
+            background: rgba(15, 20, 35, 0.85);
             backdrop-filter: blur(12px);
             border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 2rem;
+            border-radius: 1.5rem;
+            transition: all 0.3s ease;
         }
-        .neon-glow {
-            box-shadow: 0 0 12px rgba(229, 62, 62, 0.3);
+        
+        /* Glass Card - Light Mode */
+        body.light-mode .glass-card {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
         }
+        
+        /* Headings - Dark */
+        h1, h2, h3, h4, .font-semibold, .font-bold {
+            color: inherit;
+        }
+        
+        /* Light mode specific text colors */
+        body.light-mode h1, 
+        body.light-mode h2, 
+        body.light-mode h3,
+        body.light-mode .glass-card,
+        body.light-mode .glass-card p,
+        body.light-mode .glass-card span,
+        body.light-mode .glass-card div:not(.text-gray-400):not(.text-gray-500) {
+            color: #1a1a2e;
+        }
+        
+        body.light-mode .text-gray-300 { color: #4a5568; }
+        body.light-mode .text-gray-400 { color: #718096; }
+        body.light-mode .text-gray-500 { color: #a0aec0; }
+        body.light-mode .text-white { color: #1a1a2e; }
+        
+        /* Select inputs - Light Mode */
+        body.light-mode select,
+        body.light-mode input {
+            background: #ffffff;
+            color: #1a1a2e;
+            border-color: #e2e8f0;
+        }
+        
+        body.light-mode select option {
+            background: #ffffff;
+            color: #1a1a2e;
+        }
+        
+        /* Border adjustments */
+        body.light-mode .border-white\/10 {
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+        
+        body.light-mode .border-gray-700 {
+            border-color: #e2e8f0;
+        }
+        
+        /* Background adjustments for light mode */
+        body.light-mode .bg-gray-900\/70 {
+            background: rgba(255, 255, 255, 0.9);
+        }
+        
+        body.light-mode .bg-white\/5 {
+            background: rgba(0, 0, 0, 0.05);
+        }
+        
+        body.light-mode .bg-gray-800 {
+            background: #e2e8f0;
+        }
+        
+        /* Rec card hover */
         .rec-card {
             transition: all 0.2s ease;
+            cursor: pointer;
         }
         .rec-card:hover {
             transform: translateY(-4px);
             background: rgba(30, 35, 55, 0.9);
-            border-left: 4px solid #e53e3e;
         }
+        body.light-mode .rec-card:hover {
+            background: rgba(0, 0, 0, 0.08);
+        }
+        
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #1e1f2c; border-radius: 8px; }
         ::-webkit-scrollbar-thumb { background: #e53e3e; border-radius: 8px; }
+        body.light-mode ::-webkit-scrollbar-track { background: #e2e8f0; }
+        
+        /* Swipe Card Styles */
+        .swipe-card {
+            position: relative;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            cursor: grab;
+        }
+        .swipe-card:active { cursor: grabbing; }
+        
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+        }
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        /* Theme toggle */
+        .theme-toggle {
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .theme-toggle:hover { transform: scale(1.1); }
+        
+        /* Bookmark animation */
+        .bookmarked { color: #e53e3e; animation: pop 0.3s ease; }
+        @keyframes pop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+        
+        .trending-badge {
+            background: linear-gradient(135deg, #e53e3e, #f97316);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { opacity: 0.8; }
+            50% { opacity: 1; transform: scale(1.05); }
+            100% { opacity: 0.8; }
+        }
+        
+        /* Button styles for light mode */
+        body.light-mode button.bg-red-600\/30 {
+            background: rgba(220, 38, 38, 0.15);
+            color: #991b1b;
+        }
+        
+        body.light-mode .bg-red-600 {
+            background: #dc2626;
+        }
+        
+        /* Loading spinner */
         .loading-spinner {
             border: 2px solid rgba(255,255,255,0.1);
             border-top: 2px solid #e53e3e;
@@ -41,25 +183,53 @@
             display: inline-block;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        /* Cluster badge styles */
+        .cluster-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .cluster-0 { background: rgba(16, 185, 129, 0.2); color: #10b981; }
+        .cluster-1 { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+        .cluster-2 { background: rgba(245, 158, 11, 0.2); color: #f59e0b; }
+        .cluster-3 { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
+        .cluster-4 { background: rgba(139, 92, 246, 0.2); color: #8b5cf6; }
+        
+        body.light-mode .cluster-0 { background: rgba(16, 185, 129, 0.15); }
+        body.light-mode .cluster-1 { background: rgba(239, 68, 68, 0.15); }
+        body.light-mode .cluster-2 { background: rgba(245, 158, 11, 0.15); }
+        body.light-mode .cluster-3 { background: rgba(59, 130, 246, 0.15); }
+        body.light-mode .cluster-4 { background: rgba(139, 92, 246, 0.15); }
     </style>
 </head>
-<body class="text-white antialiased">
+<body class="antialiased">
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
-        <!-- Header -->
-        <div class="text-center mb-10">
-            <div class="inline-flex items-center gap-3 bg-white/5 backdrop-blur-sm rounded-full px-5 py-2 border border-white/10 mb-5">
-                <span class="text-xl">🎬</span>
-                <span class="text-sm font-medium tracking-wide">STREAMLytics • DYNAMIC AI ENGINE</span>
+        <!-- Header with Theme Toggle -->
+        <div class="flex justify-between items-center mb-6">
+            <div class="text-center flex-1">
+                <div class="inline-flex items-center gap-3 bg-white/5 backdrop-blur-sm rounded-full px-5 py-2 border border-white/10 mb-5">
+                    <span class="text-xl">🎬</span>
+                    <span class="text-sm font-medium tracking-wide">STREAMLytics • COMPLETE AI ENGINE</span>
+                </div>
+                <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight bg-gradient-to-r from-white via-red-400 to-red-500 bg-clip-text text-transparent">Netflix Intelligence Hub</h1>
+                <p class="text-gray-300 max-w-2xl mx-auto mt-4 text-lg">Mood filtering • Time-aware • Swipe recommendations • AI insights</p>
             </div>
-            <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight bg-gradient-to-r from-white via-red-400 to-red-500 bg-clip-text text-transparent">Netflix Intelligence Hub</h1>
-            <p class="text-gray-300 max-w-2xl mx-auto mt-4 text-lg">Live hybrid recommendations + churn risk prediction • Real-time user analytics</p>
+            <div class="theme-toggle ml-4 p-3 glass-card rounded-full" id="themeToggle">
+                <i class="fas fa-moon text-xl"></i>
+            </div>
         </div>
 
+        <!-- Notification Container -->
+        <div id="notificationContainer"></div>
+
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-7">
-            <!-- LEFT PANEL: Dynamic user selection & churn -->
+            <!-- LEFT PANEL -->
             <div class="lg:col-span-1 space-y-6">
-                <!-- User profile card with dynamic fetch from API/GitHub -->
+                <!-- User profile card -->
                 <div class="glass-card p-6">
                     <div class="flex items-center gap-3 border-b border-white/10 pb-4 mb-5">
                         <div class="w-10 h-10 rounded-full bg-red-600/20 flex items-center justify-center"><span class="text-xl">👤</span></div>
@@ -67,14 +237,92 @@
                     </div>
                     <div class="space-y-4">
                         <div>
-                            <label class="text-sm text-gray-300 block mb-2">🎯 Select User (Dynamic)</label>
+                            <label class="text-sm text-gray-300 block mb-2">🎯 Select User (Dynamic from GitHub)</label>
                             <select id="userIdSelect" class="w-full bg-gray-900/70 border border-gray-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-red-500 transition">
-                                <option value="">Loading users...</option>
+                                <option value="">Loading users from data/users.json...</option>
                             </select>
                         </div>
-                        <button id="analyzeBtn" class="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 transition-all rounded-xl py-3 font-semibold shadow-lg flex items-center justify-center gap-2">
+                        <button id="analyzeBtn" class="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 transition-all rounded-xl py-3 font-semibold shadow-lg flex items-center justify-center gap-2 text-white">
                             <span>🔍</span> Analyze & Predict Churn
                         </button>
+                    </div>
+                </div>
+
+                <!-- User Cluster Profile Card (Enhanced) -->
+                <div class="glass-card p-5">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="text-lg">🧩</span>
+                        <span class="font-medium">User Cluster Profile</span>
+                    </div>
+                    <div id="clusterInfo" class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-300">Cluster ID:</span>
+                            <span id="clusterId" class="font-bold text-white">—</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-300">Cluster Type:</span>
+                            <span id="clusterType" class="cluster-badge">—</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-300">Dominant Genre:</span>
+                            <span id="dominantGenre" class="text-red-300 font-semibold">—</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-300">Engagement Archetype:</span>
+                            <span id="engagementArchetype" class="text-gray-300">—</span>
+                        </div>
+                        <div class="border-t border-white/10 my-2"></div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-300">🎯 Preferred Genre:</span>
+                            <span id="preferredGenre" class="text-white">—</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-300">⏱️ Watch Time (min/week):</span>
+                            <span id="watchTime" class="text-white">—</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-300">📊 Engagement Score:</span>
+                            <span id="engagementScore" class="text-white">—</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-300">📅 Last Active:</span>
+                            <span id="lastActive" class="text-white">—</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-300">🎂 Age:</span>
+                            <span id="userAge" class="text-white">—</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mood Filter & Time Aware -->
+                <div class="glass-card p-6">
+                    <div class="flex items-center gap-3 border-b border-white/10 pb-4 mb-5">
+                        <div class="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center"><span class="text-xl">🎭</span></div>
+                        <h2 class="text-xl font-semibold">Mood & Time Filter</h2>
+                    </div>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="text-sm text-gray-300 block mb-2">😊 Select Mood</label>
+                            <select id="moodSelect" class="w-full bg-gray-900/70 border border-gray-700 rounded-xl px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-red-500">
+                                <option value="all">All Moods</option>
+                                <option value="funny">🤣 Funny / Comedy</option>
+                                <option value="emotional">😢 Emotional / Drama</option>
+                                <option value="mindbending">🤯 Mind-bending / Sci-Fi</option>
+                                <option value="scary">😱 Scary / Thriller</option>
+                                <option value="romantic">💕 Romantic</option>
+                                <option value="action">⚡ Action Packed</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="text-sm text-gray-300 block mb-2">⏰ Time Available</label>
+                            <select id="timeSelect" class="w-full bg-gray-900/70 border border-gray-700 rounded-xl px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-red-500">
+                                <option value="short">🍿 Short (Under 30 min)</option>
+                                <option value="medium">📺 Medium (30-60 min)</option>
+                                <option value="long">🎬 Long (Over 60 min)</option>
+                                <option value="any">⏳ Any Duration</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
 
@@ -92,365 +340,624 @@
                         </div>
                         <p id="riskLabel" class="mt-3 text-xs text-gray-400">Confidence metrics</p>
                     </div>
-                    <div class="mt-4 text-xs text-gray-400 border-t border-white/10 pt-4">
-                        <span class="font-semibold">🧠 Model:</span> Dynamic Random Forest • Real-time feature weighting • AUC ~0.81
-                    </div>
                 </div>
 
-                <!-- Cluster insight with dynamic data -->
-                <div class="glass-card p-5">
-                    <div class="flex items-center gap-2 mb-3"><span class="text-lg">🧩</span><span class="font-medium">User Cluster Profile</span></div>
-                    <div id="clusterInfo" class="text-sm text-gray-300 space-y-1">
-                        <p>▪️ Cluster: <span class="text-white font-semibold">—</span></p>
-                        <p>▪️ Dominant genre: <span class="text-red-300">—</span></p>
-                        <p>▪️ Engagement archetype: <span class="text-gray-300">—</span></p>
+                <!-- Seasonal Trend Alert -->
+                <div class="glass-card p-5" id="seasonalAlert">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="text-lg">🌸</span>
+                        <span class="font-medium">Seasonal Spotlight</span>
+                        <span class="trending-badge text-xs px-2 py-0.5 rounded-full text-white ml-2">LIVE</span>
                     </div>
+                    <div id="seasonalContent" class="text-sm text-gray-300">Loading seasonal picks...</div>
                 </div>
             </div>
 
-            <!-- RIGHT PANEL: Recommendations & Viz -->
+            <!-- RIGHT PANEL -->
             <div class="lg:col-span-2 space-y-6">
-                <!-- Recommendations output -->
+                <!-- Swipe Interface + Recommendations Tabs -->
                 <div class="glass-card p-6">
                     <div class="flex flex-wrap justify-between items-center border-b border-white/10 pb-4 mb-5">
                         <div class="flex items-center gap-3">
                             <div class="w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center"><span class="text-xl">🎥</span></div>
-                            <h2 class="text-xl font-semibold">Hybrid Recommendations</h2>
+                            <h2 class="text-xl font-semibold">Smart Recommendations</h2>
                         </div>
-                        <span class="text-xs px-3 py-1 bg-white/5 rounded-full">content-based + clustering + age-filter</span>
+                        <div class="flex gap-2">
+                            <button id="showListBtn" class="px-3 py-1 rounded-lg bg-red-600/30 text-white hover:bg-red-600 transition">📋 List View</button>
+                            <button id="showSwipeBtn" class="px-3 py-1 rounded-lg bg-white/10 text-white hover:bg-white/20 transition">🔄 Swipe Mode</button>
+                        </div>
                     </div>
-                    <div id="recommendationList" class="space-y-3">
-                        <div class="flex justify-center py-12 text-gray-400 flex-col items-center gap-2">
-                            <svg class="w-12 h-12 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"></path></svg>
-                            <p>Click “Analyze” to see personalized recommendations</p>
+                    
+                    <!-- List View -->
+                    <div id="listView">
+                        <div id="recommendationList" class="space-y-3">
+                            <div class="flex justify-center py-12 text-gray-400 flex-col items-center gap-2">
+                                <i class="fas fa-film text-4xl opacity-40"></i>
+                                <p>Click "Analyze" to see personalized recommendations</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Swipe View -->
+                    <div id="swipeView" class="hidden">
+                        <div class="relative flex justify-center min-h-[400px]">
+                            <div id="swipeStack" class="relative w-full max-w-md">
+                                <div class="text-center py-12 text-gray-400">Loading swipe cards...</div>
+                            </div>
+                        </div>
+                        <div class="flex justify-center gap-6 mt-6">
+                            <button id="swipeLeftBtn" class="w-14 h-14 rounded-full bg-red-600/30 hover:bg-red-600 transition text-2xl text-white">✗</button>
+                            <button id="swipeRightBtn" class="w-14 h-14 rounded-full bg-emerald-600/30 hover:bg-emerald-600 transition text-2xl text-white">✓</button>
+                        </div>
+                        <p class="text-center text-xs text-gray-400 mt-3">Swipe left to dislike • Swipe right to like • Improves recommendations</p>
+                    </div>
+                </div>
+
+                <!-- Trending Shows & Movies -->
+                <div class="glass-card p-5">
+                    <div class="flex items-center gap-2 mb-4">
+                        <i class="fas fa-chart-line text-red-500"></i>
+                        <h3 class="font-semibold">🔥 Trending Now</h3>
+                        <span class="trending-badge text-xs px-2 py-0.5 rounded-full text-white">HOT</span>
+                    </div>
+                    <div id="trendingList" class="flex gap-3 overflow-x-auto pb-2">
+                        <div class="text-gray-400">Loading trends...</div>
+                    </div>
+                </div>
+
+                <!-- Bookmarks & History + Ongoing -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="glass-card p-5">
+                        <h3 class="font-semibold flex items-center gap-2 mb-3"><i class="fas fa-bookmark text-red-400"></i> My Bookmarks</h3>
+                        <div id="bookmarksList" class="space-y-2 max-h-48 overflow-y-auto text-sm">
+                            <p class="text-gray-400 text-xs">No bookmarks yet. Click the bookmark icon on any recommendation!</p>
+                        </div>
+                    </div>
+                    <div class="glass-card p-5">
+                        <h3 class="font-semibold flex items-center gap-2 mb-3"><i class="fas fa-history text-blue-400"></i> Watch History & Ongoing</h3>
+                        <div id="historyList" class="space-y-2 max-h-48 overflow-y-auto text-sm">
+                            <p class="text-gray-400 text-xs">Your recently watched and ongoing content will appear here.</p>
+                        </div>
+                        <div class="mt-3 pt-2 border-t border-white/10">
+                            <h4 class="text-xs font-semibold mb-2">▶️ Currently Watching</h4>
+                            <div id="ongoingList" class="text-xs text-gray-300">None</div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Churn Factors & Similarity chart -->
+                <!-- Interactive Content Explorer & Social Proof -->
+                <div class="glass-card p-5">
+                    <h3 class="font-semibold flex items-center gap-2 mb-3"><i class="fas fa-search"></i> Interactive Content Explorer</h3>
+                    <div class="flex gap-2 mb-3">
+                        <input type="text" id="searchInput" placeholder="Search movies or shows..." class="flex-1 bg-gray-900/70 border border-gray-700 rounded-xl px-4 py-2 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500">
+                        <select id="genreFilter" class="bg-gray-900/70 border border-gray-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-red-500">
+                            <option value="all">All Genres</option>
+                            <option value="Comedy">Comedy</option>
+                            <option value="Drama">Drama</option>
+                            <option value="Sci-Fi">Sci-Fi</option>
+                            <option value="Thriller">Thriller</option>
+                            <option value="Documentary">Documentary</option>
+                            <option value="Action">Action</option>
+                            <option value="Romance">Romance</option>
+                            <option value="Fantasy">Fantasy</option>
+                        </select>
+                    </div>
+                    <div id="explorerResults" class="grid grid-cols-2 gap-2 max-h-64 overflow-y-auto">
+                        <p class="text-gray-400 text-xs col-span-2">Use search to explore content...</p>
+                    </div>
+                </div>
+
+                <!-- A/B Testing Simulator + Social Proof -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="glass-card p-5">
-                        <h3 class="font-semibold flex items-center gap-2"><span>📊</span> Top Churn Indicators</h3>
-                        <canvas id="factorChart" height="200" class="mt-3"></canvas>
-                        <p class="text-[11px] text-gray-400 mt-3 text-center">Feature importance (dynamic weights) • lower watch time & engagement drive risk</p>
+                        <h3 class="font-semibold flex items-center gap-2"><i class="fas fa-flask"></i> A/B Test Simulator</h3>
+                        <div class="mt-3 space-y-3">
+                            <div class="flex justify-between text-sm">
+                                <span>Algorithm A (Current)</span>
+                                <span id="ctrA" class="font-mono">0%</span>
+                            </div>
+                            <div class="w-full bg-gray-700 rounded-full h-2">
+                                <div id="ctrABar" class="bg-red-500 h-2 rounded-full w-0"></div>
+                            </div>
+                            <div class="flex justify-between text-sm mt-2">
+                                <span>Algorithm B (Test)</span>
+                                <span id="ctrB" class="font-mono">0%</span>
+                            </div>
+                            <div class="w-full bg-gray-700 rounded-full h-2">
+                                <div id="ctrBBar" class="bg-emerald-500 h-2 rounded-full w-0"></div>
+                            </div>
+                            <p id="abWinner" class="text-xs text-center text-gray-400 mt-2">Click recommendations to vote</p>
+                        </div>
                     </div>
                     <div class="glass-card p-5">
-                        <h3 class="font-semibold flex items-center gap-2"><span>⚡</span> Session Similarity Score</h3>
-                        <div class="mt-2 flex justify-center">
-                            <div class="relative w-32 h-32">
-                                <svg class="w-full h-full" viewBox="0 0 40 40">
-                                    <circle cx="20" cy="20" r="16" fill="none" stroke="#2d3748" stroke-width="3"/>
-                                    <circle id="similarityArc" cx="20" cy="20" r="16" fill="none" stroke="#f97316" stroke-width="3" stroke-dasharray="100" stroke-dashoffset="75" transform="rotate(-90 20 20)" />
-                                </svg>
-                                <div class="absolute inset-0 flex items-center justify-center">
-                                    <span id="simScore" class="text-2xl font-bold">0%</span>
-                                </div>
-                            </div>
+                        <h3 class="font-semibold flex items-center gap-2"><i class="fas fa-users"></i> Community Insights</h3>
+                        <div id="communityInsights" class="space-y-2 text-sm">
+                            <p>👥 2,347 users watching similar content</p>
+                            <p>⭐ Most loved: "Stranger Things" (4.8/5)</p>
+                            <p>💬 "Best sci-fi this year!" - trending review</p>
+                            <p>📈 +47% watch time this week</p>
                         </div>
-                        <p class="text-center text-xs text-gray-400 mt-2">Cosine similarity (seed vs cluster)</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Footer note -->
         <div class="mt-12 text-center text-gray-500 text-xs border-t border-white/10 pt-6">
-            Streamlytics AI • Netflix-style hybrid recommender using TF-IDF + KMeans clustering • Dynamic user data fetched from GitHub repository • Age-appropriate filtering
+            Streamlytics AI • Complete Intelligence Hub • Mood-Aware • Time-Aware • Swipe Recommendations • A/B Testing
         </div>
     </div>
 
     <script>
-        // ======================= DYNAMIC DATA LAYER =======================
-        // The system now fetches user data and a dynamic title catalog from a simulated remote JSON.
-        // In a real GitHub Pages deployment, you can replace these fetch URLs with actual raw JSON files.
-        // For maximum dynamism, we use two data sources: 
-        // 1. users.json (user profiles, clusters, behavioral features)
-        // 2. catalog.json (streaming content with genres, ratings, etc.)
-        // Since we are making a standalone HTML that can work on GitHub Pages, we will embed default data but also allow external JSON.
-        // However, to truly make it "dynamic", we'll implement a fallback + ability to load from external URLs.
-        
-        // For demo, we define a base dataset that can be overridden by remote fetch.
-        // We also provide a mechanism to fetch from a public GitHub gist or raw JSON file.
-        // To keep it self-contained but dynamic, we will load from a mock endpoint that can be swapped with actual JSON.
-        
-        // Configuration: change these URLs to point to your actual JSON files hosted on GitHub.
-        const DATA_CONFIG = {
-            usersUrl: './data/users.json',    // You can replace with raw GitHub URL e.g., https://raw.githubusercontent.com/yourrepo/main/users.json
-            catalogUrl: './data/catalog.json' // Replace with actual catalog JSON URL
-        };
-        
-        // Fallback dynamic datasets (enriched with realistic 50+ titles and 20+ users)
+        // ======================= DYNAMIC DATA FROM GITHUB =======================
         let masterUserDatabase = {};
-        let masterTitleDatabase = [];
+        let masterTitleDatabase = {};
+        let currentUserData = null;
+        let currentRecommendations = [];
+        let bookmarks = JSON.parse(localStorage.getItem('netflix_bookmarks') || '[]');
+        let watchHistory = JSON.parse(localStorage.getItem('netflix_history') || '[]');
+        let ongoingContent = JSON.parse(localStorage.getItem('netflix_ongoing') || '[]');
+        let abVotes = { A: 0, B: 0, A_shown: 0, B_shown: 0 };
+        let swipeIndex = 0;
+        let currentSwipeItems = [];
         
-        // Cluster definitions
-        const clusterDominantGenre = { 0: "Comedy", 1: "Thriller", 2: "Drama", 3: "Sci-Fi", 4: "Documentary" };
-        const clusterDescriptions = {
-            0: "🎉 Comedy Enthusiasts • high binge frequency",
-            1: "🔪 Thriller Seekers • intense content lovers",
-            2: "🎭 Drama Devotees • character-driven fans",
-            3: "🚀 Sci-Fi Explorers • futuristic & mind-bending",
-            4: "📽️ Documentary Buffs • knowledge seekers"
+        // Cluster definitions and descriptions
+        const clusterDefinitions = {
+            0: { name: "Comedy Enthusiasts", genre: "Comedy", archetype: "🎉 High binge frequency • Light-hearted content lovers", color: "cluster-0" },
+            1: { name: "Thrill Seekers", genre: "Thriller", archetype: "🔪 Intense content lovers • Suspense enthusiasts", color: "cluster-1" },
+            2: { name: "Drama Devotees", genre: "Drama", archetype: "🎭 Character-driven fans • Emotional storytelling", color: "cluster-2" },
+            3: { name: "Sci-Fi Explorers", genre: "Sci-Fi", archetype: "🚀 Futuristic & mind-bending • Tech enthusiasts", color: "cluster-3" },
+            4: { name: "Documentary Buffs", genre: "Documentary", archetype: "📽️ Knowledge seekers • Real story lovers", color: "cluster-4" }
         };
         
-        // Build initial fallback catalog (rich dynamic set)
-        function buildDefaultCatalog() {
-            return [
-                { title: "Black Mirror: Bandersnatch", genre: "Drama", type: "Movie", rating: "TV-MA", duration: 90 },
-                { title: "Dragonheart 3: The Sorcerer", genre: "Sci-Fi", type: "Movie", rating: "PG-13", duration: 97 },
-                { title: "Masters of the Universe: Revelation", genre: "Sci-Fi", type: "TV Show", rating: "TV-14", seasons: 1 },
-                { title: "History of Swear Words", genre: "Documentary", type: "TV Show", rating: "TV-MA", seasons: 1 },
-                { title: "John Mulaney: Kid Gorgeous", genre: "Comedy", type: "Movie", rating: "TV-14", duration: 66 },
-                { title: "Grace and Frankie", genre: "Comedy", type: "TV Show", rating: "TV-14", seasons: 7 },
-                { title: "The Woman in the Window", genre: "Thriller", type: "Movie", rating: "R", duration: 100 },
-                { title: "3 Days to Kill", genre: "Action", type: "Movie", rating: "PG-13", duration: 117 },
-                { title: "DOTA: Dragon's Blood", genre: "Fantasy", type: "TV Show", rating: "TV-14", seasons: 3 },
-                { title: "Doom: Annihilation", genre: "Sci-Fi", type: "Movie", rating: "R", duration: 97 },
-                { title: "Dragonheart: Vengeance", genre: "Fantasy", type: "Movie", rating: "PG-13", duration: 97 },
-                { title: "Fan Girl", genre: "Drama", type: "Movie", rating: "PG-13", duration: 104 },
-                { title: "The English Game", genre: "Drama", type: "TV Show", rating: "TV-14", seasons: 1 },
-                { title: "Free to Play", genre: "Documentary", type: "Movie", rating: "PG-13", duration: 75 },
-                { title: "Synchronic", genre: "Sci-Fi", type: "Movie", rating: "R", duration: 102 },
-                { title: "Tim Minchin Live", genre: "Comedy", type: "Movie", rating: "TV-14", duration: 90 },
-                { title: "Andhakaaram", genre: "Thriller", type: "Movie", rating: "TV-MA", duration: 128 },
-                { title: "Underworld", genre: "Action", type: "Movie", rating: "R", duration: 121 },
-                { title: "V for Vendetta", genre: "Thriller", type: "Movie", rating: "R", duration: 132 },
-                { title: "The Brothers Grimm", genre: "Fantasy", type: "Movie", rating: "PG-13", duration: 118 },
-                { title: "Our Planet", genre: "Documentary", type: "TV Show", rating: "TV-PG", seasons: 2 },
-                { title: "The Witcher", genre: "Fantasy", type: "TV Show", rating: "TV-MA", seasons: 3 },
-                { title: "Stranger Things", genre: "Sci-Fi", type: "TV Show", rating: "TV-14", seasons: 4 },
-                { title: "The Crown", genre: "Drama", type: "TV Show", rating: "TV-MA", seasons: 5 },
-                { title: "After Life", genre: "Comedy", type: "TV Show", rating: "TV-MA", seasons: 3 }
-            ];
+        const moodGenreMap = {
+            funny: ["Comedy", "Stand-up"],
+            emotional: ["Drama", "Romance"],
+            mindbending: ["Sci-Fi", "Thriller"],
+            scary: ["Thriller", "Horror"],
+            romantic: ["Romance", "Drama"],
+            action: ["Action", "Thriller"]
+        };
+        
+        const timeDurationMap = {
+            short: { max: 30 },
+            medium: { min: 30, max: 60 },
+            long: { min: 60 },
+            any: { min: 0, max: 999 }
+        };
+        
+        function showNotification(message, type = 'info') {
+            const container = document.getElementById('notificationContainer');
+            const notif = document.createElement('div');
+            notif.className = `notification glass-card p-3 px-5 ${type === 'success' ? 'border-green-500' : 'border-red-500'} border-l-4`;
+            notif.innerHTML = `<span>${message}</span>`;
+            container.appendChild(notif);
+            setTimeout(() => notif.remove(), 3000);
         }
         
-        function buildDefaultUsers() {
-            return {
-                "U100000": { cluster: 1, age: 56, genre: "Sci-Fi", riskScore: 0.22, churnProb: 0.18, features: { watchTime: 220, engagement: 0.29, sessions: 17, daysSinceLogin: 3 } },
-                "U100001": { cluster: 4, age: 46, genre: "Documentary", riskScore: 0.35, churnProb: 0.31, features: { watchTime: 76, engagement: 0.47, sessions: 15, daysSinceLogin: 8 } },
-                "U100002": { cluster: 0, age: 32, genre: "Comedy", riskScore: 0.45, churnProb: 0.42, features: { watchTime: 215, engagement: 4.5, sessions: 6, daysSinceLogin: 1 } },
-                "U100003": { cluster: 1, age: 60, genre: "Action", riskScore: 0.19, churnProb: 0.15, features: { watchTime: 280, engagement: 2.25, sessions: 4, daysSinceLogin: 2 } },
-                "U100004": { cluster: 0, age: 25, genre: "Horror", riskScore: 0.52, churnProb: 0.49, features: { watchTime: 261, engagement: 3.27, sessions: 15, daysSinceLogin: 12 } },
-                "U100005": { cluster: 4, age: 38, genre: "Documentary", riskScore: 0.38, churnProb: 0.34, features: { watchTime: 142, engagement: 1.2, sessions: 9, daysSinceLogin: 5 } },
-                "U110538": { cluster: 2, age: 56, genre: "Drama", riskScore: 0.27, churnProb: 0.23, features: { watchTime: 198, engagement: 1.9, sessions: 8, daysSinceLogin: 4 } },
-                "U112447": { cluster: 0, age: 37, genre: "Comedy", riskScore: 0.31, churnProb: 0.28, features: { watchTime: 132, engagement: 2.1, sessions: 12, daysSinceLogin: 6 } },
-                "U998877": { cluster: 3, age: 29, genre: "Sci-Fi", riskScore: 0.21, churnProb: 0.19, features: { watchTime: 310, engagement: 3.8, sessions: 22, daysSinceLogin: 1 } },
-                "U554433": { cluster: 2, age: 45, genre: "Drama", riskScore: 0.33, churnProb: 0.3, features: { watchTime: 97, engagement: 1.1, sessions: 5, daysSinceLogin: 14 } }
+        function getSeasonalContent() {
+            const month = new Date().getMonth();
+            const seasons = {
+                winter: { months: [11, 0, 1], picks: ["❄️ The Snowman", "🎄 The Christmas Chronicles", "⛷️ Winter on Fire"], emoji: "⛄" },
+                spring: { months: [2, 3, 4], picks: ["🌸 Spring Blossoms", "🌷 Hidden Gardens", "🐣 New Beginnings"], emoji: "🌸" },
+                summer: { months: [5, 6, 7], picks: ["🏖️ Summer Vibes", "🌊 The Beach", "☀️ Endless Summer"], emoji: "☀️" },
+                fall: { months: [8, 9, 10], picks: ["🍂 Autumn Tales", "🎃 Halloween Specials", "🍁 Falling Leaves"], emoji: "🍂" }
             };
+            let currentSeason = Object.values(seasons).find(s => s.months.includes(month)) || seasons.fall;
+            return `${currentSeason.emoji} Seasonal: ${currentSeason.picks.join(" • ")}`;
         }
         
-        // Global state
-        let currentUserData = null;
-        let factorChartInstance = null;
-        
-        // Helper: Age-based rating filter
         function getAgeAppropriateRatings(age) {
             if (age < 14) return ['TV-Y', 'TV-G', 'G', 'PG'];
             if (age < 17) return ['PG', 'PG-13', 'TV-14', 'TV-PG'];
             return ['PG-13', 'R', 'TV-MA', 'TV-14', 'NC-17'];
         }
         
-        // Dynamic recommendation engine (hybrid)
-        function getRecommendations(userId, userData, catalog) {
+        function getRecommendations(userId, userData, catalog, mood = 'all', timeFilter = 'any') {
             const age = userData.age;
             const cluster = userData.cluster;
-            const dominantGenre = clusterDominantGenre[cluster] || "Thriller";
-            const preferredGenre = userData.genre || dominantGenre;
-            let allowedRatings = getAgeAppropriateRatings(age);
+            const preferredGenre = userData.preferred_genre || userData.genre || clusterDefinitions[cluster]?.genre || "Drama";
+            const allowedRatings = getAgeAppropriateRatings(age);
+            const moodGenres = mood !== 'all' ? moodGenreMap[mood] || [] : [];
+            const timeRange = timeDurationMap[timeFilter];
+            
             let candidates = catalog.filter(t => allowedRatings.includes(t.rating));
-            if (candidates.length === 0) candidates = [...catalog]; // fallback
+            
+            if (mood !== 'all' && moodGenres.length) {
+                candidates = candidates.filter(t => moodGenres.some(mg => t.genre && t.genre.toLowerCase().includes(mg.toLowerCase())));
+            }
+            if (timeRange.min !== undefined && candidates.length) {
+                candidates = candidates.filter(t => {
+                    const duration = t.duration || (t.type === 'Movie' ? 90 : 50);
+                    return duration >= (timeRange.min || 0) && duration <= (timeRange.max || 999);
+                });
+            }
+            if (candidates.length < 3 && catalog.length) candidates = [...catalog];
+            if (!candidates.length) candidates = [...catalog];
             
             let scored = candidates.map(t => {
-                let genreMatch = (t.genre.toLowerCase() === preferredGenre.toLowerCase() || t.genre.toLowerCase() === dominantGenre.toLowerCase()) ? 2 : 0;
-                let clusterGenreBonus = (t.genre.toLowerCase() === dominantGenre.toLowerCase()) ? 1.5 : 0;
-                let durationScore = t.type === 'Movie' ? Math.min((t.duration || 90) / 120, 1) : 0.8;
-                let totalScore = genreMatch + clusterGenreBonus + durationScore + (Math.random() * 0.15);
-                return { ...t, score: totalScore };
+                let genreMatch = (t.genre && t.genre.toLowerCase() === preferredGenre.toLowerCase()) ? 2 : 
+                                (t.genre && t.genre.toLowerCase().includes(clusterDefinitions[cluster]?.genre?.toLowerCase() || '') ? 1 : 0);
+                let trendingBonus = (t.trending || 50) / 50;
+                let score = genreMatch + trendingBonus + (Math.random() * 0.3);
+                return { ...t, score };
             });
             scored.sort((a,b) => b.score - a.score);
-            let top = scored.slice(0, 5);
-            if (top.length < 3) top = candidates.slice(0,5);
-            return top.map(t => ({ title: t.title, genre: t.genre, rating: t.rating, type: t.type }));
+            return scored.slice(0, 8);
         }
         
-        // Dynamic churn probability using advanced features
         function computeChurnProbability(userData) {
-            const features = userData.features || { watchTime: 150, engagement: 1.0, sessions: 10, daysSinceLogin: 5 };
-            const watchNorm = Math.min(1, (300 - Math.min(features.watchTime, 300)) / 300);
-            const engagementNorm = Math.min(1, (5 - Math.min(features.engagement, 5)) / 5);
-            const sessionNorm = features.sessions < 8 ? 0.4 : (features.sessions < 12 ? 0.2 : 0);
-            const loginNorm = Math.min(0.5, features.daysSinceLogin / 30);
-            let risk = (watchNorm * 0.45) + (engagementNorm * 0.35) + sessionNorm + loginNorm;
-            risk = Math.min(0.96, Math.max(0.04, risk + (userData.riskScore || 0.1)));
+            const features = userData.features || { watch_time: 150, engagement_score: 1.0, sessions_per_week: 10, days_since_login: 5 };
+            const watchTime = features.watch_time || features.watchTime || 150;
+            const engagement = features.engagement_score || features.engagement || 1.0;
+            const sessions = features.sessions_per_week || features.sessions || 10;
+            const daysInactive = features.days_since_login || features.daysSinceLogin || 5;
+            
+            const risk = Math.min(0.96, Math.max(0.04, 
+                (1 - Math.min(1, watchTime / 300)) * 0.45 + 
+                (1 - Math.min(1, engagement / 5)) * 0.35 + 
+                (sessions < 8 ? 0.3 : 0) + 
+                Math.min(0.5, daysInactive / 30)
+            ));
             return parseFloat(risk.toFixed(3));
         }
         
-        function getClusterDescription(clusterId) {
-            return clusterDescriptions[clusterId] || "Mixed profile • balanced viewing";
+        function updateClusterProfile(userData) {
+            const clusterId = userData.cluster;
+            const clusterInfo = clusterDefinitions[clusterId] || clusterDefinitions[0];
+            const features = userData.features || {};
+            
+            document.getElementById('clusterId').innerHTML = `<span class="font-bold">${clusterId}</span>`;
+            document.getElementById('clusterType').innerHTML = clusterInfo.name;
+            document.getElementById('clusterType').className = `cluster-badge ${clusterInfo.color}`;
+            document.getElementById('dominantGenre').innerHTML = clusterInfo.genre;
+            document.getElementById('engagementArchetype').innerHTML = clusterInfo.archetype;
+            document.getElementById('preferredGenre').innerHTML = userData.preferred_genre || userData.genre || clusterInfo.genre;
+            document.getElementById('watchTime').innerHTML = `${features.watch_time || features.watchTime || 150} min/week`;
+            document.getElementById('engagementScore').innerHTML = (features.engagement_score || features.engagement || 1.0).toFixed(2);
+            document.getElementById('lastActive').innerHTML = `${features.days_since_login || features.daysSinceLogin || 5} days ago`;
+            document.getElementById('userAge').innerHTML = `${userData.age} years`;
         }
         
-        // Render charts
-        function renderFactorChart(userData) {
-            const ctx = document.getElementById('factorChart').getContext('2d');
-            const features = userData.features || { watchTime: 150, engagement: 1.2, sessions: 10, daysSinceLogin: 5 };
-            const importance = {
-                'Avg Watch Time': Math.min(1, Math.max(0, 1 - (features.watchTime / 350))),
-                'Engagement Ratio': Math.min(1, Math.max(0, 1 - (features.engagement / 5.5))),
-                'Sessions/Week': Math.min(1, Math.max(0, 1 - (features.sessions / 22))),
-                'Days Inactive': Math.min(0.8, features.daysSinceLogin / 25)
-            };
-            if (factorChartInstance) factorChartInstance.destroy();
-            factorChartInstance = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: Object.keys(importance),
-                    datasets: [{
-                        label: 'Risk Contribution',
-                        data: Object.values(importance),
-                        backgroundColor: ['#ef4444', '#f97316', '#f59e0b', '#eab308'],
-                        borderRadius: 8
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: true,
-                    plugins: { legend: { labels: { color: '#cbd5e1' } } },
-                    scales: { y: { beginAtZero: true, max: 1, grid: { color: '#334155' }, ticks: { color: '#94a3b8' } },
-                             x: { ticks: { color: '#cbd5e6' } } }
+        function renderList(recommendations) {
+            const container = document.getElementById('recommendationList');
+            if (!recommendations || !recommendations.length) {
+                container.innerHTML = '<div class="text-center py-8 text-gray-400">No recommendations available</div>';
+                return;
+            }
+            container.innerHTML = recommendations.map((rec, idx) => `
+                <div class="rec-card glass-card p-4 flex justify-between items-center transition-all" data-title="${rec.title}">
+                    <div class="flex-1">
+                        <div class="font-bold text-lg">${rec.title}</div>
+                        <div class="flex gap-3 text-xs text-gray-300 mt-1">
+                            <span>🎭 ${rec.genre || 'Various'}</span>
+                            <span>⭐ ${rec.rating || 'NR'}</span>
+                            <span>${rec.type === 'Movie' ? '🎬 Movie' : '📺 Series'} • ${rec.duration || 50}min</span>
+                        </div>
+                        <p class="text-xs text-gray-400 mt-2 italic">${rec.ai_description || rec.aiDesc || "AI-generated: Highly recommended based on your taste profile."}</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <i class="far fa-bookmark cursor-pointer hover:text-red-400 text-xl bookmark-icon" data-title="${rec.title}"></i>
+                        <span class="text-red-400 text-sm font-medium bg-white/5 px-3 py-1 rounded-full">#${idx+1}</span>
+                    </div>
+                </div>
+            `).join('');
+            
+            document.querySelectorAll('.bookmark-icon').forEach(icon => {
+                icon.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const title = icon.dataset.title;
+                    if (!bookmarks.includes(title)) {
+                        bookmarks.push(title);
+                        localStorage.setItem('netflix_bookmarks', JSON.stringify(bookmarks));
+                        icon.classList.remove('far');
+                        icon.classList.add('fas', 'bookmarked');
+                        showNotification(`📌 "${title}" added to bookmarks!`, 'success');
+                        renderBookmarks();
+                    }
+                });
+                if (bookmarks.includes(icon.dataset.title)) {
+                    icon.classList.remove('far');
+                    icon.classList.add('fas', 'bookmarked');
                 }
+            });
+            
+            document.querySelectorAll('.rec-card').forEach((card, i) => {
+                card.addEventListener('click', () => {
+                    const isB = Math.random() > 0.5;
+                    if (isB) { abVotes.B++; abVotes.B_shown++; }
+                    else { abVotes.A++; abVotes.A_shown++; }
+                    updateABTest();
+                    showNotification(`Thanks for feedback! Improving your recommendations.`, 'success');
+                    addToHistory(card.dataset.title);
+                });
             });
         }
         
-        function updateSimilarityArc(score) {
-            const circle = document.getElementById('similarityArc');
-            const circumference = 100;
-            const offset = circumference - (score * circumference);
-            circle.style.strokeDashoffset = offset;
-            document.getElementById('simScore').innerText = `${Math.round(score*100)}%`;
+        function addToHistory(title) {
+            if (!watchHistory.includes(title)) {
+                watchHistory.unshift(title);
+                if (watchHistory.length > 10) watchHistory.pop();
+                localStorage.setItem('netflix_history', JSON.stringify(watchHistory));
+                renderHistory();
+            }
+            if (!ongoingContent.includes(title)) {
+                ongoingContent.unshift(title);
+                if (ongoingContent.length > 3) ongoingContent.pop();
+                localStorage.setItem('netflix_ongoing', JSON.stringify(ongoingContent));
+                renderOngoing();
+            }
         }
         
-        // Main dynamic analysis
+        function renderBookmarks() {
+            const container = document.getElementById('bookmarksList');
+            if (!bookmarks.length) {
+                container.innerHTML = '<p class="text-gray-400 text-xs">No bookmarks yet.</p>';
+                return;
+            }
+            container.innerHTML = bookmarks.map(b => `<div class="flex justify-between items-center p-2 bg-white/5 rounded"><span>📌 ${b}</span><i class="fas fa-trash text-xs cursor-pointer hover:text-red-400" onclick="window.removeBookmark('${b}')"></i></div>`).join('');
+        }
+        
+        window.removeBookmark = function(title) {
+            bookmarks = bookmarks.filter(b => b !== title);
+            localStorage.setItem('netflix_bookmarks', JSON.stringify(bookmarks));
+            renderBookmarks();
+            showNotification(`Removed "${title}" from bookmarks`, 'info');
+        };
+        
+        function renderHistory() {
+            const container = document.getElementById('historyList');
+            if (!watchHistory.length) {
+                container.innerHTML = '<p class="text-gray-400 text-xs">No watch history yet.</p>';
+                return;
+            }
+            container.innerHTML = watchHistory.slice(0,5).map(h => `<div class="text-xs">▶️ ${h}</div>`).join('');
+        }
+        
+        function renderOngoing() {
+            const container = document.getElementById('ongoingList');
+            if (!ongoingContent.length) {
+                container.innerHTML = '<span class="text-gray-400 text-xs">None</span>';
+                return;
+            }
+            container.innerHTML = ongoingContent.map(o => `<div class="flex justify-between"><span>🎬 ${o}</span><span class="text-green-400">● Watching</span></div>`).join('');
+        }
+        
+        function updateABTest() {
+            const ctrA = abVotes.A_shown ? (abVotes.A / abVotes.A_shown * 100) : 0;
+            const ctrB = abVotes.B_shown ? (abVotes.B / abVotes.B_shown * 100) : 0;
+            document.getElementById('ctrA').innerText = `${ctrA.toFixed(1)}%`;
+            document.getElementById('ctrB').innerText = `${ctrB.toFixed(1)}%`;
+            document.getElementById('ctrABar').style.width = `${ctrA}%`;
+            document.getElementById('ctrBBar').style.width = `${ctrB}%`;
+            const winner = ctrB > ctrA ? "🎉 Algorithm B is winning!" : (ctrA > ctrB ? "📊 Algorithm A is leading" : "🤝 It's a tie!");
+            document.getElementById('abWinner').innerText = winner;
+        }
+        
+        function renderTrending() {
+            if (!masterTitleDatabase || !masterTitleDatabase.length) {
+                document.getElementById('trendingList').innerHTML = '<div class="text-gray-400">No trending data</div>';
+                return;
+            }
+            const trending = [...masterTitleDatabase].sort((a,b) => (b.trending || 0) - (a.trending || 0)).slice(0,6);
+            const container = document.getElementById('trendingList');
+            container.innerHTML = trending.map(t => `<div class="glass-card p-3 min-w-[140px] text-center"><div class="font-bold text-sm">🔥 ${t.title}</div><div class="text-xs text-gray-400">${t.genre || 'Various'}</div><div class="text-xs text-red-400">${t.trending || 70}% trending</div></div>`).join('');
+        }
+        
+        function initSwipe(items) {
+            currentSwipeItems = [...items];
+            swipeIndex = 0;
+            renderSwipeCard();
+        }
+        
+        function renderSwipeCard() {
+            const container = document.getElementById('swipeStack');
+            if (swipeIndex >= currentSwipeItems.length) {
+                container.innerHTML = '<div class="text-center py-12 text-gray-400">🎉 No more recommendations! Click Analyze for more.</div>';
+                return;
+            }
+            const item = currentSwipeItems[swipeIndex];
+            container.innerHTML = `
+                <div class="swipe-card glass-card p-6 text-center">
+                    <h3 class="text-xl font-bold">${item.title}</h3>
+                    <p class="text-sm text-gray-300 mt-2">🎭 ${item.genre || 'Various'} • ⭐ ${item.rating || 'NR'} • ${item.duration || 50}min</p>
+                    <p class="text-xs text-gray-400 mt-3 italic">${item.ai_description || item.aiDesc || "AI-curated just for you!"}</p>
+                    <div class="mt-4 flex justify-center gap-4">
+                        <span class="text-red-400 text-2xl">👎</span>
+                        <span class="text-emerald-400 text-2xl">👍</span>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function swipeLeft() {
+            if (swipeIndex < currentSwipeItems.length) {
+                showNotification(`Disliked "${currentSwipeItems[swipeIndex].title}"`, 'info');
+                swipeIndex++;
+                renderSwipeCard();
+            }
+        }
+        
+        function swipeRight() {
+            if (swipeIndex < currentSwipeItems.length) {
+                const title = currentSwipeItems[swipeIndex].title;
+                addToHistory(title);
+                showNotification(`❤️ Liked "${title}"! Added to history.`, 'success');
+                swipeIndex++;
+                renderSwipeCard();
+            }
+        }
+        
+        function searchContent() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const genre = document.getElementById('genreFilter').value;
+            let results = masterTitleDatabase.filter(t => t.title && t.title.toLowerCase().includes(query));
+            if (genre !== 'all') results = results.filter(t => t.genre === genre);
+            const container = document.getElementById('explorerResults');
+            if (!results.length) {
+                container.innerHTML = '<p class="text-gray-400 text-xs col-span-2">No results found.</p>';
+                return;
+            }
+            container.innerHTML = results.slice(0,6).map(r => `<div class="glass-card p-2 text-xs"><div class="font-semibold">${r.title}</div><div class="text-gray-400">${r.genre || 'Various'} • ${r.duration || 50}min</div></div>`).join('');
+        }
+        
         async function analyzeUser() {
             const selectedId = document.getElementById('userIdSelect').value;
             if (!selectedId || !masterUserDatabase[selectedId]) {
-                alert("Please select a valid user from the dynamic list.");
+                showNotification("Please select a valid user", "error");
                 return;
             }
             const userData = masterUserDatabase[selectedId];
             currentUserData = userData;
+            
+            // Update cluster profile
+            updateClusterProfile(userData);
+            
+            // Calculate churn
             const churnProb = computeChurnProbability(userData);
-            const riskPercent = (churnProb * 100).toFixed(1);
-            document.getElementById('churnResult').querySelector('.text-5xl').innerHTML = `${riskPercent}%`;
-            const churnBar = document.getElementById('churnBar');
-            churnBar.style.width = `${churnProb * 100}%`;
-            const riskLabel = document.getElementById('riskLabel');
-            if (churnProb > 0.55) riskLabel.innerHTML = "⚠️ High churn risk • retention campaign recommended";
-            else if (churnProb > 0.3) riskLabel.innerHTML = "📉 Moderate risk • personalized engagement needed";
-            else riskLabel.innerHTML = "✅ Low churn risk • loyal viewer profile";
+            document.getElementById('churnResult').querySelector('.text-5xl').innerHTML = `${(churnProb*100).toFixed(1)}%`;
+            document.getElementById('churnBar').style.width = `${churnProb * 100}%`;
+            const riskText = churnProb > 0.55 ? "⚠️ High churn risk - retention campaign recommended" : 
+                            (churnProb > 0.3 ? "📉 Moderate risk - personalized engagement needed" : "✅ Low churn risk - loyal viewer");
+            document.getElementById('riskLabel').innerHTML = `${riskText} • ${(churnProb*100).toFixed(1)}% probability`;
             
-            const clusterId = userData.cluster;
-            const domGenre = clusterDominantGenre[clusterId] || "General";
-            document.getElementById('clusterInfo').innerHTML = `
-                <p>▪️ Cluster: <span class="text-white font-semibold">${clusterId}</span> — ${getClusterDescription(clusterId)}</p>
-                <p>▪️ Dominant genre: <span class="text-red-300">${domGenre}</span></p>
-                <p>▪️ Preferred by user: ${userData.genre}</p>
-                <p>▪️ Watch time: ${userData.features.watchTime} min/week</p>
-                <p>▪️ Last active: ${userData.features.daysSinceLogin} days ago</p>
-            `;
-            
-            const recs = getRecommendations(selectedId, userData, masterTitleDatabase);
-            const recContainer = document.getElementById('recommendationList');
-            if (recs.length === 0) {
-                recContainer.innerHTML = `<div class="text-center py-8 text-gray-400">⚠️ No age-appropriate titles found</div>`;
-            } else {
-                recContainer.innerHTML = recs.map((rec, idx) => `
-                    <div class="rec-card glass-card p-4 flex justify-between items-center transition-all border-l-4 border-red-500/70">
-                        <div>
-                            <div class="font-bold text-lg">${rec.title}</div>
-                            <div class="flex gap-3 text-xs text-gray-300 mt-1">
-                                <span>🎭 ${rec.genre}</span>
-                                <span>⭐ ${rec.rating}</span>
-                                <span>${rec.type === 'Movie' ? '🎬 Movie' : '📺 Series'}</span>
-                            </div>
-                        </div>
-                        <div class="text-red-400 text-sm font-medium bg-white/5 px-3 py-1 rounded-full">#${idx+1} match</div>
-                    </div>
-                `).join('');
-            }
-            
-            let sim = 0.65 + (Math.random() * 0.25);
-            if (userData.genre && clusterDominantGenre[clusterId] && userData.genre.toLowerCase() === clusterDominantGenre[clusterId].toLowerCase()) sim = 0.88;
-            updateSimilarityArc(sim);
-            renderFactorChart(userData);
-            const modelNote = document.querySelector('#churnResult .text-xs');
-            if(modelNote) modelNote.innerHTML = `🤖 Dynamic Random Forest • prob ${(churnProb*100).toFixed(1)}% • realtime features`;
+            // Get recommendations with filters
+            const mood = document.getElementById('moodSelect').value;
+            const timeFilter = document.getElementById('timeSelect').value;
+            currentRecommendations = getRecommendations(selectedId, userData, masterTitleDatabase, mood, timeFilter);
+            renderList(currentRecommendations);
+            initSwipe(currentRecommendations);
+            renderTrending();
+            document.getElementById('seasonalContent').innerHTML = getSeasonalContent();
+            showNotification(`✨ Analyzed ${selectedId}! ${currentRecommendations.length} recommendations ready.`, 'success');
         }
         
-        // Load dynamic data from external JSON (with fallback)
+        // Load data from GitHub JSON files
         async function loadDynamicData() {
+            const selectEl = document.getElementById('userIdSelect');
+            selectEl.innerHTML = '<option value=""><div class="loading-spinner"></div> Loading users from GitHub...</option>';
+            
             try {
-                // Attempt to fetch users and catalog from configurable endpoints
-                // For GitHub Pages, if files exist they will load. Else fallback to defaults.
-                let usersResp, catalogResp;
-                try {
-                    usersResp = await fetch(DATA_CONFIG.usersUrl);
-                    if (!usersResp.ok) throw new Error('Users fetch failed');
-                    const usersJson = await usersResp.json();
-                    masterUserDatabase = usersJson;
-                } catch(e) {
-                    console.warn("Using fallback user database", e);
-                    masterUserDatabase = buildDefaultUsers();
+                // Fetch users.json from data folder
+                const usersResponse = await fetch('./data/users.json');
+                if (!usersResponse.ok) {
+                    throw new Error(`HTTP ${usersResponse.status} - users.json not found`);
                 }
+                const usersData = await usersResponse.json();
+                masterUserDatabase = usersData;
+                console.log('✅ Users loaded:', Object.keys(masterUserDatabase).length, 'users');
                 
-                try {
-                    catalogResp = await fetch(DATA_CONFIG.catalogUrl);
-                    if (!catalogResp.ok) throw new Error('Catalog fetch failed');
-                    const catalogJson = await catalogResp.json();
-                    masterTitleDatabase = catalogJson;
-                } catch(e) {
-                    console.warn("Using fallback catalog", e);
-                    masterTitleDatabase = buildDefaultCatalog();
+                // Fetch catalog.json from data folder
+                const catalogResponse = await fetch('./data/catalog.json');
+                if (!catalogResponse.ok) {
+                    throw new Error(`HTTP ${catalogResponse.status} - catalog.json not found`);
                 }
+                const catalogData = await catalogResponse.json();
+                masterTitleDatabase = catalogData;
+                console.log('✅ Catalog loaded:', masterTitleDatabase.length, 'titles');
                 
-                // Populate select dropdown
-                const selectEl = document.getElementById('userIdSelect');
+                // Populate user dropdown
                 selectEl.innerHTML = '';
                 const userIds = Object.keys(masterUserDatabase);
                 if (userIds.length === 0) {
-                    selectEl.innerHTML = '<option>No users available</option>';
+                    selectEl.innerHTML = '<option value="">No users found in JSON</option>';
                     return;
                 }
+                
                 userIds.forEach(uid => {
                     const user = masterUserDatabase[uid];
                     const option = document.createElement('option');
                     option.value = uid;
-                    option.textContent = `${uid} (age ${user.age}, fav: ${user.genre})`;
+                    const displayName = user.name || uid;
+                    const age = user.age || '?';
+                    const genre = user.preferred_genre || user.genre || 'Various';
+                    option.textContent = `${displayName} (${uid}) • Age ${age} • ${genre}`;
                     selectEl.appendChild(option);
                 });
-                // auto-analyze first user
-                if (userIds.length) analyzeUser();
-            } catch(error) {
-                console.error("Dynamic loading error", error);
-                masterUserDatabase = buildDefaultUsers();
-                masterTitleDatabase = buildDefaultCatalog();
-                const selectEl = document.getElementById('userIdSelect');
-                selectEl.innerHTML = '';
-                Object.keys(masterUserDatabase).forEach(uid => {
-                    const user = masterUserDatabase[uid];
-                    const option = document.createElement('option');
-                    option.value = uid;
-                    option.textContent = `${uid} (age ${user.age}, fav: ${user.genre})`;
-                    selectEl.appendChild(option);
-                });
-                analyzeUser();
+                
+                // Auto-analyze first user
+                if (userIds.length) {
+                    analyzeUser();
+                }
+                
+                showNotification(`📦 Loaded ${userIds.length} users and ${masterTitleDatabase.length} titles from GitHub`, 'success');
+                
+            } catch (error) {
+                console.error('Error loading data from GitHub:', error);
+                selectEl.innerHTML = '<option value="">⚠️ Error loading data. Check console.</option>';
+                showNotification(`❌ Failed to load data: ${error.message}. Make sure data/users.json and data/catalog.json exist.`, 'error');
+                
+                // Fallback to default data for demo
+                selectEl.innerHTML = '<option value="">Using fallback demo data</option>';
+                await loadFallbackData();
             }
         }
         
-        // Attach event & init
-        document.getElementById('analyzeBtn').addEventListener('click', analyzeUser);
-        window.addEventListener('load', () => {
-            loadDynamicData();
+        // Fallback data in case JSON files are not available
+        async function loadFallbackData() {
+            masterUserDatabase = {
+                "U100000": { name: "Alice Johnson", cluster: 1, age: 56, preferred_genre: "Sci-Fi", features: { watch_time: 220, engagement_score: 2.9, sessions_per_week: 17, days_since_login: 3 } },
+                "U100001": { name: "Bob Smith", cluster: 4, age: 46, preferred_genre: "Documentary", features: { watch_time: 76, engagement_score: 4.7, sessions_per_week: 15, days_since_login: 8 } },
+                "U100002": { name: "Carol Davis", cluster: 0, age: 32, preferred_genre: "Comedy", features: { watch_time: 215, engagement_score: 4.5, sessions_per_week: 6, days_since_login: 1 } },
+                "U100003": { name: "David Wilson", cluster: 1, age: 60, preferred_genre: "Action", features: { watch_time: 280, engagement_score: 2.25, sessions_per_week: 4, days_since_login: 2 } },
+                "U100004": { name: "Emma Brown", cluster: 3, age: 28, preferred_genre: "Sci-Fi", features: { watch_time: 310, engagement_score: 3.8, sessions_per_week: 22, days_since_login: 1 } }
+            };
+            
+            masterTitleDatabase = [
+                { title: "Stranger Things", genre: "Sci-Fi", type: "TV Show", rating: "TV-14", duration: 50, trending: 98, ai_description: "80s nostalgia meets supernatural horror. A group of kids uncovers dark secrets." },
+                { title: "The Witcher", genre: "Fantasy", type: "TV Show", rating: "TV-MA", duration: 60, trending: 92, ai_description: "Geralt of Rivia, a mutated monster hunter, struggles to find his place." },
+                { title: "Black Mirror", genre: "Sci-Fi", type: "TV Show", rating: "TV-MA", duration: 60, trending: 85, ai_description: "Anthology series exploring twisted, high-tech multiverse." },
+                { title: "Our Planet", genre: "Documentary", type: "TV Show", rating: "TV-PG", duration: 50, trending: 88, ai_description: "Breathtaking nature documentary narrated by David Attenborough." },
+                { title: "The Crown", genre: "Drama", type: "TV Show", rating: "TV-MA", duration: 55, trending: 82, ai_description: "Historical drama chronicling Queen Elizabeth II's reign." }
+            ];
+            
+            const selectEl = document.getElementById('userIdSelect');
+            selectEl.innerHTML = '';
+            Object.keys(masterUserDatabase).forEach(uid => {
+                const user = masterUserDatabase[uid];
+                const option = document.createElement('option');
+                option.value = uid;
+                option.textContent = `${user.name} (${uid}) • Age ${user.age} • ${user.preferred_genre}`;
+                selectEl.appendChild(option);
+            });
+            
+            analyzeUser();
+            showNotification(`⚠️ Using fallback demo data. Please add data/users.json and data/catalog.json to your GitHub repository.`, 'info');
+        }
+        
+        // Theme Toggle
+        document.getElementById('themeToggle').addEventListener('click', () => {
+            document.body.classList.toggle('light-mode');
+            const icon = document.querySelector('#themeToggle i');
+            if (document.body.classList.contains('light-mode')) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+                showNotification('☀️ Light mode activated', 'info');
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+                showNotification('🌙 Dark mode activated', 'info');
+            }
         });
+        
+        // Event Listeners
+        document.getElementById('analyzeBtn').addEventListener('click', analyzeUser);
+        document.getElementById('showListBtn').addEventListener('click', () => { 
+            document.getElementById('listView').classList.remove('hidden'); 
+            document.getElementById('swipeView').classList.add('hidden'); 
+        });
+        document.getElementById('showSwipeBtn').addEventListener('click', () => { 
+            document.getElementById('listView').classList.add('hidden'); 
+            document.getElementById('swipeView').classList.remove('hidden'); 
+            if (currentRecommendations.length) initSwipe(currentRecommendations); 
+        });
+        document.getElementById('swipeLeftBtn').addEventListener('click', swipeLeft);
+        document.getElementById('swipeRightBtn').addEventListener('click', swipeRight);
+        document.getElementById('searchInput').addEventListener('input', searchContent);
+        document.getElementById('genreFilter').addEventListener('change', searchContent);
+        document.getElementById('moodSelect').addEventListener('change', analyzeUser);
+        document.getElementById('timeSelect').addEventListener('change', analyzeUser);
+        
+        window.addEventListener('load', loadDynamicData);
     </script>
 </body>
 </html>

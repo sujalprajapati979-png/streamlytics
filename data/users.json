@@ -1,163 +1,382 @@
 {
   "U100000": {
+    "name": "Alice Johnson",
     "cluster": 1,
     "age": 56,
-    "genre": "Sci-Fi",
-    "riskScore": 0.22,
-    "features": { "watchTime": 220, "engagement": 0.29, "sessions": 17, "daysSinceLogin": 3 }
+    "preferred_genre": "Sci-Fi",
+    "location": "New York, USA",
+    "subscription_tier": "Premium",
+    "join_date": "2022-03-15",
+    "features": {
+      "watch_time": 220,
+      "engagement_score": 2.9,
+      "sessions_per_week": 17,
+      "days_since_login": 3,
+      "total_watch_hours": 847,
+      "avg_session_duration": 52,
+      "devices_used": 3,
+      "profile_count": 2
+    }
   },
   "U100001": {
+    "name": "Bob Smith",
     "cluster": 4,
     "age": 46,
-    "genre": "Documentary",
-    "riskScore": 0.35,
-    "features": { "watchTime": 76, "engagement": 0.47, "sessions": 15, "daysSinceLogin": 8 }
+    "preferred_genre": "Documentary",
+    "location": "London, UK",
+    "subscription_tier": "Standard",
+    "join_date": "2021-11-20",
+    "features": {
+      "watch_time": 76,
+      "engagement_score": 4.7,
+      "sessions_per_week": 15,
+      "days_since_login": 8,
+      "total_watch_hours": 342,
+      "avg_session_duration": 28,
+      "devices_used": 2,
+      "profile_count": 1
+    }
   },
   "U100002": {
+    "name": "Carol Davis",
     "cluster": 0,
     "age": 32,
-    "genre": "Comedy",
-    "riskScore": 0.45,
-    "features": { "watchTime": 215, "engagement": 4.5, "sessions": 6, "daysSinceLogin": 1 }
+    "preferred_genre": "Comedy",
+    "location": "Los Angeles, USA",
+    "subscription_tier": "Premium",
+    "join_date": "2023-01-10",
+    "features": {
+      "watch_time": 215,
+      "engagement_score": 4.5,
+      "sessions_per_week": 6,
+      "days_since_login": 1,
+      "total_watch_hours": 1250,
+      "avg_session_duration": 85,
+      "devices_used": 4,
+      "profile_count": 3
+    }
   },
   "U100003": {
-    "cluster": 2,
-    "age": 24,
-    "genre": "Action",
-    "riskScore": 0.68,
-    "features": { "watchTime": 340, "engagement": 5.2, "sessions": 22, "daysSinceLogin": 0 }
+    "name": "David Wilson",
+    "cluster": 1,
+    "age": 60,
+    "preferred_genre": "Action",
+    "location": "Toronto, Canada",
+    "subscription_tier": "Basic",
+    "join_date": "2020-08-05",
+    "features": {
+      "watch_time": 280,
+      "engagement_score": 2.25,
+      "sessions_per_week": 4,
+      "days_since_login": 2,
+      "total_watch_hours": 2100,
+      "avg_session_duration": 120,
+      "devices_used": 1,
+      "profile_count": 1
+    }
   },
   "U100004": {
+    "name": "Emma Brown",
     "cluster": 3,
-    "age": 61,
-    "genre": "Drama",
-    "riskScore": 0.19,
-    "features": { "watchTime": 145, "engagement": 0.18, "sessions": 11, "daysSinceLogin": 5 }
+    "age": 28,
+    "preferred_genre": "Sci-Fi",
+    "location": "Sydney, Australia",
+    "subscription_tier": "Premium",
+    "join_date": "2023-06-22",
+    "features": {
+      "watch_time": 310,
+      "engagement_score": 3.8,
+      "sessions_per_week": 22,
+      "days_since_login": 1,
+      "total_watch_hours": 560,
+      "avg_session_duration": 45,
+      "devices_used": 5,
+      "profile_count": 2
+    }
   },
   "U100005": {
-    "cluster": 1,
-    "age": 43,
-    "genre": "Thriller",
-    "riskScore": 0.51,
-    "features": { "watchTime": 198, "engagement": 1.2, "sessions": 9, "daysSinceLogin": 2 }
+    "name": "Frank Miller",
+    "cluster": 2,
+    "age": 42,
+    "preferred_genre": "Drama",
+    "location": "Berlin, Germany",
+    "subscription_tier": "Standard",
+    "join_date": "2022-09-18",
+    "features": {
+      "watch_time": 195,
+      "engagement_score": 3.2,
+      "sessions_per_week": 12,
+      "days_since_login": 4,
+      "total_watch_hours": 980,
+      "avg_session_duration": 65,
+      "devices_used": 2,
+      "profile_count": 2
+    }
   },
   "U100006": {
+    "name": "Grace Lee",
     "cluster": 0,
-    "age": 28,
-    "genre": "Comedy",
-    "riskScore": 0.73,
-    "features": { "watchTime": 420, "engagement": 6.1, "sessions": 25, "daysSinceLogin": 0 }
+    "age": 24,
+    "preferred_genre": "Comedy",
+    "location": "Seoul, South Korea",
+    "subscription_tier": "Basic",
+    "join_date": "2023-10-01",
+    "features": {
+      "watch_time": 340,
+      "engagement_score": 4.9,
+      "sessions_per_week": 25,
+      "days_since_login": 0,
+      "total_watch_hours": 320,
+      "avg_session_duration": 40,
+      "devices_used": 3,
+      "profile_count": 1
+    }
   },
   "U100007": {
+    "name": "Henry Adams",
     "cluster": 4,
     "age": 52,
-    "genre": "Documentary",
-    "riskScore": 0.27,
-    "features": { "watchTime": 89, "engagement": 0.34, "sessions": 13, "daysSinceLogin": 7 }
+    "preferred_genre": "Documentary",
+    "location": "Chicago, USA",
+    "subscription_tier": "Premium",
+    "join_date": "2021-05-12",
+    "features": {
+      "watch_time": 120,
+      "engagement_score": 3.5,
+      "sessions_per_week": 9,
+      "days_since_login": 6,
+      "total_watch_hours": 1500,
+      "avg_session_duration": 55,
+      "devices_used": 2,
+      "profile_count": 2
+    }
   },
   "U100008": {
-    "cluster": 2,
-    "age": 35,
-    "genre": "Action",
-    "riskScore": 0.39,
-    "features": { "watchTime": 270, "engagement": 2.8, "sessions": 18, "daysSinceLogin": 1 }
+    "name": "Ivy Chen",
+    "cluster": 3,
+    "age": 19,
+    "preferred_genre": "Fantasy",
+    "location": "Singapore",
+    "subscription_tier": "Basic",
+    "join_date": "2024-01-15",
+    "features": {
+      "watch_time": 380,
+      "engagement_score": 5.0,
+      "sessions_per_week": 30,
+      "days_since_login": 0,
+      "total_watch_hours": 180,
+      "avg_session_duration": 38,
+      "devices_used": 4,
+      "profile_count": 1
+    }
   },
   "U100009": {
-    "cluster": 3,
-    "age": 67,
-    "genre": "Drama",
-    "riskScore": 0.12,
-    "features": { "watchTime": 130, "engagement": 0.11, "sessions": 8, "daysSinceLogin": 10 }
+    "name": "Jack Turner",
+    "cluster": 1,
+    "age": 35,
+    "preferred_genre": "Thriller",
+    "location": "Mumbai, India",
+    "subscription_tier": "Premium",
+    "join_date": "2022-12-03",
+    "features": {
+      "watch_time": 260,
+      "engagement_score": 3.9,
+      "sessions_per_week": 14,
+      "days_since_login": 2,
+      "total_watch_hours": 720,
+      "avg_session_duration": 58,
+      "devices_used": 3,
+      "profile_count": 2
+    }
   },
   "U100010": {
-    "cluster": 1,
-    "age": 39,
-    "genre": "Sci-Fi",
-    "riskScore": 0.48,
-    "features": { "watchTime": 255, "engagement": 1.9, "sessions": 14, "daysSinceLogin": 2 }
+    "name": "Karen White",
+    "cluster": 2,
+    "age": 48,
+    "preferred_genre": "Romance",
+    "location": "Paris, France",
+    "subscription_tier": "Standard",
+    "join_date": "2021-02-28",
+    "features": {
+      "watch_time": 145,
+      "engagement_score": 2.8,
+      "sessions_per_week": 8,
+      "days_since_login": 5,
+      "total_watch_hours": 1100,
+      "avg_session_duration": 48,
+      "devices_used": 2,
+      "profile_count": 1
+    }
   },
   "U100011": {
+    "name": "Leo Martinez",
     "cluster": 0,
-    "age": 21,
-    "genre": "Comedy",
-    "riskScore": 0.82,
-    "features": { "watchTime": 490, "engagement": 7.3, "sessions": 31, "daysSinceLogin": 0 }
+    "age": 29,
+    "preferred_genre": "Stand-up",
+    "location": "Madrid, Spain",
+    "subscription_tier": "Basic",
+    "join_date": "2023-08-20",
+    "features": {
+      "watch_time": 290,
+      "engagement_score": 4.2,
+      "sessions_per_week": 18,
+      "days_since_login": 1,
+      "total_watch_hours": 450,
+      "avg_session_duration": 50,
+      "devices_used": 3,
+      "profile_count": 1
+    }
   },
   "U100012": {
+    "name": "Mona Gupta",
     "cluster": 4,
-    "age": 59,
-    "genre": "Documentary",
-    "riskScore": 0.31,
-    "features": { "watchTime": 68, "engagement": 0.41, "sessions": 12, "daysSinceLogin": 6 }
+    "age": 38,
+    "preferred_genre": "History",
+    "location": "Delhi, India",
+    "subscription_tier": "Premium",
+    "join_date": "2022-07-14",
+    "features": {
+      "watch_time": 98,
+      "engagement_score": 3.1,
+      "sessions_per_week": 11,
+      "days_since_login": 3,
+      "total_watch_hours": 890,
+      "avg_session_duration": 32,
+      "devices_used": 2,
+      "profile_count": 3
+    }
   },
   "U100013": {
-    "cluster": 2,
-    "age": 29,
-    "genre": "Action",
-    "riskScore": 0.62,
-    "features": { "watchTime": 380, "engagement": 4.9, "sessions": 20, "daysSinceLogin": 1 }
+    "name": "Nick Foster",
+    "cluster": 3,
+    "age": 25,
+    "preferred_genre": "Animation",
+    "location": "Melbourne, Australia",
+    "subscription_tier": "Standard",
+    "join_date": "2023-11-09",
+    "features": {
+      "watch_time": 330,
+      "engagement_score": 4.6,
+      "sessions_per_week": 20,
+      "days_since_login": 1,
+      "total_watch_hours": 280,
+      "avg_session_duration": 42,
+      "devices_used": 3,
+      "profile_count": 1
+    }
   },
   "U100014": {
-    "cluster": 3,
-    "age": 73,
-    "genre": "Drama",
-    "riskScore": 0.09,
-    "features": { "watchTime": 102, "engagement": 0.08, "sessions": 6, "daysSinceLogin": 14 }
+    "name": "Olivia Parker",
+    "cluster": 2,
+    "age": 55,
+    "preferred_genre": "Drama",
+    "location": "Boston, USA",
+    "subscription_tier": "Premium",
+    "join_date": "2020-12-10",
+    "features": {
+      "watch_time": 168,
+      "engagement_score": 2.7,
+      "sessions_per_week": 7,
+      "days_since_login": 4,
+      "total_watch_hours": 1850,
+      "avg_session_duration": 70,
+      "devices_used": 2,
+      "profile_count": 2
+    }
   },
   "U100015": {
+    "name": "Peter Kim",
     "cluster": 1,
-    "age": 48,
-    "genre": "Thriller",
-    "riskScore": 0.44,
-    "features": { "watchTime": 210, "engagement": 1.5, "sessions": 16, "daysSinceLogin": 3 }
+    "age": 31,
+    "preferred_genre": "Crime",
+    "location": "Vancouver, Canada",
+    "subscription_tier": "Basic",
+    "join_date": "2023-04-05",
+    "features": {
+      "watch_time": 245,
+      "engagement_score": 3.6,
+      "sessions_per_week": 13,
+      "days_since_login": 2,
+      "total_watch_hours": 620,
+      "avg_session_duration": 55,
+      "devices_used": 2,
+      "profile_count": 1
+    }
   },
   "U100016": {
+    "name": "Quinn Rogers",
     "cluster": 0,
-    "age": 26,
-    "genre": "Comedy",
-    "riskScore": 0.79,
-    "features": { "watchTime": 450, "engagement": 6.8, "sessions": 28, "daysSinceLogin": 0 }
+    "age": 22,
+    "preferred_genre": "Rom-Com",
+    "location": "Austin, USA",
+    "subscription_tier": "Basic",
+    "join_date": "2024-02-14",
+    "features": {
+      "watch_time": 350,
+      "engagement_score": 4.8,
+      "sessions_per_week": 28,
+      "days_since_login": 0,
+      "total_watch_hours": 150,
+      "avg_session_duration": 35,
+      "devices_used": 4,
+      "profile_count": 1
+    }
   },
   "U100017": {
-    "cluster": 4,
-    "age": 55,
-    "genre": "Documentary",
-    "riskScore": 0.25,
-    "features": { "watchTime": 94, "engagement": 0.39, "sessions": 14, "daysSinceLogin": 4 }
+    "name": "Rachel Green",
+    "cluster": 2,
+    "age": 34,
+    "preferred_genre": "Drama",
+    "location": "Amsterdam, Netherlands",
+    "subscription_tier": "Standard",
+    "join_date": "2022-10-22",
+    "features": {
+      "watch_time": 178,
+      "engagement_score": 3.3,
+      "sessions_per_week": 10,
+      "days_since_login": 3,
+      "total_watch_hours": 780,
+      "avg_session_duration": 52,
+      "devices_used": 2,
+      "profile_count": 1
+    }
   },
   "U100018": {
-    "cluster": 2,
-    "age": 37,
-    "genre": "Action",
-    "riskScore": 0.57,
-    "features": { "watchTime": 310, "engagement": 3.6, "sessions": 19, "daysSinceLogin": 1 }
+    "name": "Sam Wilson",
+    "cluster": 4,
+    "age": 65,
+    "preferred_genre": "Nature",
+    "location": "Seattle, USA",
+    "subscription_tier": "Premium",
+    "join_date": "2019-06-01",
+    "features": {
+      "watch_time": 85,
+      "engagement_score": 2.3,
+      "sessions_per_week": 6,
+      "days_since_login": 7,
+      "total_watch_hours": 2500,
+      "avg_session_duration": 45,
+      "devices_used": 1,
+      "profile_count": 2
+    }
   },
   "U100019": {
-    "cluster": 3,
-    "age": 65,
-    "genre": "Drama",
-    "riskScore": 0.14,
-    "features": { "watchTime": 118, "engagement": 0.15, "sessions": 9, "daysSinceLogin": 9 }
-  },
-  "U100020": {
-    "cluster": 1,
-    "age": 44,
-    "genre": "Sci-Fi",
-    "riskScore": 0.41,
-    "features": { "watchTime": 240, "engagement": 1.7, "sessions": 15, "daysSinceLogin": 2 }
-  },
-  "U100021": {
+    "name": "Tina Fey",
     "cluster": 0,
-    "age": 30,
-    "genre": "Comedy",
-    "riskScore": 0.87,
-    "features": { "watchTime": 520, "engagement": 8.1, "sessions": 35, "daysSinceLogin": 0 }
-  },
-  "U100022": {
-    "cluster": 4,
-    "age": 50,
-    "genre": "Documentary",
-    "riskScore": 0.29,
-    "features": { "watchTime": 82, "engagement": 0.44, "sessions": 11, "daysSinceLogin": 5 }
+    "age": 27,
+    "preferred_genre": "Comedy",
+    "location": "Dublin, Ireland",
+    "subscription_tier": "Premium",
+    "join_date": "2023-09-30",
+    "features": {
+      "watch_time": 305,
+      "engagement_score": 4.4,
+      "sessions_per_week": 19,
+      "days_since_login": 1,
+      "total_watch_hours": 380,
+      "avg_session_duration": 48,
+      "devices_used": 3,
+      "profile_count": 2
+    }
   }
 }

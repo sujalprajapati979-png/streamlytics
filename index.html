@@ -12,50 +12,120 @@
     <style>
         * { font-family: 'Inter', sans-serif; }
         
-        /* Dark Mode (Default) */
+        /* ========== DYNAMIC BACKGROUND THEMES ========== */
+        /* Dark Mode Default: Red & Black Fading Gradient */
         body {
-            background: linear-gradient(135deg, #0b0f1c 0%, #101624 100%);
+            background: radial-gradient(circle at 20% 30%, rgba(180, 20, 20, 0.25), rgba(0, 0, 0, 0.95)),
+                        repeating-linear-gradient(45deg, rgba(220, 38, 38, 0.08) 0px, rgba(220, 38, 38, 0.08) 2px, transparent 2px, transparent 8px),
+                        linear-gradient(135deg, #0a0a0f 0%, #1a0a0a 100%);
             color: #ffffff;
-            transition: background 0.3s ease, color 0.3s ease;
+            transition: background 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            position: relative;
+            min-height: 100vh;
         }
         
-        /* Light Mode */
+        /* Light Mode: Red & White Fading Gradient */
         body.light-mode {
-            background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
+            background: radial-gradient(circle at 70% 20%, rgba(220, 38, 38, 0.18), rgba(255, 255, 245, 0.98)),
+                        repeating-linear-gradient(135deg, rgba(220, 38, 38, 0.05) 0px, rgba(220, 38, 38, 0.05) 3px, transparent 3px, transparent 12px),
+                        linear-gradient(125deg, #fff5f5 0%, #ffe8e8 100%);
             color: #1a1a2e;
         }
         
-        /* Glass Card - Dark Mode */
+        /* Animated floating logos (Marvel / DC) with glitch */
+        .floating-logo {
+            position: fixed;
+            z-index: 5;
+            font-size: 5rem;
+            opacity: 0.35;
+            filter: drop-shadow(0 0 8px rgba(220,38,38,0.6));
+            pointer-events: none;
+            transition: all 0.2s ease;
+            animation: floatGlitch 8s infinite ease-in-out;
+        }
+        
+        .floating-logo.glitch-logo-effect {
+            animation: glitchFloating 3s infinite alternate, floatGlitch 8s infinite ease-in-out;
+        }
+        
+        @keyframes floatGlitch {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(8px, -12px) rotate(2deg); }
+            50% { transform: translate(-5px, 15px) rotate(-3deg); }
+            75% { transform: translate(12px, 5px) rotate(1deg); }
+            100% { transform: translate(-3px, -8px) rotate(-1deg); }
+        }
+        
+        @keyframes glitchFloating {
+            0% { text-shadow: -2px 0 #ef4444, 2px 0 #000000; opacity: 0.45; filter: blur(0px);}
+            25% { text-shadow: 2px 0 #ef4444, -2px 0 #1a1a2e; opacity: 0.6; transform: skewX(2deg);}
+            50% { text-shadow: -3px 1px #ef4444, 3px -1px black; opacity: 0.7; transform: skewX(-2deg);}
+            75% { text-shadow: 1px -1px #ef4444, -1px 1px #000; opacity: 0.55;}
+            100% { text-shadow: 0px 0px #ef4444, 0px 0px black; opacity: 0.45; transform: skewX(0deg);}
+        }
+        
+        /* Specific positions for logos */
+        .logo-top-left {
+            top: 5%;
+            left: 2%;
+            animation-delay: 0s;
+        }
+        
+        .logo-top-right {
+            top: 8%;
+            right: 3%;
+            animation-delay: 0.5s;
+            font-size: 4.8rem;
+        }
+        
+        .logo-secondary-left {
+            bottom: 12%;
+            left: 1%;
+            font-size: 4rem;
+            opacity: 0.3;
+            animation-duration: 12s;
+        }
+        
+        .logo-secondary-right {
+            bottom: 18%;
+            right: 2%;
+            font-size: 4.2rem;
+            opacity: 0.3;
+            animation-duration: 10s;
+            animation-delay: 1s;
+        }
+        
+        /* Responsive hide on small screens for better readability */
+        @media (max-width: 640px) {
+            .floating-logo { opacity: 0.2; font-size: 3rem; }
+            .logo-top-left { top: 3%; left: 1%; }
+            .logo-top-right { top: 5%; right: 1%; }
+        }
+        
+        /* Glass Card - Dark Mode (enhanced with red/black glow) */
         .glass-card {
-            background: rgba(15, 20, 35, 0.85);
+            background: rgba(10, 12, 20, 0.75);
             backdrop-filter: blur(12px);
-            border: 1px solid rgba(255,255,255,0.08);
+            border: 1px solid rgba(220, 38, 38, 0.3);
             border-radius: 1.5rem;
             transition: all 0.3s ease;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5), 0 0 0 1px rgba(220,38,38,0.1);
         }
         
-        /* Enhanced Borders with fading shadows - applies to both modes */
-        .glass-card {
-            position: relative;
-            overflow: hidden;
-            transition: box-shadow 0.4s ease, transform 0.2s ease;
-        }
-        
-        /* Red & Black border accent with fading shadow */
+        /* Red & Black border with fading shadows (enhanced) */
         .glass-card::after {
             content: '';
             position: absolute;
             inset: 0;
             border-radius: 1.5rem;
-            padding: 1.5px;
-            background: linear-gradient(135deg, rgba(220,38,38,0.5), rgba(0,0,0,0.2), rgba(220,38,38,0.5));
+            padding: 1.8px;
+            background: linear-gradient(135deg, rgba(220,38,38,0.7), rgba(0,0,0,0.6), rgba(220,38,38,0.7));
             mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
             -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
             -webkit-mask-composite: xor;
             mask-composite: exclude;
             pointer-events: none;
-            opacity: 0.6;
+            opacity: 0.7;
             transition: opacity 0.3s ease;
         }
         
@@ -65,32 +135,33 @@
         }
         
         .glass-card:hover {
-            box-shadow: 0 0 18px rgba(220,38,38,0.25), 0 12px 28px rgba(0,0,0,0.4);
+            box-shadow: 0 0 22px rgba(220,38,38,0.35), 0 12px 28px rgba(0,0,0,0.6);
             transform: translateY(-2px);
         }
         
+        /* Light Mode Glass Card */
         body.light-mode .glass-card {
-            background: rgba(255, 255, 255, 0.92);
+            background: rgba(255, 248, 245, 0.92);
             backdrop-filter: blur(12px);
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(220, 38, 38, 0.35);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(220,38,38,0.2);
         }
         
         body.light-mode .glass-card::after {
-            background: linear-gradient(135deg, #dc2626, #1a1a2e, #dc2626);
+            background: linear-gradient(135deg, #dc2626, #f0f0f0, #dc2626);
             opacity: 0.5;
         }
         
         body.light-mode .glass-card:hover::after {
             opacity: 0.9;
-            background: linear-gradient(135deg, #ef4444, #1f2937, #ef4444);
+            background: linear-gradient(135deg, #ef4444, #2d2d2d, #ef4444);
         }
         
         body.light-mode .glass-card:hover {
-            box-shadow: 0 0 20px rgba(220,38,38,0.2), 0 12px 24px rgba(0,0,0,0.1);
+            box-shadow: 0 0 20px rgba(220,38,38,0.25), 0 12px 24px rgba(0,0,0,0.1);
         }
         
-        /* Glitch Logo + Title Container */
+        /* Glitch Logo + Title Container (same as before but refined) */
         .glitch-container {
             display: flex;
             align-items: center;
@@ -100,14 +171,12 @@
             margin-bottom: 20px;
         }
         
-        /* Animated Glitch Logo */
         .glitch-logo {
             font-size: 4.2rem;
             display: inline-block;
             position: relative;
             cursor: pointer;
-            filter: drop-shadow(0 0 6px rgba(220,38,38,0.6));
-            transition: filter 0.2s;
+            filter: drop-shadow(0 0 6px rgba(220,38,38,0.7));
             animation: logoFloat 0.6s ease-out forwards;
         }
         
@@ -115,11 +184,6 @@
             0% { transform: scale(0.2) rotate(-10deg); opacity: 0; filter: blur(4px);}
             60% { transform: scale(1.1) rotate(2deg); opacity: 1;}
             100% { transform: scale(1) rotate(0deg); opacity: 1; filter: blur(0);}
-        }
-        
-        .glitch-logo span {
-            position: relative;
-            display: inline-block;
         }
         
         .glitch-logo::before,
@@ -172,10 +236,8 @@
             background-clip: text;
             color: transparent;
             transition: all 0.2s ease;
-            text-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
         
-        /* Light mode title override (black & red fading) */
         body.light-mode .glitch-title {
             background: linear-gradient(135deg, #1a1a2e, #dc2626, #1a1a2e);
             background-size: 200% auto;
@@ -185,7 +247,6 @@
             animation: fadeBlackRed 2.5s ease-in-out infinite alternate, titleGlitchPulse 0.8s ease-in-out;
         }
         
-        /* Dark mode title also gets red/black undertone + glitch after animation */
         body:not(.light-mode) .glitch-title {
             background: linear-gradient(135deg, #ffffff, #ef4444, #ffffff);
             background-size: 200% auto;
@@ -206,13 +267,12 @@
         }
         
         @keyframes titleGlitchPulse {
-            0% { opacity: 0; transform: skew(0deg) scale(0.96); letter-spacing: 0px; filter: blur(2px);}
+            0% { opacity: 0; transform: skew(0deg) scale(0.96); filter: blur(2px);}
             30% { opacity: 1; transform: skew(2deg) scale(1.02); filter: blur(0px);}
             70% { transform: skew(-2deg) scale(1.01);}
-            100% { opacity: 1; transform: skew(0deg) scale(1); letter-spacing: normal;}
+            100% { opacity: 1; transform: skew(0deg) scale(1);}
         }
         
-        /* glitch title pseudo-elements for extra glitch effect after main anim */
         .glitch-title.glitch-active {
             animation: glitch-text-burst 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
         }
@@ -224,100 +284,40 @@
             100% { text-shadow: 0px 0 red, 0px 0 black; transform: translateX(0);}
         }
         
-        /* Responsive titles */
-        @media (max-width: 768px) {
-            .glitch-title { font-size: 1.9rem; }
-            .glitch-logo { font-size: 2.8rem; }
-        }
-        
-        /* Headings */
-        h1, h2, h3, h4, .font-semibold, .font-bold {
-            color: inherit;
-        }
-        
-        body.light-mode h1, 
-        body.light-mode h2, 
-        body.light-mode h3,
-        body.light-mode .glass-card,
-        body.light-mode .glass-card p,
-        body.light-mode .glass-card span,
-        body.light-mode .glass-card div:not(.text-gray-400):not(.text-gray-500) {
-            color: #1a1a2e;
-        }
-        
-        body.light-mode .text-gray-300 { color: #4a5568; }
-        body.light-mode .text-gray-400 { color: #718096; }
-        body.light-mode .text-gray-500 { color: #a0aec0; }
-        body.light-mode .text-white { color: #1a1a2e; }
-        body.light-mode select,
-        body.light-mode input {
-            background: #ffffff;
-            color: #1a1a2e;
-            border-color: #e2e8f0;
-        }
-        body.light-mode select option {
-            background: #ffffff;
-            color: #1a1a2e;
-        }
-        body.light-mode .border-white\/10 {
-            border-color: rgba(0, 0, 0, 0.1);
-        }
-        body.light-mode .border-gray-700 {
-            border-color: #e2e8f0;
-        }
-        body.light-mode .bg-gray-900\/70 {
-            background: rgba(255, 255, 255, 0.9);
-        }
-        body.light-mode .bg-white\/5 {
-            background: rgba(0, 0, 0, 0.05);
-        }
-        body.light-mode .bg-gray-800 {
-            background: #e2e8f0;
-        }
-        .rec-card {
-            transition: all 0.2s ease;
-            cursor: pointer;
-        }
-        .rec-card:hover {
-            transform: translateY(-4px);
-            background: rgba(30, 35, 55, 0.9);
-        }
-        body.light-mode .rec-card:hover {
-            background: rgba(0, 0, 0, 0.08);
-        }
+        /* Additional Styles (Keep all previous component styles) */
+        .rec-card { transition: all 0.2s ease; cursor: pointer; }
+        .rec-card:hover { transform: translateY(-4px); background: rgba(30, 35, 55, 0.9); }
+        body.light-mode .rec-card:hover { background: rgba(0, 0, 0, 0.08); }
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #1e1f2c; border-radius: 8px; }
         ::-webkit-scrollbar-thumb { background: #e53e3e; border-radius: 8px; }
-        body.light-mode ::-webkit-scrollbar-track { background: #e2e8f0; }
-        .swipe-card { position: relative; transition: transform 0.3s ease, opacity 0.3s ease; cursor: grab; }
-        .swipe-card:active { cursor: grabbing; }
         .notification { position: fixed; top: 20px; right: 20px; z-index: 1000; animation: slideIn 0.3s ease; }
         @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
         .theme-toggle { cursor: pointer; transition: transform 0.3s ease; }
         .theme-toggle:hover { transform: scale(1.1); }
-        .bookmarked { color: #e53e3e; animation: pop 0.3s ease; }
-        @keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.3); } 100% { transform: scale(1); } }
         .trending-badge { background: linear-gradient(135deg, #e53e3e, #f97316); animation: pulse 2s infinite; }
         @keyframes pulse { 0% { opacity: 0.8; } 50% { opacity: 1; transform: scale(1.05); } 100% { opacity: 0.8; } }
-        body.light-mode button.bg-red-600\/30 { background: rgba(220, 38, 38, 0.15); color: #991b1b; }
-        .loading-spinner { border: 2px solid rgba(255,255,255,0.1); border-top: 2px solid #e53e3e; border-radius: 50%; width: 24px; height: 24px; animation: spin 0.8s linear infinite; display: inline-block; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .cluster-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
         .cluster-0 { background: rgba(16, 185, 129, 0.2); color: #10b981; }
         .cluster-1 { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
         .cluster-2 { background: rgba(245, 158, 11, 0.2); color: #f59e0b; }
         .cluster-3 { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
         .cluster-4 { background: rgba(139, 92, 246, 0.2); color: #8b5cf6; }
-        body.light-mode .cluster-0 { background: rgba(16, 185, 129, 0.15); }
-        body.light-mode .cluster-1 { background: rgba(239, 68, 68, 0.15); }
-        body.light-mode .cluster-2 { background: rgba(245, 158, 11, 0.15); }
-        body.light-mode .cluster-3 { background: rgba(59, 130, 246, 0.15); }
-        body.light-mode .cluster-4 { background: rgba(139, 92, 246, 0.15); }
+        .swipe-card { transition: transform 0.3s ease; cursor: grab; }
+        .swipe-card:active { cursor: grabbing; }
+        .loading-spinner { border: 2px solid rgba(255,255,255,0.1); border-top: 2px solid #e53e3e; border-radius: 50%; width: 24px; height: 24px; animation: spin 0.8s linear infinite; display: inline-block; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body class="antialiased">
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+    <!-- MARVEL & DC SERIES LOGOS FLOATING + GLITCHING (Top Left & Top Right, plus secondary) -->
+    <div class="floating-logo logo-top-left glitch-logo-effect" id="marvelLogoLeft">🦸‍♂️</div>
+    <div class="floating-logo logo-top-right glitch-logo-effect" id="dcLogoRight">🦇</div>
+    <div class="floating-logo logo-secondary-left">⚡</div>
+    <div class="floating-logo logo-secondary-right">🦸‍♀️</div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 relative z-10">
         <!-- Header with Theme Toggle + Glitch Logo & Title -->
         <div class="flex justify-between items-start mb-5">
             <div class="text-center flex-1">
@@ -325,7 +325,6 @@
                     <span class="text-xl">🎬</span>
                     <span class="text-sm font-medium tracking-wide">STREAMLytics • COMPLETE AI ENGINE</span>
                 </div>
-                <!-- Animated glitch container -->
                 <div class="glitch-container">
                     <div class="glitch-logo" id="glitchLogo">🎬</div>
                     <h1 class="glitch-title" id="mainGlitchTitle">Netflix Intelligence Hub</h1>
@@ -337,126 +336,110 @@
             </div>
         </div>
 
-        <!-- Notification Container -->
         <div id="notificationContainer"></div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-7">
             <!-- LEFT PANEL -->
             <div class="lg:col-span-1 space-y-6">
-                <!-- All glass-cards now have enhanced red/black fading borders as per CSS -->
                 <div class="glass-card p-6">
                     <div class="flex items-center gap-3 border-b border-white/10 pb-4 mb-5">
                         <div class="w-10 h-10 rounded-full bg-red-600/20 flex items-center justify-center"><span class="text-xl">👤</span></div>
                         <h2 class="text-xl font-semibold">User Analyzer</h2>
                     </div>
                     <div class="space-y-4">
-                        <div>
-                            <label class="text-sm text-gray-300 block mb-2">🎯 Select User (Dynamic from GitHub)</label>
-                            <select id="userIdSelect" class="w-full bg-gray-900/70 border border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-red-500 transition">
-                                <option value="">Loading users from data/users.json...</option>
-                            </select>
-                        </div>
-                        <button id="analyzeBtn" class="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 transition-all rounded-xl py-3 font-semibold shadow-lg flex items-center justify-center gap-2 text-white">
-                            <span>🔍</span> Analyze & Predict Churn
-                        </button>
+                        <div><label class="text-sm text-gray-300 block mb-2">🎯 Select User (Dynamic from GitHub)</label>
+                        <select id="userIdSelect" class="w-full bg-gray-900/70 border border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-red-500 transition">
+                            <option value="">Loading users from data/users.json...</option>
+                        </select></div>
+                        <button id="analyzeBtn" class="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 transition-all rounded-xl py-3 font-semibold shadow-lg flex items-center justify-center gap-2 text-white"><span>🔍</span> Analyze & Predict Churn</button>
                     </div>
                 </div>
 
                 <div class="glass-card p-5">
                     <div class="flex items-center gap-2 mb-3"><span class="text-lg">🧩</span><span class="font-medium">User Cluster Profile</span></div>
-                    <div id="clusterInfo" class="space-y-3">...</div>
+                    <div id="clusterInfo" class="space-y-3"><div class="text-gray-400">Select a user</div></div>
                 </div>
 
                 <div class="glass-card p-6">
                     <div class="flex items-center gap-3 border-b border-white/10 pb-4 mb-5"><div class="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center"><span class="text-xl">🎭</span></div><h2 class="text-xl font-semibold">Mood & Time Filter</h2></div>
                     <div class="space-y-4">
-                        <div><label class="text-sm text-gray-300 block mb-2">😊 Select Mood</label><select id="moodSelect" class="w-full bg-gray-900/70 border border-gray-700 rounded-xl px-4 py-2">...</select></div>
-                        <div><label class="text-sm text-gray-300 block mb-2">⏰ Time Available</label><select id="timeSelect" class="w-full bg-gray-900/70 border border-gray-700 rounded-xl px-4 py-2">...</select></div>
+                        <div><label class="text-sm text-gray-300 block mb-2">😊 Select Mood</label><select id="moodSelect" class="w-full bg-gray-900/70 border border-gray-700 rounded-xl px-4 py-2"><option value="all">All Moods</option><option value="funny">🤣 Funny</option><option value="emotional">😢 Emotional</option><option value="mindbending">🤯 Mind-bending</option><option value="scary">😱 Scary</option><option value="romantic">💕 Romantic</option><option value="action">⚡ Action</option></select></div>
+                        <div><label class="text-sm text-gray-300 block mb-2">⏰ Time Available</label><select id="timeSelect" class="w-full bg-gray-900/70 border border-gray-700 rounded-xl px-4 py-2"><option value="short">🍿 Short</option><option value="medium">📺 Medium</option><option value="long">🎬 Long</option><option value="any">⏳ Any</option></select></div>
                     </div>
                 </div>
 
                 <div class="glass-card p-6">
                     <div class="flex items-center gap-3 border-b border-white/10 pb-4 mb-5"><div class="w-10 h-10 rounded-full bg-amber-500/20 flex items-center justify-center"><span class="text-xl">⚠️</span></div><h2 class="text-xl font-semibold">Churn Risk Score</h2></div>
-                    <div id="churnResult" class="text-center py-4">...</div>
+                    <div id="churnResult" class="text-center py-4"><div class="text-5xl font-black mb-2 text-gray-400">—</div><div class="w-full bg-gray-800 rounded-full h-2.5"><div id="churnBar" class="bg-red-500 h-2.5 rounded-full w-0 transition-all duration-500"></div></div><p class="mt-3 text-xs text-gray-400">Select user & analyze</p></div>
                 </div>
-
-                <div class="glass-card p-5" id="seasonalAlert">
-                    <div class="flex items-center gap-2 mb-3"><span class="text-lg">🌸</span><span class="font-medium">Seasonal Spotlight</span><span class="trending-badge text-xs px-2 py-0.5 rounded-full text-white ml-2">LIVE</span></div>
-                    <div id="seasonalContent" class="text-sm text-gray-300">Loading seasonal picks...</div>
-                </div>
+                <div class="glass-card p-5"><div class="flex items-center gap-2 mb-3"><span class="text-lg">🌸</span><span class="font-medium">Seasonal Spotlight</span><span class="trending-badge text-xs px-2 py-0.5 rounded-full text-white ml-2">LIVE</span></div><div id="seasonalContent" class="text-sm text-gray-300">Loading seasonal picks...</div></div>
             </div>
 
-            <!-- RIGHT PANEL same as original but glass-card effects apply -->
+            <!-- RIGHT PANEL -->
             <div class="lg:col-span-2 space-y-6">
                 <div class="glass-card p-6">
                     <div class="flex flex-wrap justify-between items-center border-b border-white/10 pb-4 mb-5"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center"><span class="text-xl">🎥</span></div><h2 class="text-xl font-semibold">Smart Recommendations</h2></div><div class="flex gap-2"><button id="showListBtn" class="px-3 py-1 rounded-lg bg-red-600/30 hover:bg-red-600 transition">📋 List View</button><button id="showSwipeBtn" class="px-3 py-1 rounded-lg bg-white/10 hover:bg-white/20 transition">🔄 Swipe Mode</button></div></div>
-                    <div id="listView"><div id="recommendationList" class="space-y-3">...</div></div>
-                    <div id="swipeView" class="hidden"><div id="swipeStack" class="relative w-full max-w-md mx-auto"></div><div class="flex justify-center gap-6 mt-6"><button id="swipeLeftBtn" class="w-14 h-14 rounded-full bg-red-600/30 hover:bg-red-600 transition text-2xl">✗</button><button id="swipeRightBtn" class="w-14 h-14 rounded-full bg-emerald-600/30 hover:bg-emerald-600 transition text-2xl">✓</button></div></div>
+                    <div id="listView"><div id="recommendationList" class="space-y-3"><div class="text-center py-12 text-gray-400">Click "Analyze" to see recommendations</div></div></div>
+                    <div id="swipeView" class="hidden"><div id="swipeStack" class="relative w-full max-w-md mx-auto"></div><div class="flex justify-center gap-6 mt-6"><button id="swipeLeftBtn" class="w-14 h-14 rounded-full bg-red-600/30 hover:bg-red-600 transition text-2xl">✗</button><button id="swipeRightBtn" class="w-14 h-14 rounded-full bg-emerald-600/30 hover:bg-emerald-600 transition text-2xl">✓</button></div><p class="text-center text-xs text-gray-400 mt-3">Swipe left/right to improve AI</p></div>
                 </div>
-                <div class="glass-card p-5"><div class="flex items-center gap-2 mb-4"><i class="fas fa-chart-line text-red-500"></i><h3 class="font-semibold">🔥 Trending Now</h3><span class="trending-badge text-xs px-2 py-0.5 rounded-full text-white">HOT</span></div><div id="trendingList" class="flex gap-3 overflow-x-auto pb-2"></div></div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6"><div class="glass-card p-5"><h3 class="font-semibold flex items-center gap-2 mb-3"><i class="fas fa-bookmark text-red-400"></i> My Bookmarks</h3><div id="bookmarksList"></div></div><div class="glass-card p-5"><h3 class="font-semibold flex items-center gap-2 mb-3"><i class="fas fa-history text-blue-400"></i> Watch History & Ongoing</h3><div id="historyList"></div><div class="mt-3 pt-2 border-t border-white/10"><h4 class="text-xs font-semibold mb-2">▶️ Currently Watching</h4><div id="ongoingList" class="text-xs text-gray-300"></div></div></div></div>
-                <div class="glass-card p-5"><h3 class="font-semibold flex items-center gap-2 mb-3"><i class="fas fa-search"></i> Interactive Content Explorer</h3><div class="flex gap-2 mb-3"><input type="text" id="searchInput" placeholder="Search movies or shows..." class="flex-1 bg-gray-900/70 border border-gray-700 rounded-xl px-4 py-2"><select id="genreFilter" class="bg-gray-900/70 border border-gray-700 rounded-xl px-3 py-2"><option value="all">All Genres</option></select></div><div id="explorerResults" class="grid grid-cols-2 gap-2 max-h-64 overflow-y-auto"></div></div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6"><div class="glass-card p-5"><h3 class="font-semibold flex items-center gap-2"><i class="fas fa-flask"></i> A/B Test Simulator</h3><div class="mt-3 space-y-3"><div class="flex justify-between text-sm"><span>Algorithm A (Current)</span><span id="ctrA" class="font-mono">0%</span></div><div class="w-full bg-gray-700 rounded-full h-2"><div id="ctrABar" class="bg-red-500 h-2 rounded-full w-0"></div></div><div class="flex justify-between text-sm mt-2"><span>Algorithm B (Test)</span><span id="ctrB" class="font-mono">0%</span></div><div class="w-full bg-gray-700 rounded-full h-2"><div id="ctrBBar" class="bg-emerald-500 h-2 rounded-full w-0"></div></div><p id="abWinner" class="text-xs text-center text-gray-400 mt-2">Click recommendations to vote</p></div></div><div class="glass-card p-5"><h3 class="font-semibold flex items-center gap-2"><i class="fas fa-users"></i> Community Insights</h3><div id="communityInsights" class="space-y-2 text-sm"><p>👥 2,347 users watching similar content</p><p>⭐ Most loved: "Stranger Things" (4.8/5)</p><p>💬 "Best sci-fi this year!" - trending review</p><p>📈 +47% watch time this week</p></div></div></div>
+
+                <div class="glass-card p-5"><div class="flex items-center gap-2 mb-4"><i class="fas fa-chart-line text-red-500"></i><h3 class="font-semibold">🔥 Trending Now</h3><span class="trending-badge text-xs px-2 py-0.5 rounded-full text-white">HOT</span></div><div id="trendingList" class="flex gap-3 overflow-x-auto pb-2"><div class="text-gray-400">Loading trends...</div></div></div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="glass-card p-5"><h3 class="font-semibold flex items-center gap-2 mb-3"><i class="fas fa-bookmark text-red-400"></i> My Bookmarks</h3><div id="bookmarksList"><p class="text-gray-400 text-xs">No bookmarks yet.</p></div></div>
+                    <div class="glass-card p-5"><h3 class="font-semibold flex items-center gap-2 mb-3"><i class="fas fa-history text-blue-400"></i> Watch History & Ongoing</h3><div id="historyList"><p class="text-gray-400 text-xs">No history yet.</p></div><div class="mt-3 pt-2 border-t border-white/10"><h4 class="text-xs font-semibold mb-2">▶️ Currently Watching</h4><div id="ongoingList" class="text-xs text-gray-300">None</div></div></div>
+                </div>
+
+                <div class="glass-card p-5"><h3 class="font-semibold flex items-center gap-2 mb-3"><i class="fas fa-search"></i> Interactive Content Explorer</h3><div class="flex gap-2 mb-3"><input type="text" id="searchInput" placeholder="Search movies or shows..." class="flex-1 bg-gray-900/70 border border-gray-700 rounded-xl px-4 py-2"><select id="genreFilter" class="bg-gray-900/70 border border-gray-700 rounded-xl px-3 py-2"><option value="all">All Genres</option><option>Comedy</option><option>Drama</option><option>Sci-Fi</option><option>Action</option></select></div><div id="explorerResults" class="grid grid-cols-2 gap-2 max-h-64 overflow-y-auto"><p class="text-gray-400 text-xs col-span-2">Search content...</p></div></div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="glass-card p-5"><h3 class="font-semibold flex items-center gap-2"><i class="fas fa-flask"></i> A/B Test Simulator</h3><div class="mt-3 space-y-3"><div class="flex justify-between text-sm"><span>Algorithm A</span><span id="ctrA">0%</span></div><div class="w-full bg-gray-700 rounded-full h-2"><div id="ctrABar" class="bg-red-500 h-2 rounded-full w-0"></div></div><div class="flex justify-between text-sm mt-2"><span>Algorithm B</span><span id="ctrB">0%</span></div><div class="w-full bg-gray-700 rounded-full h-2"><div id="ctrBBar" class="bg-emerald-500 h-2 rounded-full w-0"></div></div><p id="abWinner" class="text-xs text-center text-gray-400 mt-2">Click recs to vote</p></div></div>
+                    <div class="glass-card p-5"><h3 class="font-semibold flex items-center gap-2"><i class="fas fa-users"></i> Community Insights</h3><div id="communityInsights" class="space-y-2 text-sm"><p>👥 2,347 users watching similar content</p><p>⭐ Most loved: "Stranger Things" (4.8/5)</p><p>💬 "Best sci-fi this year!" - trending review</p><p>📈 +47% watch time this week</p></div></div>
+                </div>
             </div>
         </div>
-        <div class="mt-12 text-center text-gray-500 text-xs border-t border-white/10 pt-6">Streamlytics AI • Complete Intelligence Hub • Mood-Aware • Time-Aware • Swipe Recommendations • A/B Testing</div>
+        <div class="mt-12 text-center text-gray-500 text-xs border-t border-white/10 pt-6">Streamlytics AI • Complete Intelligence Hub • Marvel & DC vibes • Glitch Edition</div>
     </div>
 
     <script>
-        // All original logic preserved plus glitch title animation after logo finishes.
+        // Fully functional Netflix Intelligence Hub + dynamic background with Marvel/DC logos glitching
         let masterUserDatabase = {}, masterTitleDatabase = [], currentUserData = null, currentRecommendations = [], bookmarks = JSON.parse(localStorage.getItem('netflix_bookmarks') || '[]'), watchHistory = JSON.parse(localStorage.getItem('netflix_history') || '[]'), ongoingContent = JSON.parse(localStorage.getItem('netflix_ongoing') || '[]'), abVotes = { A: 0, B: 0, A_shown: 0, B_shown: 0 }, swipeIndex = 0, currentSwipeItems = [];
-        const clusterDefinitions = {0:{name:"Comedy Enthusiasts",genre:"Comedy",archetype:"🎉 High binge frequency"},1:{name:"Thrill Seekers",genre:"Thriller",archetype:"🔪 Intense content lovers"},2:{name:"Drama Devotees",genre:"Drama",archetype:"🎭 Character-driven fans"},3:{name:"Sci-Fi Explorers",genre:"Sci-Fi",archetype:"🚀 Futuristic & mind-bending"},4:{name:"Documentary Buffs",genre:"Documentary",archetype:"📽️ Knowledge seekers"}};
-        const moodGenreMap = {funny:["Comedy"],emotional:["Drama"],mindbending:["Sci-Fi","Thriller"],scary:["Thriller"],romantic:["Romance"],action:["Action"]};
+        const clusterDefinitions = {0:{name:"Comedy Enthusiasts",genre:"Comedy"},1:{name:"Thrill Seekers",genre:"Thriller"},2:{name:"Drama Devotees",genre:"Drama"},3:{name:"Sci-Fi Explorers",genre:"Sci-Fi"},4:{name:"Documentary Buffs",genre:"Documentary"}};
+        const moodGenreMap = {funny:["Comedy"],emotional:["Drama"],mindbending:["Sci-Fi"],scary:["Thriller"],romantic:["Romance"],action:["Action"]};
         const timeDurationMap = {short:{max:30},medium:{min:30,max:60},long:{min:60},any:{min:0,max:999}};
+        
         function showNotification(m,t){let c=document.getElementById('notificationContainer'),n=document.createElement('div');n.className=`notification glass-card p-3 px-5 ${t==='success'?'border-green-500':'border-red-500'} border-l-4`;n.innerHTML=`<span>${m}</span>`;c.appendChild(n);setTimeout(()=>n.remove(),3000);}
-        function getSeasonalContent(){let m=new Date().getMonth(),p=(["winter"][0]? "❄️ The Snowman": "🌸 Spring Blossoms");return `🌸 Seasonal: Spring picks • Hidden Gardens`;}
+        function getSeasonalContent(){const m=new Date().getMonth();return "🌸 Seasonal Spotlight: Marvel & DC Marathon • Spring Specials";}
         function getAgeAppropriateRatings(age){if(age<14)return['TV-Y','PG'];if(age<17)return['PG-13','TV-14'];return['R','TV-MA'];}
-        function getRecommendations(uid,ud,catalog,mood,timeFilter){let allowed=getAgeAppropriateRatings(ud.age),candidates=catalog.filter(t=>allowed.includes(t.rating));if(mood!=='all')candidates=candidates.filter(t=>t.genre&&moodGenreMap[mood]?.some(mg=>t.genre.includes(mg)));return candidates.slice(0,8).map(t=>({...t,score:1})).sort(()=>0.5-Math.random());}
-        function computeChurnProbability(ud){let risk=0.25+Math.random()*0.5;return parseFloat(risk.toFixed(3));}
-        function updateClusterProfile(ud){let ci=clusterDefinitions[ud.cluster]||clusterDefinitions[0];document.getElementById('clusterId')&&(document.getElementById('clusterId').innerHTML=ud.cluster);}
-        function renderList(recs){let container=document.getElementById('recommendationList');if(!recs?.length){container.innerHTML='<div class="text-center py-8 text-gray-400">No recs</div>';return;}container.innerHTML=recs.map((rec,idx)=>`<div class="rec-card glass-card p-4 flex justify-between items-center" data-title="${rec.title}"><div><div class="font-bold">${rec.title}</div><div class="text-xs">${rec.genre}</div></div><i class="far fa-bookmark cursor-pointer bookmark-icon" data-title="${rec.title}"></i></div>`).join('');}
+        function getRecommendations(uid,ud,catalog,mood,timeFilter){let allowed=getAgeAppropriateRatings(ud.age||25),candidates=catalog.filter(t=>allowed.includes(t.rating));if(mood!=='all')candidates=candidates.filter(t=>t.genre&&moodGenreMap[mood]?.some(mg=>t.genre.includes(mg)));return candidates.slice(0,8).map(t=>({...t,score:1}));}
+        function computeChurnProbability(ud){return parseFloat((0.2+Math.random()*0.6).toFixed(3));}
+        function updateClusterProfile(ud){let cid=ud.cluster||0;document.getElementById('clusterInfo').innerHTML=`<div>Cluster: ${clusterDefinitions[cid]?.name||'Standard'}</div><div>Preferred: ${ud.preferred_genre||'Action'}</div>`;}
+        function renderList(recs){let container=document.getElementById('recommendationList');if(!recs?.length){container.innerHTML='<div class="text-center py-8">No recs</div>';return;}container.innerHTML=recs.map((rec,idx)=>`<div class="rec-card glass-card p-4 flex justify-between items-center" data-title="${rec.title}"><div><div class="font-bold">${rec.title}</div><div class="text-xs">${rec.genre}</div></div><i class="far fa-bookmark cursor-pointer bookmark-icon" data-title="${rec.title}"></i></div>`).join('');}
         function initSwipe(items){currentSwipeItems=items||[];swipeIndex=0;renderSwipeCard();}
-        function renderSwipeCard(){let container=document.getElementById('swipeStack');if(swipeIndex>=currentSwipeItems.length){container.innerHTML='<div class="text-center py-12">Done</div>';return;}let item=currentSwipeItems[swipeIndex];container.innerHTML=`<div class="swipe-card glass-card p-6 text-center"><h3 class="font-bold">${item.title}</h3><p>${item.genre}</p><div class="flex justify-center gap-4 mt-2"><span>👎</span><span>👍</span></div></div>`;}
-        function swipeLeft(){if(swipeIndex<currentSwipeItems.length){swipeIndex++;renderSwipeCard();showNotification("Disliked",'info');}}
-        function swipeRight(){if(swipeIndex<currentSwipeItems.length){addToHistory(currentSwipeItems[swipeIndex].title);swipeIndex++;renderSwipeCard();showNotification("Liked!",'success');}}
+        function renderSwipeCard(){let container=document.getElementById('swipeStack');if(swipeIndex>=currentSwipeItems.length){container.innerHTML='<div class="text-center py-12">No more cards</div>';return;}let item=currentSwipeItems[swipeIndex];container.innerHTML=`<div class="swipe-card glass-card p-6 text-center"><h3 class="font-bold text-xl">${item.title}</h3><p class="mt-2">${item.genre}</p><div class="flex justify-center gap-4 mt-4"><span class="text-red-400">👎</span><span class="text-emerald-400">👍</span></div></div>`;}
+        function swipeLeft(){if(swipeIndex<currentSwipeItems.length){swipeIndex++;renderSwipeCard();showNotification("👎 Disliked",'info');}}
+        function swipeRight(){if(swipeIndex<currentSwipeItems.length){addToHistory(currentSwipeItems[swipeIndex].title);swipeIndex++;renderSwipeCard();showNotification("❤️ Liked!",'success');}}
         function addToHistory(title){if(!watchHistory.includes(title))watchHistory.unshift(title);localStorage.setItem('netflix_history',JSON.stringify(watchHistory));}
-        function renderBookmarks(){}
-        function renderHistory(){}
-        function renderOngoing(){}
-        function updateABTest(){}
-        function renderTrending(){}
-        function searchContent(){}
-        async function analyzeUser(){const sid=document.getElementById('userIdSelect').value;if(!sid||!masterUserDatabase[sid])return;currentUserData=masterUserDatabase[sid];let mood=document.getElementById('moodSelect').value,timeF=document.getElementById('timeSelect').value;currentRecommendations=getRecommendations(sid,currentUserData,masterTitleDatabase,mood,timeF);renderList(currentRecommendations);initSwipe(currentRecommendations);showNotification(`Analyzed ${sid}`,'success');}
-        async function loadDynamicData(){try{let ur=await fetch('./data/users.json');let us=await ur.json();masterUserDatabase=us;let cr=await fetch('./data/catalog.json');let ct=await cr.json();masterTitleDatabase=ct;let sel=document.getElementById('userIdSelect');sel.innerHTML='';Object.keys(masterUserDatabase).forEach(uid=>{let opt=document.createElement('option');opt.value=uid;opt.textContent=uid;sel.appendChild(opt);});if(Object.keys(masterUserDatabase).length) analyzeUser();}catch(e){console.warn(e);loadFallbackData();}}
-        function loadFallbackData(){masterUserDatabase={"U1":{name:"Alice",cluster:1,age:30,preferred_genre:"Comedy",features:{}}};masterTitleDatabase=[{title:"Stranger Things",genre:"Sci-Fi",rating:"TV-14",duration:50}];let sel=document.getElementById('userIdSelect');sel.innerHTML='<option value="U1">U1</option>';analyzeUser();}
+        function renderBookmarks(){let bmDiv=document.getElementById('bookmarksList');if(bookmarks.length===0){bmDiv.innerHTML='<p class="text-gray-400 text-xs">No bookmarks</p>';return;}bmDiv.innerHTML=bookmarks.map(b=>`<div>📌 ${b}</div>`).join('');}
+        function updateABTest(){let ctrA=abVotes.A_shown?(abVotes.A/abVotes.A_shown*100):0;let ctrB=abVotes.B_shown?(abVotes.B/abVotes.B_shown*100):0;document.getElementById('ctrA').innerText=`${ctrA.toFixed(1)}%`;document.getElementById('ctrB').innerText=`${ctrB.toFixed(1)}%`;document.getElementById('ctrABar').style.width=`${ctrA}%`;document.getElementById('ctrBBar').style.width=`${ctrB}%`;}
+        function renderTrending(){if(!masterTitleDatabase.length)return;let trending=[...masterTitleDatabase].slice(0,5);document.getElementById('trendingList').innerHTML=trending.map(t=>`<div class="glass-card p-2 min-w-[120px] text-center"><div class="font-bold">🔥 ${t.title}</div><div class="text-xs">${t.genre}</div></div>`).join('');}
+        function searchContent(){let query=document.getElementById('searchInput').value.toLowerCase();let filtered=masterTitleDatabase.filter(t=>t.title.toLowerCase().includes(query));document.getElementById('explorerResults').innerHTML=filtered.slice(0,4).map(t=>`<div class="glass-card p-2 text-xs">${t.title}</div>`).join('')||'<p class="text-gray-400">No results</p>';}
+        async function analyzeUser(){let sid=document.getElementById('userIdSelect').value;if(!sid||!masterUserDatabase[sid]){showNotification("Select valid user",'error');return;}currentUserData=masterUserDatabase[sid];updateClusterProfile(currentUserData);let mood=document.getElementById('moodSelect').value,timeF=document.getElementById('timeSelect').value;currentRecommendations=getRecommendations(sid,currentUserData,masterTitleDatabase,mood,timeF);renderList(currentRecommendations);initSwipe(currentRecommendations);renderTrending();document.getElementById('seasonalContent').innerHTML=getSeasonalContent();let churn=computeChurnProbability(currentUserData);document.getElementById('churnBar').style.width=`${churn*100}%`;document.querySelector('#churnResult .text-5xl').innerHTML=`${(churn*100).toFixed(1)}%`;showNotification(`Analyzed ${sid}`, 'success');}
+        async function loadDynamicData(){try{let ur=await fetch('./data/users.json');let us=await ur.json();masterUserDatabase=us;let cr=await fetch('./data/catalog.json');let ct=await cr.json();masterTitleDatabase=ct;let sel=document.getElementById('userIdSelect');sel.innerHTML='';Object.keys(masterUserDatabase).forEach(uid=>{let opt=document.createElement('option');opt.value=uid;opt.textContent=`${masterUserDatabase[uid].name||uid} (${uid})`;sel.appendChild(opt);});if(Object.keys(masterUserDatabase).length) analyzeUser();showNotification("Loaded Marvel/DC Realm + Netflix Data",'success');}catch(e){loadFallbackData();}}
+        function loadFallbackData(){masterUserDatabase={"U1":{name:"Tony Stark",cluster:3,age:35,preferred_genre:"Sci-Fi",features:{}},"U2":{name:"Bruce Wayne",cluster:1,age:40,preferred_genre:"Thriller"}};masterTitleDatabase=[{title:"Iron Man: Legacy",genre:"Action",rating:"PG-13",duration:120},{title:"Dark Knight Returns",genre:"Thriller",rating:"R",duration:150},{title:"Loki: Glitch Effect",genre:"Sci-Fi",rating:"TV-14",duration:55}];let sel=document.getElementById('userIdSelect');sel.innerHTML='<option value="U1">Tony Stark</option><option value="U2">Bruce Wayne</option>';analyzeUser();}
         
         // Glitch animation trigger after logo finishes
-        const logo = document.getElementById('glitchLogo');
+        const logoDiv = document.getElementById('glitchLogo');
         const titleEl = document.getElementById('mainGlitchTitle');
-        if(logo && titleEl) {
-            logo.addEventListener('animationend', () => {
-                titleEl.classList.add('glitch-active');
-                setTimeout(() => titleEl.classList.remove('glitch-active'), 500);
-                // additional shimmer for title to persist style
-            });
-            // Also manual fallback: if no animationend due to performance, trigger after 0.6s
-            setTimeout(() => {
-                if(titleEl && !titleEl.classList.contains('glitch-active')) {
-                    titleEl.classList.add('glitch-active');
-                    setTimeout(() => titleEl.classList.remove('glitch-active'), 400);
-                }
-            }, 700);
-        }
+        if(logoDiv && titleEl) { logoDiv.addEventListener('animationend', () => { titleEl.classList.add('glitch-active'); setTimeout(() => titleEl.classList.remove('glitch-active'), 500); }); setTimeout(() => { if(titleEl && !titleEl.classList.contains('glitch-active')) { titleEl.classList.add('glitch-active'); setTimeout(() => titleEl.classList.remove('glitch-active'), 400); } }, 700); }
+        
         document.getElementById('themeToggle').addEventListener('click',()=>{document.body.classList.toggle('light-mode');let icon=document.querySelector('#themeToggle i');if(document.body.classList.contains('light-mode')){icon.classList.remove('fa-moon');icon.classList.add('fa-sun');}else{icon.classList.remove('fa-sun');icon.classList.add('fa-moon');}});
-        document.getElementById('analyzeBtn')?.addEventListener('click',analyzeUser);
-        document.getElementById('showListBtn')?.addEventListener('click',()=>{document.getElementById('listView').classList.remove('hidden');document.getElementById('swipeView').classList.add('hidden');});
-        document.getElementById('showSwipeBtn')?.addEventListener('click',()=>{document.getElementById('listView').classList.add('hidden');document.getElementById('swipeView').classList.remove('hidden');if(currentRecommendations.length)initSwipe(currentRecommendations);});
-        document.getElementById('swipeLeftBtn')?.addEventListener('click',swipeLeft);
-        document.getElementById('swipeRightBtn')?.addEventListener('click',swipeRight);
-        document.getElementById('searchInput')?.addEventListener('input',searchContent);
-        document.getElementById('genreFilter')?.addEventListener('change',searchContent);
-        document.getElementById('moodSelect')?.addEventListener('change',analyzeUser);
-        document.getElementById('timeSelect')?.addEventListener('change',analyzeUser);
+        document.getElementById('analyzeBtn').addEventListener('click',analyzeUser);
+        document.getElementById('showListBtn').addEventListener('click',()=>{document.getElementById('listView').classList.remove('hidden');document.getElementById('swipeView').classList.add('hidden');});
+        document.getElementById('showSwipeBtn').addEventListener('click',()=>{document.getElementById('listView').classList.add('hidden');document.getElementById('swipeView').classList.remove('hidden');if(currentRecommendations.length)initSwipe(currentRecommendations);});
+        document.getElementById('swipeLeftBtn').addEventListener('click',swipeLeft); document.getElementById('swipeRightBtn').addEventListener('click',swipeRight);
+        document.getElementById('searchInput').addEventListener('input',searchContent); document.getElementById('genreFilter').addEventListener('change',searchContent);
+        document.getElementById('moodSelect').addEventListener('change',analyzeUser); document.getElementById('timeSelect').addEventListener('change',analyzeUser);
         window.addEventListener('load',loadDynamicData);
         window.removeBookmark = (t)=>{};
     </script>

@@ -49,23 +49,28 @@ Streamlytics is an intelligent content recommendation and sentiment analytics pl
 Streamlytics utilizes a modular Jupyter Notebook-based architecture for transparent, reproducible analysis and modeling.
 
 ```text
-your-repo/
-├── index.html              # Main webpage
-├── app.py                  # Flask/FastAPI backend (if using server)
-├── requirements.txt        # Python dependencies
-├── saved_models/          # Your exported models
+netflix-recommendation-system/
+├── app.py                 # Main Flask application
+├── requirements.txt       # Python dependencies
+├── saved_models/         # Your exported models
 │   ├── tfidf_vectorizer.pkl
 │   ├── cosine_sim.joblib
 │   ├── indices.pkl
 │   ├── df_titles.pkl
 │   ├── random_forest_churn_model.joblib
+│   ├── logistic_regression_churn_model.joblib
 │   ├── feature_scaler.joblib
 │   ├── kmeans_model.joblib
-│   └── model_config.json
-└── static/
-    ├── css/style.css
-    └── js/script.js
-```
+│   ├── cluster_genre_preferences.csv
+│   ├── model_config.pkl
+│   └── user_features_with_clusters.csv
+├── static/
+│   ├── css/
+│   │   └── style.css
+│   └── js/
+│       └── main.js
+└── templates/
+    └── index.html
 
 ## ⚙️ Installation & Setup
 

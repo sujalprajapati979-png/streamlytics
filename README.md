@@ -184,6 +184,14 @@ Open the notebooks in the `notebooks/` directory and run them sequentially to:
 
 ---
 
+## 🌐 Live Demo & Documentation
+
+🔗 **[Visit Streamlytics Live Demo]()**
+
+For detailed documentation and interactive analysis results, visit the project website linked above.
+
+---
+
 ## 🎓 Learning Outcomes
 
 - Comprehensive understanding of machine learning, recommendation systems, and sentiment analysis

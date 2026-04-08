@@ -214,6 +214,75 @@
         }
         .detail-card:hover { background: rgba(220,38,38,0.2); transform: scale(0.98); }
         .info-row { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 0.75rem; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 4px; }
+
+        /* Loader & Modal styles from the provided functions */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+        }
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-top-color: #e50914;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background: #1a1a2e;
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+        .close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        .similar-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        .similar-card {
+            background: rgba(255,255,255,0.05);
+            padding: 0.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .similar-card:hover {
+            background: rgba(255,255,255,0.1);
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -237,6 +306,8 @@
         </div>
 
         <div id="notificationContainer"></div>
+        <div id="loader" class="loader"><div class="spinner"></div></div>
+        <div id="error-container"></div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-7">
             <!-- LEFT PANEL -->
@@ -259,7 +330,6 @@
                     </div>
                 </div>
 
-                <!-- Enhanced Cluster Profile with FULL user data -->
                 <div class="glass-card p-5">
                     <div class="flex items-center gap-2 mb-3"><span class="text-lg">🧩</span><span class="font-medium">User Cluster Profile (Full Data)</span></div>
                     <div id="clusterInfo" class="space-y-3 text-sm">Select a user to view complete profile</div>
@@ -302,7 +372,7 @@
                 <div class="glass-card p-5"><div class="flex items-center gap-2 mb-4"><i class="fas fa-chart-line text-red-500"></i><h3 class="font-semibold">🔥 Trending Now</h3><span class="trending-badge text-xs px-2 py-0.5 rounded-full text-white">HOT</span></div><div id="trendingList" class="flex gap-3 overflow-x-auto pb-2"></div></div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6"><div class="glass-card p-5"><h3 class="font-semibold flex items-center gap-2 mb-3"><i class="fas fa-bookmark text-red-400"></i> My Bookmarks</h3><div id="bookmarksList" class="text-sm space-y-1"></div></div><div class="glass-card p-5"><h3 class="font-semibold flex items-center gap-2 mb-3"><i class="fas fa-history text-blue-400"></i> Watch History</h3><div id="historyList" class="text-sm space-y-1"></div><div class="mt-3 pt-2 border-t border-white/10"><h4 class="text-xs font-semibold mb-2">▶️ Currently Watching</h4><div id="ongoingList" class="text-xs text-gray-300"></div></div></div></div>
                 
-                <!-- Enhanced Content Explorer with FULL details from catalog -->
+                <!-- Interactive Content Explorer with FULL details -->
                 <div class="glass-card p-5">
                     <h3 class="font-semibold flex items-center gap-2 mb-3"><i class="fas fa-search"></i> Interactive Content Explorer (Full Details)</h3>
                     <div class="flex gap-2 mb-3 flex-wrap"><input type="text" id="searchInput" placeholder="Search movies or shows..." class="flex-1 bg-gray-900/70 border border-gray-700 rounded-xl px-4 py-2"><select id="genreFilter" class="bg-gray-900/70 border border-gray-700 rounded-xl px-3 py-2"><option value="all">All Genres</option></select></div>
@@ -316,6 +386,123 @@
     </div>
 
     <script>
+        // ============================================
+        // API FUNCTIONS (from provided JavaScript)
+        // ============================================
+        const API_BASE = window.location.origin; // For local or deployed backend
+        
+        async function getRecommendations(userData) {
+            try {
+                const response = await fetch(`${API_BASE}/api/recommendations`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(userData)
+                });
+                const result = await response.json();
+                if (result.success) return { success: true, cluster: result.user_cluster, genre: result.dominant_genre, recommendations: result.recommendations };
+                return { success: false, error: result.error };
+            } catch (error) { return { success: false, error: error.message }; }
+        }
+        
+        async function predictChurn(userData) {
+            try {
+                const response = await fetch(`${API_BASE}/api/predict-churn`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(userData)
+                });
+                const result = await response.json();
+                if (result.success) return { success: true, probability: result.prediction.ensemble_probability, riskLevel: result.prediction.risk_level, rfProbability: result.prediction.random_forest_probability, lrProbability: result.prediction.logistic_regression_probability, willChurn: result.prediction.ensemble_prediction === 1 };
+                return { success: false, error: result.error };
+            } catch (error) { return { success: false, error: error.message }; }
+        }
+        
+        async function searchMovies(query) {
+            try {
+                const response = await fetch(`${API_BASE}/api/search?q=${encodeURIComponent(query)}`);
+                const result = await response.json();
+                if (result.success) return { success: true, results: result.results };
+                return { success: false, error: result.error };
+            } catch (error) { return { success: false, error: error.message }; }
+        }
+        
+        async function getMovieDetails(title) {
+            try {
+                const response = await fetch(`${API_BASE}/api/movie/${encodeURIComponent(title)}`);
+                const result = await response.json();
+                if (result.success) return { success: true, movie: result.movie };
+                return { success: false, error: result.error };
+            } catch (error) { return { success: false, error: error.message }; }
+        }
+        
+        async function getSimilarMovies(title) {
+            try {
+                const response = await fetch(`${API_BASE}/api/movie-similar/${encodeURIComponent(title)}`);
+                const result = await response.json();
+                if (result.success) return { success: true, similarMovies: result.similar_movies };
+                return { success: false, error: result.error };
+            } catch (error) { return { success: false, error: error.message }; }
+        }
+        
+        // Helper UI functions
+        function showLoading(show) { const loader = document.getElementById('loader'); if(loader) loader.style.display = show ? 'flex' : 'none'; }
+        function showError(message) { const ec = document.getElementById('error-container'); if(ec) { ec.innerHTML = `<div class="notification" style="background:#dc2626;">Error: ${message}</div>`; setTimeout(()=>ec.innerHTML='', 4000); } else alert(`Error: ${message}`); }
+        function closeModal() { const modal = document.querySelector('.modal'); if(modal) modal.remove(); }
+        
+        // Enhanced modal details using API
+        async function showMovieDetails(title) {
+            showLoading(true);
+            const result = await getMovieDetails(title);
+            showLoading(false);
+            if(result.success) {
+                const movie = result.movie;
+                const modalDiv = document.createElement('div');
+                modalDiv.className = 'modal';
+                modalDiv.innerHTML = `
+                    <div class="modal-content">
+                        <span class="close-btn" onclick="closeModal()">&times;</span>
+                        <h2>${movie.title}</h2>
+                        <div class="movie-details">
+                            <p><strong>Type:</strong> ${movie.type}</p><p><strong>Rating:</strong> ${movie.rating}</p><p><strong>Release Year:</strong> ${movie.release_year}</p>
+                            <p><strong>Director:</strong> ${movie.director || 'Unknown'}</p><p><strong>Cast:</strong> ${movie.cast || 'Unknown'}</p>
+                            <p><strong>Country:</strong> ${movie.country || 'Unknown'}</p><p><strong>Genres:</strong> ${movie.listed_in || 'N/A'}</p>
+                            ${movie.movie_duration_minutes ? `<p><strong>Duration:</strong> ${movie.movie_duration_minutes} minutes</p>` : ''}
+                            ${movie.tv_show_seasons ? `<p><strong>Seasons:</strong> ${movie.tv_show_seasons}</p>` : ''}
+                            <p><strong>Description:</strong> ${movie.description || 'No description'}</p>
+                        </div>
+                        <button onclick="getSimilarMoviesAndShow('${movie.title.replace(/'/g, "\\'")}')" class="similar-btn mt-3 bg-red-600 px-4 py-2 rounded-lg">Get Similar Movies</button>
+                    </div>
+                `;
+                document.body.appendChild(modalDiv);
+            } else { showError(result.error); }
+        }
+        
+        async function getSimilarMoviesAndShow(title) {
+            showLoading(true);
+            const result = await getSimilarMovies(title);
+            showLoading(false);
+            if(result.success) {
+                const modal = document.querySelector('.modal');
+                if(modal) {
+                    const modalContent = modal.querySelector('.modal-content');
+                    const similarHtml = `<div class="similar-movies mt-4"><h4>Similar Movies</h4><div class="similar-grid">${result.similarMovies.map(m => `<div class="similar-card" onclick="showMovieDetails('${m.title.replace(/'/g, "\\'")}')"><strong>${m.title}</strong><small>${m.rating} | ${m.release_year}</small></div>`).join('')}</div></div>`;
+                    const existing = modalContent.querySelector('.similar-movies');
+                    if(existing) existing.remove();
+                    modalContent.insertAdjacentHTML('beforeend', similarHtml);
+                }
+            } else { showError(result.error); }
+        }
+        
+        // Enhanced search API integration in explorer
+        async function onSearchApi(query) {
+            if(!query.trim()) return;
+            showLoading(true);
+            const result = await searchMovies(query);
+            showLoading(false);
+            if(result.success) {
+                const container = document.getElementById('explorerResults');
+                container.innerHTML = result.results.map(m => `<div class="detail-card glass-card p-3 cursor-pointer" data-title="${m.title}"><div class="font-bold">${m.title}</div><div class="info-row"><span>⭐ Rating:</span><span>${m.rating}</span></div><div class="info-row"><span>📅 Year:</span><span>${m.release_year}</span></div><div class="info-row"><span>🎭 Type:</span><span>${m.type}</span></div><div class="text-xs mt-1">${m.description?.substring(0,100)}...</div></div>`).join('');
+                document.querySelectorAll('#explorerResults .detail-card').forEach(card => card.addEventListener('click', () => showMovieDetails(card.dataset.title)));
+            } else { showError(result.error); }
+        }
+        
+        // Legacy demo data & UI sync (keeps offline fallback, but API-first for search/detail)
         let masterUserDatabase = {}, masterTitleDatabase = [], currentUserData = null, currentRecommendations = [];
         let bookmarks = JSON.parse(localStorage.getItem('netflix_bookmarks') || '[]');
         let watchHistory = JSON.parse(localStorage.getItem('netflix_history') || '[]');
@@ -326,134 +513,91 @@
         const moodGenreMap = {funny:["Comedy"],emotional:["Drama"],mindbending:["Sci-Fi","Thriller"],scary:["Horror","Thriller"],romantic:["Romance"],action:["Action","Thriller"]};
         const timeDurationMap = {short:{max:30},medium:{min:30,max:60},long:{min:60},any:{min:0,max:999}};
         
-        function showNotification(msg, type='info') { let c=document.getElementById('notificationContainer'),n=document.createElement('div');n.className=`notification ${type}`;n.innerHTML=`<span>${msg}</span>`;c.appendChild(n);setTimeout(()=>n.remove(),3000);}
-        
         function getAgeAppropriateRatings(age) { if(age<14) return ['TV-Y','PG','TV-PG']; if(age<17) return ['PG-13','TV-14']; return ['R','TV-MA','NC-17']; }
-        
-        function getRecommendations(uid, user, catalog, mood, timeFilter) {
+        function getRecommendationsLocal(uid, user, catalog, mood, timeFilter) {
             let allowed = getAgeAppropriateRatings(user.age);
             let candidates = catalog.filter(t => allowed.includes(t.rating) && t.type);
             if(mood !== 'all') candidates = candidates.filter(t => t.genre && moodGenreMap[mood]?.some(mg => t.genre.includes(mg)));
             let timeRule = timeDurationMap[timeFilter] || timeDurationMap.any;
             candidates = candidates.filter(t => (!timeRule.min || t.duration >= timeRule.min) && (!timeRule.max || t.duration <= timeRule.max));
-            let sorted = candidates.sort((a,b) => (b.popularity_score||0) - (a.popularity_score||0)).slice(0, 12);
-            return sorted.map(t => ({...t, score: (t.popularity_score || 5)}));
+            return candidates.sort((a,b) => (b.popularity_score||0) - (a.popularity_score||0)).slice(0, 12).map(t => ({...t, score: (t.popularity_score || 5)}));
         }
         
-        function computeChurnProbability(user) { let risk = 0.1 + (user.features?.days_since_login || 0) * 0.03 + (100 - (user.features?.engagement_score || 5)*10)/200; risk = Math.min(0.95, Math.max(0.05, risk)); return parseFloat(risk.toFixed(3)); }
+        function computeChurnProbabilityLocal(user) { let risk = 0.1 + (user.features?.days_since_login || 0) * 0.03 + (100 - (user.features?.engagement_score || 5)*10)/200; return Math.min(0.95, Math.max(0.05, risk)); }
         
-        // FULL DETAILS display for each movie/show
-        function renderFullCatalogItem(item) {
-            return `<div class="detail-card glass-card p-3 cursor-pointer" data-title="${item.title}">
-                        <div class="font-bold text-base">${item.title}</div>
-                        <div class="info-row"><span>🎭 Genre:</span><span class="font-mono">${item.genre}</span></div>
-                        <div class="info-row"><span>📺 Type:</span><span>${item.type}</span></div>
-                        <div class="info-row"><span>🔞 Rating:</span><span>${item.rating}</span></div>
-                        <div class="info-row"><span>⏱️ Duration:</span><span>${item.duration} min</span></div>
-                        <div class="info-row"><span>📅 Year:</span><span>${item.year}</span></div>
-                        <div class="info-row"><span>🔥 Trending:</span><span>${item.trending}%</span></div>
-                        <div class="info-row"><span>⭐ Popularity:</span><span>${item.popularity_score}/10</span></div>
-                        <div class="text-xs mt-2 text-gray-300 italic">💡 ${item.ai_description?.substring(0,120)}${item.ai_description?.length>120?'...':''}</div>
-                    </div>`;
-        }
+        function renderFullCatalogItem(item) { return `<div class="detail-card glass-card p-3 cursor-pointer" data-title="${item.title}"><div class="font-bold text-base">${item.title}</div><div class="info-row"><span>🎭 Genre:</span><span>${item.genre}</span></div><div class="info-row"><span>📺 Type:</span><span>${item.type}</span></div><div class="info-row"><span>🔞 Rating:</span><span>${item.rating}</span></div><div class="info-row"><span>⏱️ Duration:</span><span>${item.duration} min</span></div><div class="info-row"><span>📅 Year:</span><span>${item.year}</span></div><div class="info-row"><span>🔥 Trending:</span><span>${item.trending}%</span></div><div class="text-xs mt-2 text-gray-300 italic">${item.ai_description?.substring(0,120)}</div></div>`; }
         
         function renderList(recs) {
             let container = document.getElementById('recommendationList');
-            if(!recs?.length){ container.innerHTML='<div class="text-center py-8 text-gray-400">No recommendations based on filters</div>'; return; }
+            if(!recs?.length){ container.innerHTML='<div class="text-center py-8 text-gray-400">No recommendations</div>'; return; }
             container.innerHTML = recs.map((rec,idx) => `<div class="rec-card glass-card p-4 flex justify-between items-center cursor-pointer" data-title="${rec.title}" data-idx="${idx}"><div><div class="font-bold">${rec.title}</div><div class="text-xs">${rec.genre} • ${rec.duration}min • ${rec.rating}</div><div class="text-xs text-gray-400">${rec.ai_description?.substring(0,60)}...</div></div><i class="far fa-bookmark bookmark-icon" data-title="${rec.title}"></i></div>`).join('');
             document.querySelectorAll('.rec-card').forEach(el => el.addEventListener('click', (e) => { if(!e.target.classList.contains('bookmark-icon')) addToHistory(el.dataset.title); }));
             document.querySelectorAll('.bookmark-icon').forEach(icon => { icon.addEventListener('click', (e) => { e.stopPropagation(); toggleBookmark(icon.dataset.title); }); });
         }
         
-        function toggleBookmark(title) { if(bookmarks.includes(title)) bookmarks = bookmarks.filter(b=>b!==title); else bookmarks.push(title); localStorage.setItem('netflix_bookmarks', JSON.stringify(bookmarks)); renderBookmarks(); showNotification(`${title} ${bookmarks.includes(title) ? 'added to' : 'removed from'} bookmarks`); }
-        function renderBookmarks() { let cont = document.getElementById('bookmarksList'); if(!bookmarks.length) { cont.innerHTML='<div class="text-gray-400 text-xs">No bookmarks yet</div>'; return; } cont.innerHTML = bookmarks.map(b => `<div class="flex justify-between text-sm"><span>📌 ${b}</span><i class="fas fa-times-circle text-red-400 cursor-pointer" data-title="${b}"></i></div>`).join(''); document.querySelectorAll('#bookmarksList .fa-times-circle').forEach(el => el.addEventListener('click', (e) => { let t = el.dataset.title; bookmarks = bookmarks.filter(b=>b!==t); localStorage.setItem('netflix_bookmarks', JSON.stringify(bookmarks)); renderBookmarks(); showNotification(`Removed ${t}`); })); }
+        function toggleBookmark(title) { if(bookmarks.includes(title)) bookmarks = bookmarks.filter(b=>b!==title); else bookmarks.push(title); localStorage.setItem('netflix_bookmarks', JSON.stringify(bookmarks)); renderBookmarks(); showNotification(`${title} ${bookmarks.includes(title) ? 'added' : 'removed'}`); }
+        function renderBookmarks() { let cont = document.getElementById('bookmarksList'); if(!bookmarks.length) { cont.innerHTML='<div class="text-gray-400 text-xs">No bookmarks</div>'; return; } cont.innerHTML = bookmarks.map(b => `<div class="flex justify-between text-sm"><span>📌 ${b}</span><i class="fas fa-times-circle text-red-400 cursor-pointer" data-title="${b}"></i></div>`).join(''); document.querySelectorAll('#bookmarksList .fa-times-circle').forEach(el => el.addEventListener('click', (e) => { let t = el.dataset.title; bookmarks = bookmarks.filter(b=>b!==t); localStorage.setItem('netflix_bookmarks', JSON.stringify(bookmarks)); renderBookmarks(); showNotification(`Removed ${t}`); })); }
         function addToHistory(title) { if(!watchHistory.includes(title)) watchHistory.unshift(title); if(watchHistory.length>20) watchHistory.pop(); localStorage.setItem('netflix_history', JSON.stringify(watchHistory)); renderHistory(); showNotification(`Added "${title}" to history`); updateABTestVote(title); }
-        function renderHistory() { let cont = document.getElementById('historyList'); if(!watchHistory.length) { cont.innerHTML='<div class="text-gray-400 text-xs">No history yet</div>'; return; } cont.innerHTML = watchHistory.slice(0,8).map(h => `<div class="text-sm">🎬 ${h}</div>`).join(''); }
+        function renderHistory() { let cont = document.getElementById('historyList'); if(!watchHistory.length) { cont.innerHTML='<div class="text-gray-400 text-xs">No history</div>'; return; } cont.innerHTML = watchHistory.slice(0,8).map(h => `<div class="text-sm">🎬 ${h}</div>`).join(''); }
         function renderOngoing() { let cont = document.getElementById('ongoingList'); if(!ongoingContent.length) { cont.innerHTML='<div class="text-gray-400">No ongoing shows</div>'; return; } cont.innerHTML = ongoingContent.map(o => `<div>▶️ ${o.title} - ${o.progress}%</div>`).join(''); }
         function updateABTestVote(title) { let isTest = Math.random() > 0.5; if(isTest) { abVotes.B++; abVotes.B_shown++; } else { abVotes.A++; abVotes.A_shown++; } updateABDisplay(); }
-        function updateABDisplay() { let ctrA = abVotes.A_shown ? (abVotes.A/abVotes.A_shown)*100 : 0; let ctrB = abVotes.B_shown ? (abVotes.B/abVotes.B_shown)*100 : 0; document.getElementById('ctrA').innerText = ctrA.toFixed(1)+'%'; document.getElementById('ctrB').innerText = ctrB.toFixed(1)+'%'; document.getElementById('ctrABar').style.width = ctrA+'%'; document.getElementById('ctrBBar').style.width = ctrB+'%'; let winner = ctrA>ctrB ? '🏆 Algorithm A leading' : (ctrB>ctrA ? '🚀 Algorithm B leading' : '⚖️ Tie'); document.getElementById('abWinner').innerText = winner; }
-        function renderTrending() { let trendingSorted = [...masterTitleDatabase].sort((a,b)=> (b.trending||0) - (a.trending||0)).slice(0,6); let cont = document.getElementById('trendingList'); cont.innerHTML = trendingSorted.map(t => `<div class="glass-card p-2 text-center min-w-[110px]"><div class="font-bold text-sm">${t.title}</div><div class="text-xs">🔥 ${t.trending}%</div><div class="text-[10px]">${t.genre}</div></div>`).join(''); }
-        
-        function searchContent() {
-            let query = document.getElementById('searchInput').value.toLowerCase();
-            let genre = document.getElementById('genreFilter').value;
-            let filtered = masterTitleDatabase.filter(t => (!genre || genre==='all' || t.genre===genre) && t.title.toLowerCase().includes(query)).slice(0,18);
-            let container = document.getElementById('explorerResults');
-            container.innerHTML = filtered.map(item => renderFullCatalogItem(item)).join('');
-            document.querySelectorAll('#explorerResults .detail-card').forEach(card => {
-                card.addEventListener('click', () => { addToHistory(card.dataset.title); });
-            });
-        }
-        
+        function updateABDisplay() { let ctrA = abVotes.A_shown ? (abVotes.A/abVotes.A_shown)*100 : 0; let ctrB = abVotes.B_shown ? (abVotes.B/abVotes.B_shown)*100 : 0; document.getElementById('ctrA').innerText = ctrA.toFixed(1)+'%'; document.getElementById('ctrB').innerText = ctrB.toFixed(1)+'%'; document.getElementById('ctrABar').style.width = ctrA+'%'; document.getElementById('ctrBBar').style.width = ctrB+'%'; let winner = ctrA>ctrB ? '🏆 Algorithm A' : (ctrB>ctrA ? '🚀 Algorithm B' : '⚖️ Tie'); document.getElementById('abWinner').innerText = winner; }
+        function renderTrending() { let trendingSorted = [...masterTitleDatabase].sort((a,b)=> (b.trending||0) - (a.trending||0)).slice(0,6); let cont = document.getElementById('trendingList'); cont.innerHTML = trendingSorted.map(t => `<div class="glass-card p-2 text-center min-w-[110px]"><div class="font-bold text-sm">${t.title}</div><div class="text-xs">🔥 ${t.trending}%</div></div>`).join(''); }
         function initSwipe(items) { currentSwipeItems = items || []; swipeIndex = 0; renderSwipeCard(); }
-        function renderSwipeCard() { let container = document.getElementById('swipeStack'); if(swipeIndex >= currentSwipeItems.length) { container.innerHTML='<div class="text-center py-12 text-gray-400">✨ No more recommendations ✨</div>'; return; } let item = currentSwipeItems[swipeIndex]; container.innerHTML = `<div class="swipe-card glass-card p-6 text-center"><h3 class="font-bold text-xl">${item.title}</h3><p class="mt-1">${item.genre} • ${item.duration}min • ${item.rating}</p><p class="text-sm mt-3 text-gray-300">${item.ai_description?.substring(0,120)}...</p><div class="flex justify-center gap-8 mt-5"><span class="text-3xl">👎</span><span class="text-3xl">👍</span></div></div>`; }
+        function renderSwipeCard() { let container = document.getElementById('swipeStack'); if(swipeIndex >= currentSwipeItems.length) { container.innerHTML='<div class="text-center py-12 text-gray-400">✨ No more ✨</div>'; return; } let item = currentSwipeItems[swipeIndex]; container.innerHTML = `<div class="swipe-card glass-card p-6 text-center"><h3 class="font-bold text-xl">${item.title}</h3><p>${item.genre} • ${item.duration}min</p><p class="text-sm mt-3">${item.ai_description?.substring(0,100)}...</p></div>`; }
         function swipeLeft() { if(swipeIndex < currentSwipeItems.length) { swipeIndex++; renderSwipeCard(); showNotification("Skipped", 'info'); } }
-        function swipeRight() { if(swipeIndex < currentSwipeItems.length) { addToHistory(currentSwipeItems[swipeIndex].title); swipeIndex++; renderSwipeCard(); showNotification("Added to watch history!", 'success'); } }
+        function swipeRight() { if(swipeIndex < currentSwipeItems.length) { addToHistory(currentSwipeItems[swipeIndex].title); swipeIndex++; renderSwipeCard(); showNotification("Added to history", 'success'); } }
         
         async function analyzeUser() {
             let uid = document.getElementById('userIdSelect').value;
-            if(!uid || !masterUserDatabase[uid]) { showNotification("Select a valid user", 'error'); return; }
+            if(!uid || !masterUserDatabase[uid]) { showNotification("Select valid user", 'error'); return; }
             currentUserData = masterUserDatabase[uid];
             let mood = document.getElementById('moodSelect').value;
             let timeF = document.getElementById('timeSelect').value;
-            currentRecommendations = getRecommendations(uid, currentUserData, masterTitleDatabase, mood, timeF);
+            currentRecommendations = getRecommendationsLocal(uid, currentUserData, masterTitleDatabase, mood, timeF);
             renderList(currentRecommendations);
             initSwipe(currentRecommendations);
-            let churn = computeChurnProbability(currentUserData);
-            document.getElementById('churnResult').innerHTML = `<div class="text-3xl font-bold ${churn>0.6 ? 'text-red-500' : 'text-green-400'}">${(churn*100).toFixed(1)}%</div><div class="text-xs">${churn>0.6 ? 'High risk: re-engage with personalized offers' : 'Low churn risk, loyal user'}</div>`;
+            let churn = computeChurnProbabilityLocal(currentUserData);
+            document.getElementById('churnResult').innerHTML = `<div class="text-3xl font-bold ${churn>0.6 ? 'text-red-500' : 'text-green-400'}">${(churn*100).toFixed(1)}%</div><div class="text-xs">${churn>0.6 ? 'High risk' : 'Low risk'}</div>`;
             let clusterInfo = clusterDefinitions[currentUserData.cluster] || clusterDefinitions[0];
-            // FULL user data display
             let features = currentUserData.features || {};
-            document.getElementById('clusterInfo').innerHTML = `
-                <div class="cluster-badge cluster-${currentUserData.cluster} mb-2">${clusterInfo.name}</div>
-                <div class="grid grid-cols-2 gap-1 text-xs"><span>👤 Name:</span><span class="font-semibold">${currentUserData.name}</span>
-                <span>🎂 Age:</span><span>${currentUserData.age}</span>
-                <span>📍 Location:</span><span>${currentUserData.location}</span>
-                <span>💎 Tier:</span><span>${currentUserData.subscription_tier}</span>
-                <span>📅 Joined:</span><span>${currentUserData.join_date}</span>
-                <span>🎭 Preferred:</span><span>${currentUserData.preferred_genre}</span>
-                <span>📺 Watch Time:</span><span>${features.watch_time || 'N/A'} hrs</span>
-                <span>⭐ Engagement:</span><span>${features.engagement_score || 'N/A'}/5</span>
-                <span>📆 Sessions/week:</span><span>${features.sessions_per_week || 'N/A'}</span>
-                <span>📅 Days since login:</span><span>${features.days_since_login ?? 'N/A'}</span>
-                <span>⌛ Total hours:</span><span>${features.total_watch_hours || 'N/A'}</span>
-                <span>📱 Devices:</span><span>${features.devices_used || 'N/A'}</span>
-                <span>👥 Profiles:</span><span>${features.profile_count || 'N/A'}</span></div>
-                <div class="mt-2 text-xs text-gray-400">${clusterInfo.archetype}</div>`;
-            showNotification(`Analyzed ${currentUserData.name} (${clusterInfo.name})`, 'success');
+            document.getElementById('clusterInfo').innerHTML = `<div class="cluster-badge cluster-${currentUserData.cluster} mb-2">${clusterInfo.name}</div><div class="grid grid-cols-2 gap-1 text-xs"><span>👤 Name:</span><span>${currentUserData.name}</span><span>🎂 Age:</span><span>${currentUserData.age}</span><span>🎭 Preferred:</span><span>${currentUserData.preferred_genre}</span><span>⭐ Engagement:</span><span>${features.engagement_score || 'N/A'}/5</span><span>📅 Days since login:</span><span>${features.days_since_login ?? 'N/A'}</span></div><div class="mt-2 text-xs">${clusterInfo.archetype}</div>`;
+            showNotification(`Analyzed ${currentUserData.name}`, 'success');
         }
         
         async function loadDynamicData() {
             try {
                 let usersRes = await fetch('./data/users.json');
-                if(!usersRes.ok) throw new Error('users.json not found');
                 let catalogRes = await fetch('./data/catalog.json');
-                if(!catalogRes.ok) throw new Error('catalog.json not found');
+                if(!usersRes.ok || !catalogRes.ok) throw new Error('data files missing');
                 masterUserDatabase = await usersRes.json();
                 masterTitleDatabase = await catalogRes.json();
                 let select = document.getElementById('userIdSelect');
-                select.innerHTML = '';
-                Object.keys(masterUserDatabase).forEach(uid => { let opt = document.createElement('option'); opt.value = uid; opt.textContent = `${uid} - ${masterUserDatabase[uid].name} (${masterUserDatabase[uid].preferred_genre})`; select.appendChild(opt); });
+                select.innerHTML = Object.keys(masterUserDatabase).map(uid => `<option value="${uid}">${uid} - ${masterUserDatabase[uid].name} (${masterUserDatabase[uid].preferred_genre})</option>`).join('');
                 let genres = [...new Set(masterTitleDatabase.map(t=>t.genre).filter(Boolean))];
-                let genreFilter = document.getElementById('genreFilter'); genreFilter.innerHTML = '<option value="all">All Genres</option>'+genres.map(g=>`<option value="${g}">${g}</option>`).join('');
-                renderTrending(); renderBookmarks(); renderHistory(); renderOngoing(); updateABDisplay(); searchContent();
+                document.getElementById('genreFilter').innerHTML = '<option value="all">All Genres</option>'+genres.map(g=>`<option value="${g}">${g}</option>`).join('');
+                renderTrending(); renderBookmarks(); renderHistory(); renderOngoing(); updateABDisplay();
                 if(Object.keys(masterUserDatabase).length) analyzeUser();
-            } catch(e) { console.error(e); showNotification("Error loading data from /data/ folder. Ensure users.json and catalog.json exist.", 'error'); masterUserDatabase = {"U1":{name:"Demo",cluster:0,age:30,preferred_genre:"Comedy",location:"Global",subscription_tier:"Premium",features:{days_since_login:1,engagement_score:5}}}; masterTitleDatabase = [{title:"Stranger Things",genre:"Sci-Fi",rating:"TV-14",duration:50,trending:98,ai_description:"Demo",year:2016,popularity_score:9}]; analyzeUser(); }
+            } catch(e) { console.error(e); showNotification("Using demo catalog", 'info'); masterUserDatabase = {"U1":{name:"Demo User",cluster:0,age:30,preferred_genre:"Comedy",features:{days_since_login:1,engagement_score:5}}}; masterTitleDatabase = [{title:"Stranger Things",genre:"Sci-Fi",rating:"TV-14",duration:50,trending:98,ai_description:"Demo",year:2016,type:"Series"}]; analyzeUser(); }
         }
         
-        document.getElementById('glitchLogo')?.addEventListener('animationend', () => { let title = document.getElementById('mainGlitchTitle'); if(title) { title.classList.add('glitch-active'); setTimeout(()=>title.classList.remove('glitch-active'),500); } });
-        setTimeout(() => { let title = document.getElementById('mainGlitchTitle'); if(title && !title.classList.contains('glitch-active')) { title.classList.add('glitch-active'); setTimeout(()=>title.classList.remove('glitch-active'),400); } }, 700);
+        function showNotification(msg, type='info') { let c=document.getElementById('notificationContainer'),n=document.createElement('div');n.className=`notification ${type}`;n.innerHTML=`<span>${msg}</span>`;c.appendChild(n);setTimeout(()=>n.remove(),3000);}
+        
         document.getElementById('themeToggle').addEventListener('click',()=>{ document.body.classList.toggle('light-mode'); let icon=document.querySelector('#themeToggle i'); if(document.body.classList.contains('light-mode')){ icon.classList.remove('fa-moon'); icon.classList.add('fa-sun'); } else { icon.classList.remove('fa-sun'); icon.classList.add('fa-moon'); } });
         document.getElementById('analyzeBtn')?.addEventListener('click', analyzeUser);
         document.getElementById('showListBtn')?.addEventListener('click',()=>{ document.getElementById('listView').classList.remove('hidden'); document.getElementById('swipeView').classList.add('hidden'); });
         document.getElementById('showSwipeBtn')?.addEventListener('click',()=>{ document.getElementById('listView').classList.add('hidden'); document.getElementById('swipeView').classList.remove('hidden'); if(currentRecommendations.length) initSwipe(currentRecommendations); });
         document.getElementById('swipeLeftBtn')?.addEventListener('click', swipeLeft);
         document.getElementById('swipeRightBtn')?.addEventListener('click', swipeRight);
-        document.getElementById('searchInput')?.addEventListener('input', searchContent);
-        document.getElementById('genreFilter')?.addEventListener('change', searchContent);
+        document.getElementById('searchInput')?.addEventListener('input', (e) => onSearchApi(e.target.value));
+        document.getElementById('genreFilter')?.addEventListener('change', () => { if(document.getElementById('searchInput').value) onSearchApi(document.getElementById('searchInput').value); });
         document.getElementById('moodSelect')?.addEventListener('change', analyzeUser);
         document.getElementById('timeSelect')?.addEventListener('change', analyzeUser);
         window.addEventListener('load', loadDynamicData);
+        
+        window.showMovieDetails = showMovieDetails;
+        window.getSimilarMoviesAndShow = getSimilarMoviesAndShow;
+        window.closeModal = closeModal;
     </script>
 </body>
 </html>

@@ -65,11 +65,6 @@ netflix-recommendation-system/
 │   ├── cluster_genre_preferences.csv
 │   ├── model_config.pkl
 │   └── user_features_with_clusters.csv
-├── static/
-│   ├── css/
-│   │   └── style.css
-│   └── js/
-│       └── main.js
 └── templates/
     └── index.html
 

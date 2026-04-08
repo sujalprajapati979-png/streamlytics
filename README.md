@@ -17,6 +17,7 @@ Streamlytics is an intelligent content recommendation and sentiment analytics pl
 - [Installation & Setup](#-installation--setup)
 - [Database Structure](#-database-structure)
 - [Tools & Technologies](#-tools--technologies)
+- [Live Demo & Documentation](#-live-demo--documentation)
 
 ---
 

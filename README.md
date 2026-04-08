@@ -72,17 +72,6 @@ netflix-recommendation-system/
 └── templates/
     └── index.html
 
-## ⚙️ Installation & Setup
-
-### Prerequisites
-- Python 3.8 or higher
-- pip or conda package manager
-
-### 1. Clone the repository
-
-```bash
-git clone https://github.com/sujalprajapati979-png/streamlytics.git
-cd streamlytics
 ```
 
 ### 2. Install dependencies

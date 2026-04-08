@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: netflix-recommendation-api
+    name: streamlytics
     runtime: python
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn app:app

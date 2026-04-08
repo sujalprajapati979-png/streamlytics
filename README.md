@@ -186,7 +186,7 @@ Open the notebooks in the `notebooks/` directory and run them sequentially to:
 
 ## 🌐 Live Demo & Documentation
 
-🔗 **[Visit Streamlytics Live Demo]()**
+🔗 **[Visit Streamlytics Live Demo](https://streamlytics-fei3.onrender.com/)**
 
 For detailed documentation and interactive analysis results, visit the project website linked above.
 

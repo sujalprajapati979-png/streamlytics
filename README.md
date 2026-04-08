@@ -51,9 +51,12 @@ Streamlytics utilizes a modular Jupyter Notebook-based architecture for transpar
 
 ```text
 netflix-recommendation-system/
+├── readme.md              # overview
 ├── app.py                 # Main Flask application
+├── project structure.txt  # structure of repository
 ├── requirements.txt       # Python dependencies
-├── saved_models/         # Your exported models
+├── render.yaml            # hosting project
+├── saved_models/          # Your exported models
 │   ├── tfidf_vectorizer.pkl
 │   ├── cosine_sim.joblib
 │   ├── indices.pkl

@@ -17,7 +17,6 @@ Streamlytics is an intelligent content recommendation and sentiment analytics pl
 - [Installation & Setup](#-installation--setup)
 - [Database Structure](#-database-structure)
 - [Tools & Technologies](#-tools--technologies)
-- [Live Demo & Documentation](#-live-demo--documentation)
 
 ---
 
@@ -178,14 +177,6 @@ Open the notebooks in the `notebooks/` directory and run them sequentially to:
 - Train collaborative and content-based filtering models
 - Analyze user sentiment and preferences
 - Generate personalized recommendations
-
----
-
-## 🌐 Live Demo & Documentation
-
-🔗 **[Visit Streamlytics Live Demo](https://sujalprajapati979-png.github.io/streamlytics/)**
-
-For detailed documentation and interactive analysis results, visit the project website linked above.
 
 ---
 

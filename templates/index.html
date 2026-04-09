@@ -406,7 +406,7 @@
             } catch (error) { return { success: false, error: error.message }; }
         }
         
-        async function predictChurn(userData) {
+       /* async function predictChurn(userData) {
             try {
                 const response = await fetch(`${API_BASE}/api/predict-churn`, {
                     method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(userData)
@@ -415,7 +415,7 @@
                 if (result.success) return { success: true, probability: result.prediction.ensemble_probability, riskLevel: result.prediction.risk_level, rfProbability: result.prediction.random_forest_probability, lrProbability: result.prediction.logistic_regression_probability, willChurn: result.prediction.ensemble_prediction === 1 };
                 return { success: false, error: result.error };
             } catch (error) { return { success: false, error: error.message }; }
-        }
+        }*/
         
         async function searchMovies(query) {
             try {
@@ -526,7 +526,7 @@
             return candidates.sort((a,b) => (b.popularity_score||0) - (a.popularity_score||0)).slice(0, 12).map(t => ({...t, score: (t.popularity_score || 5)}));
         }
         
-        function computeChurnProbabilityLocal(user) { let risk = 0.1 + (user.features?.days_since_login || 0) * 0.03 + (100 - (user.features?.engagement_score || 5)*10)/200; return Math.min(0.95, Math.max(0.05, risk)); }
+       // function computeChurnProbabilityLocal(user) { let risk = 0.1 + (user.features?.days_since_login || 0) * 0.03 + (100 - (user.features?.engagement_score || 5)*10)/200; return Math.min(0.95, Math.max(0.05, risk)); }
         
         function renderFullCatalogItem(item) { return `<div class="detail-card glass-card p-3 cursor-pointer" data-title="${item.title}"><div class="font-bold text-base">${item.title}</div><div class="info-row"><span>🎭 Genre:</span><span>${item.genre}</span></div><div class="info-row"><span>📺 Type:</span><span>${item.type}</span></div><div class="info-row"><span>🔞 Rating:</span><span>${item.rating}</span></div><div class="info-row"><span>⏱️ Duration:</span><span>${item.duration} min</span></div><div class="info-row"><span>📅 Year:</span><span>${item.year}</span></div><div class="info-row"><span>🔥 Trending:</span><span>${item.trending}%</span></div><div class="text-xs mt-2 text-gray-300 italic">${item.ai_description?.substring(0,120)}</div></div>`; }
         

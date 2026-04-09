@@ -649,8 +649,43 @@
         }
         
         function showNotification(msg, type='info') { let c=document.getElementById('notificationContainer'),n=document.createElement('div');n.className=`notification ${type}`;n.innerHTML=`<span>${msg}</span>`;c.appendChild(n);setTimeout(()=>n.remove(),3000);}
-        
-        document.getElementById('themeToggle').addEventListener('click',()=>{ document.body.classList.toggle('light-mode'); let icon=document.querySelector('#themeToggle i'); if(document.body.classList.contains('light-mode')){ icon.classList.remove('fa-moon'); icon.classList.add('fa-sun'); } else { icon.classList.remove('fa-sun'); icon.classList.add('fa-moon'); } });
+
+        // Theme toggle function with localStorage persistence
+function setTheme(isLightMode) {
+    if(isLightMode) {
+        document.body.classList.add('light-mode');
+        localStorage.setItem('theme', 'light');
+        let icon = document.querySelector('#themeToggle i');
+        if(icon) {
+            icon.classList.remove('fa-moon');
+            icon.classList.add('fa-sun');
+        }
+    } else {
+        document.body.classList.remove('light-mode');
+        localStorage.setItem('theme', 'dark');
+        let icon = document.querySelector('#themeToggle i');
+        if(icon) {
+            icon.classList.remove('fa-sun');
+            icon.classList.add('fa-moon');
+        }
+    }
+}
+
+// Load saved theme on page load
+function loadSavedTheme() {
+    const savedTheme = localStorage.getItem('theme');
+    if(savedTheme === 'light') {
+        setTheme(true);
+    } else {
+        setTheme(false); // Default to dark
+    }
+}
+
+// Theme toggle event listener
+document.getElementById('themeToggle').addEventListener('click', () => {
+    const isLightMode = document.body.classList.contains('light-mode');
+    setTheme(!isLightMode);
+});
         document.getElementById('analyzeBtn')?.addEventListener('click', analyzeUser);
         document.getElementById('showListBtn')?.addEventListener('click',()=>{ document.getElementById('listView').classList.remove('hidden'); document.getElementById('swipeView').classList.add('hidden'); });
         document.getElementById('showSwipeBtn')?.addEventListener('click',()=>{ document.getElementById('listView').classList.add('hidden'); document.getElementById('swipeView').classList.remove('hidden'); if(currentRecommendations.length) initSwipe(currentRecommendations); });
@@ -660,7 +695,10 @@
         document.getElementById('genreFilter')?.addEventListener('change', () => { if(document.getElementById('searchInput').value) onSearchApi(document.getElementById('searchInput').value); });
         document.getElementById('moodSelect')?.addEventListener('change', analyzeUser);
         document.getElementById('timeSelect')?.addEventListener('change', analyzeUser);
-        window.addEventListener('load', loadDynamicData);
+        window.addEventListener('load', () => {
+    loadSavedTheme();  // Load saved theme first
+    loadDynamicData(); // Then load data
+});
         
         window.showMovieDetails = showMovieDetails;
         window.getSimilarMoviesAndShow = getSimilarMoviesAndShow;

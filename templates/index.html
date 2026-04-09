@@ -529,21 +529,88 @@
         function renderFullCatalogItem(item) { return `<div class="detail-card glass-card p-3 cursor-pointer" data-title="${item.title}"><div class="font-bold text-base">${item.title}</div><div class="info-row"><span>🎭 Genre:</span><span>${item.genre}</span></div><div class="info-row"><span>📺 Type:</span><span>${item.type}</span></div><div class="info-row"><span>🔞 Rating:</span><span>${item.rating}</span></div><div class="info-row"><span>⏱️ Duration:</span><span>${item.duration} min</span></div><div class="info-row"><span>📅 Year:</span><span>${item.year}</span></div><div class="info-row"><span>🔥 Trending:</span><span>${item.trending}%</span></div><div class="text-xs mt-2 text-gray-300 italic">${item.ai_description?.substring(0,120)}</div></div>`; }
         
         function renderList(recs) {
-            let container = document.getElementById('recommendationList');
-            if(!recs?.length){ container.innerHTML='<div class="text-center py-8 text-gray-400">No recommendations</div>'; return; }
-            container.innerHTML = recs.map((rec,idx) => `<div class="rec-card glass-card p-4 flex justify-between items-center cursor-pointer" data-title="${rec.title}" data-idx="${idx}"><div><div class="font-bold">${rec.title}</div><div class="text-xs">${rec.genre} • ${rec.duration}min • ${rec.rating}</div><div class="text-xs text-gray-400">${rec.ai_description?.substring(0,60)}...</div></div><i class="far fa-bookmark bookmark-icon" data-title="${rec.title}"></i></div>`).join('');
-            document.querySelectorAll('.rec-card').forEach(el => el.addEventListener('click', (e) => { if(!e.target.classList.contains('bookmark-icon')) addToHistory(el.dataset.title); }));
-            document.querySelectorAll('.bookmark-icon').forEach(icon => { icon.addEventListener('click', (e) => { e.stopPropagation(); toggleBookmark(icon.dataset.title); }); });
-        }
-        
-        function toggleBookmark(title) { if(bookmarks.includes(title)) bookmarks = bookmarks.filter(b=>b!==title); else bookmarks.push(title); localStorage.setItem('netflix_bookmarks', JSON.stringify(bookmarks)); renderBookmarks(); showNotification(`${title} ${bookmarks.includes(title) ? 'added' : 'removed'}`); }
+    let container = document.getElementById('recommendationList');
+    if(!recs?.length){ 
+        container.innerHTML='<div class="text-center py-8 text-gray-400">No recommendations</div>'; 
+        return; 
+    }
+    
+    container.innerHTML = recs.map((rec, idx) => {
+        const isBookmarked = bookmarks.includes(rec.title);
+        return `<div class="rec-card glass-card p-4 flex justify-between items-center cursor-pointer" data-title="${rec.title}" data-idx="${idx}">
+            <div class="flex-1">
+                <div class="font-bold">${rec.title}</div>
+                <div class="text-xs">${rec.genre} • ${rec.duration}min • ${rec.rating}</div>
+                <div class="text-xs text-gray-400">${rec.ai_description?.substring(0,60)}...</div>
+            </div>
+            <i class="fas ${isBookmarked ? 'fa-bookmark' : 'fa-bookmark-regular'} text-xl bookmark-icon ${isBookmarked ? 'text-red-500' : 'text-gray-400 hover:text-red-400'}" data-title="${rec.title}"></i>
+        </div>`;
+    }).join('');
+    
+    document.querySelectorAll('.rec-card').forEach(el => {
+        el.addEventListener('click', (e) => { 
+            if(!e.target.classList.contains('bookmark-icon')) 
+                addToHistory(el.dataset.title); 
+        });
+    });
+    
+    document.querySelectorAll('.bookmark-icon').forEach(icon => { 
+        icon.addEventListener('click', (e) => { 
+            e.stopPropagation(); 
+            toggleBookmark(icon.dataset.title); 
+        }); 
+    });
+}
+
+        function toggleBookmark(title) { 
+    if(bookmarks.includes(title)) {
+        bookmarks = bookmarks.filter(b => b !== title);
+    } else {
+        bookmarks.push(title);
+    }
+    localStorage.setItem('netflix_bookmarks', JSON.stringify(bookmarks));
+    
+    // Re-render recommendations to update bookmark icons
+    if(currentRecommendations.length) {
+        renderList(currentRecommendations);
+    }
+    
+    renderBookmarks();
+    showNotification(`${title} ${bookmarks.includes(title) ? 'added to' : 'removed from'} bookmarks`);
+}
         function renderBookmarks() { let cont = document.getElementById('bookmarksList'); if(!bookmarks.length) { cont.innerHTML='<div class="text-gray-400 text-xs">No bookmarks</div>'; return; } cont.innerHTML = bookmarks.map(b => `<div class="flex justify-between text-sm"><span>📌 ${b}</span><i class="fas fa-times-circle text-red-400 cursor-pointer" data-title="${b}"></i></div>`).join(''); document.querySelectorAll('#bookmarksList .fa-times-circle').forEach(el => el.addEventListener('click', (e) => { let t = el.dataset.title; bookmarks = bookmarks.filter(b=>b!==t); localStorage.setItem('netflix_bookmarks', JSON.stringify(bookmarks)); renderBookmarks(); showNotification(`Removed ${t}`); })); }
         function addToHistory(title) { if(!watchHistory.includes(title)) watchHistory.unshift(title); if(watchHistory.length>20) watchHistory.pop(); localStorage.setItem('netflix_history', JSON.stringify(watchHistory)); renderHistory(); showNotification(`Added "${title}" to history`); }
         function renderHistory() { let cont = document.getElementById('historyList'); if(!watchHistory.length) { cont.innerHTML='<div class="text-gray-400 text-xs">No history</div>'; return; } cont.innerHTML = watchHistory.slice(0,8).map(h => `<div class="text-sm">🎬 ${h}</div>`).join(''); }
         function renderOngoing() { let cont = document.getElementById('ongoingList'); if(!ongoingContent.length) { cont.innerHTML='<div class="text-gray-400">No ongoing shows</div>'; return; } cont.innerHTML = ongoingContent.map(o => `<div>▶️ ${o.title} - ${o.progress}%</div>`).join(''); }
         function renderTrending() { let trendingSorted = [...masterTitleDatabase].sort((a,b)=> (b.trending||0) - (a.trending||0)).slice(0,6); let cont = document.getElementById('trendingList'); cont.innerHTML = trendingSorted.map(t => `<div class="glass-card p-2 text-center min-w-[110px]"><div class="font-bold text-sm">${t.title}</div><div class="text-xs">🔥 ${t.trending}%</div></div>`).join(''); }
         function initSwipe(items) { currentSwipeItems = items || []; swipeIndex = 0; renderSwipeCard(); }
-        function renderSwipeCard() { let container = document.getElementById('swipeStack'); if(swipeIndex >= currentSwipeItems.length) { container.innerHTML='<div class="text-center py-12 text-gray-400">✨ No more ✨</div>'; return; } let item = currentSwipeItems[swipeIndex]; container.innerHTML = `<div class="swipe-card glass-card p-6 text-center"><h3 class="font-bold text-xl">${item.title}</h3><p>${item.genre} • ${item.duration}min</p><p class="text-sm mt-3">${item.ai_description?.substring(0,100)}...</p></div>`; }
+        function renderSwipeCard() { 
+    let container = document.getElementById('swipeStack'); 
+    if(swipeIndex >= currentSwipeItems.length) { 
+        container.innerHTML='<div class="text-center py-12 text-gray-400">✨ No more ✨</div>'; 
+        return; 
+    } 
+    let item = currentSwipeItems[swipeIndex];
+    const isBookmarked = bookmarks.includes(item.title);
+    container.innerHTML = `<div class="swipe-card glass-card p-6 text-center">
+        <div class="flex justify-end">
+            <i class="fas ${isBookmarked ? 'fa-bookmark text-red-500' : 'fa-bookmark-regular text-gray-400'} text-2xl bookmark-swipe-icon cursor-pointer" data-title="${item.title}"></i>
+        </div>
+        <h3 class="font-bold text-xl">${item.title}</h3>
+        <p>${item.genre} • ${item.duration}min</p>
+        <p class="text-sm mt-3">${item.ai_description?.substring(0,100)}...</p>
+    </div>`; 
+    
+    // Add bookmark toggle to swipe card icon
+    const swipeIcon = container.querySelector('.bookmark-swipe-icon');
+    if(swipeIcon) {
+        swipeIcon.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleBookmark(swipeIcon.dataset.title);
+            renderSwipeCard(); // Refresh to show updated icon
+        });
+    }
+}
         function swipeLeft() { if(swipeIndex < currentSwipeItems.length) { swipeIndex++; renderSwipeCard(); showNotification("Skipped", 'info'); } }
         function swipeRight() { if(swipeIndex < currentSwipeItems.length) { addToHistory(currentSwipeItems[swipeIndex].title); swipeIndex++; renderSwipeCard(); showNotification("Added to history", 'success'); } }
         
@@ -565,6 +632,7 @@
         }
         
         async function loadDynamicData() {
+            bookmarks = JSON.parse(localStorage.getItem('netflix_bookmarks') || '[]');
             try {
                 let usersRes = await fetch('./data/users.json');
                 let catalogRes = await fetch('./data/catalog.json');

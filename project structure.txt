@@ -1,4 +1,5 @@
 streamlytics/
+├── README.md
 ├── app.py                 # Main Flask application
 ├── index.html             # webpage
 ├── requirements.txt       # Python dependencies
@@ -13,4 +14,9 @@ streamlytics/
 │   ├── kmeans_model.joblib
 │   ├── cluster_genre_preferences.csv
 │   ├── model_config.pkl
-│   └── user_features_with_clusters.csv index.html
+│   └── user_features_with_clusters.csv
+├── render.yaml
+├── project structure.txt
+└── gitignore
+
+

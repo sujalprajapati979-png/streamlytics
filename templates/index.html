@@ -561,8 +561,8 @@
             currentRecommendations = getRecommendationsLocal(uid, currentUserData, masterTitleDatabase, mood, timeF);
             renderList(currentRecommendations);
             initSwipe(currentRecommendations);
-            let churn = computeChurnProbabilityLocal(currentUserData);
-            document.getElementById('churnResult').innerHTML = `<div class="text-3xl font-bold ${churn>0.6 ? 'text-red-500' : 'text-green-400'}">${(churn*100).toFixed(1)}%</div><div class="text-xs">${churn>0.6 ? 'High risk' : 'Low risk'}</div>`;
+            //let churn = computeChurnProbabilityLocal(currentUserData);
+            //document.getElementById('churnResult').innerHTML = `<div class="text-3xl font-bold ${churn>0.6 ? 'text-red-500' : 'text-green-400'}">${(churn*100).toFixed(1)}%</div><div class="text-xs">${churn>0.6 ? 'High risk' : 'Low risk'}</div>`;
             let clusterInfo = clusterDefinitions[currentUserData.cluster] || clusterDefinitions[0];
             let features = currentUserData.features || {};
             document.getElementById('clusterInfo').innerHTML = `<div class="cluster-badge cluster-${currentUserData.cluster} mb-2">${clusterInfo.name}</div><div class="grid grid-cols-2 gap-1 text-xs"><span>👤 Name:</span><span>${currentUserData.name}</span><span>🎂 Age:</span><span>${currentUserData.age}</span><span>🎭 Preferred:</span><span>${currentUserData.preferred_genre}</span><span>⭐ Engagement:</span><span>${features.engagement_score || 'N/A'}/5</span><span>📅 Days since login:</span><span>${features.days_since_login ?? 'N/A'}</span></div><div class="mt-2 text-xs">${clusterInfo.archetype}</div>`;

@@ -359,11 +359,12 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="glass-card p-5" id="seasonalAlert">
                     <div class="flex items-center gap-2 mb-3"><span class="text-lg">🌸</span><span class="font-medium">Seasonal Spotlight</span><span class="trending-badge text-xs px-2 py-0.5 rounded-full text-white ml-2">LIVE</span></div>
                     <div id="seasonalContent" class="text-sm text-gray-300">🎬 Spring Season: Romantic Comedies & Drama blooms</div>
                 </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6"><div class="glass-card p-5"><h3 class="font-semibold flex items-center gap-2"><i class="fas fa-users"></i> Community Insights</h3><div id="communityInsights" class="space-y-2 text-sm"><p>👥 2,847 active viewers</p><p>⭐ Most loved: "Arcane" (9.1/10)</p><p>💬 "Best thriller this season" trending</p><p>📈 +52% watch time this week</p></div></div></div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6"><div class="glass-card p-5"><h3 class="font-semibold flex items-center gap-2 mb-3"><i class="fas fa-bookmark text-red-400"></i> My Bookmarks</h3><div id="bookmarksList" class="text-sm space-y-1"></div></div><div class="glass-card p-5"><h3 class="font-semibold flex items-center gap-2 mb-3"><i class="fas fa-history text-blue-400"></i> My History</h3><div id="historyList" class="text-sm space-y-1"></div><div class="mt-3 pt-2 border-t border-white/10"><h4 class="text-xs font-semibold mb-2">▶️ ongoing</h4><div id="ongoingList" class="text-xs text-gray-300"></div></div></div></div>
             </div>
 
             <!-- RIGHT PANEL -->
@@ -374,7 +375,6 @@
                     <div id="swipeView" class="hidden"><div id="swipeStack" class="relative w-full max-w-md mx-auto"></div><div class="flex justify-center gap-6 mt-6"><button id="swipeLeftBtn" class="w-14 h-14 rounded-full bg-red-600/30 hover:bg-red-600 transition text-2xl">✗</button><button id="swipeRightBtn" class="w-14 h-14 rounded-full bg-emerald-600/30 hover:bg-emerald-600 transition text-2xl">✓</button></div></div>
                 </div>
                 <div class="glass-card p-5"><div class="flex items-center gap-2 mb-4"><i class="fas fa-chart-line text-red-500"></i><h3 class="font-semibold">🔥Top Trendings</h3><span class="trending-badge text-xs px-2 py-0.5 rounded-full text-white">HOT</span></div><div id="trendingList" class="flex gap-3 overflow-x-auto pb-2"></div></div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6"><div class="glass-card p-5"><h3 class="font-semibold flex items-center gap-2 mb-3"><i class="fas fa-bookmark text-red-400"></i> My Bookmarks</h3><div id="bookmarksList" class="text-sm space-y-1"></div></div><div class="glass-card p-5"><h3 class="font-semibold flex items-center gap-2 mb-3"><i class="fas fa-history text-blue-400"></i> My History</h3><div id="historyList" class="text-sm space-y-1"></div><div class="mt-3 pt-2 border-t border-white/10"><h4 class="text-xs font-semibold mb-2">▶️ ongoing</h4><div id="ongoingList" class="text-xs text-gray-300"></div></div></div></div>
                 
                 <!-- Interactive Content Explorer with FULL details -->
                 <div class="glass-card p-5">
@@ -382,8 +382,6 @@
                     <div class="flex gap-2 mb-3 flex-wrap"><input type="text" id="searchInput" placeholder="Search movies or shows..." class="flex-1 bg-gray-900/70 border border-gray-700 rounded-xl px-4 py-2"><select id="genreFilter" class="bg-gray-900/70 border border-gray-700 rounded-xl px-3 py-2"><option value="all">All Genres</option></select></div>
                     <div id="explorerResults" class="grid grid-cols-1 gap-3 max-h-96 overflow-y-auto pr-1"></div>
                 </div>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6"><div class="glass-card p-5"><h3 class="font-semibold flex items-center gap-2"><i class="fas fa-users"></i> Community Insights</h3><div id="communityInsights" class="space-y-2 text-sm"><p>👥 2,847 active viewers</p><p>⭐ Most loved: "Arcane" (9.1/10)</p><p>💬 "Best thriller this season" trending</p><p>📈 +52% watch time this week</p></div></div></div>
             </div>
         </div>
         <div class="mt-12 text-center text-gray-500 text-xs border-t border-white/10 pt-6">Streamlytics AI : by SUJAL PRAJAPATI</div>

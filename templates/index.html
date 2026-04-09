@@ -59,36 +59,69 @@
             overflow: hidden;
         }
         
-        /* Animated Red/Black fading border effect (gradient rotating) */
-        .glass-card::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: 1.5rem;
-            padding: 2px;
-            background: linear-gradient(125deg, rgba(220,38,38,0.9), rgba(0,0,0,0.6), rgba(180,0,0,0.9), rgba(0,0,0,0.8));
-            background-size: 200% 200%;
-            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            pointer-events: none;
-            opacity: 0.8;
-            animation: borderFlow 3s ease infinite alternate;
-        }
-        
-        @keyframes borderFlow {
-            0% { background-position: 0% 0%; opacity: 0.6; }
-            50% { background-position: 100% 100%; opacity: 1; }
-            100% { background-position: 0% 0%; opacity: 0.7; }
-        }
-        
-        .glass-card:hover::before {
-            opacity: 1;
-            animation: borderFlow 0.8s ease infinite;
-            background: linear-gradient(125deg, #ef4444, #000000, #ef4444, #3b0000);
-            background-size: 200% 200%;
-        }
+       /* Static Red/Black border (NO ANIMATION - just static colors) */
+.glass-card {
+    background: rgba(10, 10, 18, 0.75);
+    backdrop-filter: blur(14px);
+    border-radius: 1.5rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Static border - no animation */
+.glass-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 1.5rem;
+    padding: 2px;
+    background: linear-gradient(125deg, rgba(220,38,38,0.9), rgba(0,0,0,0.6), rgba(180,0,0,0.9), rgba(0,0,0,0.8));
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    opacity: 0.8;
+    /* ANIMATION REMOVED */
+}
+
+/* Hover effect without animation */
+.glass-card:hover::before {
+    opacity: 1;
+    background: linear-gradient(125deg, #ef4444, #000000, #ef4444, #3b0000);
+    /* NO animation property */
+}
+
+.glass-card:hover {
+    box-shadow: 0 0 28px rgba(220,38,38,0.5), 0 12px 28px rgba(0,0,0,0.6);
+    transform: translateY(-2px);
+}
+
+/* Light mode static border */
+body.light-mode .glass-card {
+    background: rgba(255, 245, 245, 0.92);
+    backdrop-filter: blur(14px);
+    border: none;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+body.light-mode .glass-card::before {
+    background: linear-gradient(125deg, #ef4444, #ffffff, #dc2626, #f0f0f0);
+    opacity: 0.6;
+    /* NO animation */
+}
+
+body.light-mode .glass-card:hover::before {
+    opacity: 0.9;
+    background: linear-gradient(125deg, #dc2626, #fef2f2, #dc2626, #ffffff);
+    /* NO animation */
+}
+
+body.light-mode .glass-card:hover {
+    box-shadow: 0 0 28px rgba(220,38,38,0.4), 0 12px 24px rgba(0,0,0,0.1);
+}
         
         .glass-card:hover {
             box-shadow: 0 0 28px rgba(220,38,38,0.5), 0 12px 28px rgba(0,0,0,0.6);
